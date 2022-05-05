@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/04/19 15:29:15 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/04/20 17:30:05 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+
 
 namespace ft
 {
@@ -99,53 +100,29 @@ class vector
 };
 #endif
 
-// Array<T>(unsigned int n): _size(n)
-// 		{
-// 			if (n != 0)
-// 				this->array = new T[n];
-// 			else
-// 				this->array = new T[0];
-// 		}
+/*********
+ * Internally, vectors use a dynamically allocated array to store their elements.
+ * This array may need to be reallocated in order to grow in size when new elements are inserted,
+ * which implies allocating a new array and moving all elements to it.
+ * This is a relatively expensive task in terms of processing time, and thus,
+ * vectors do not reallocate each time an element is added to the container.
 
-// 		Array<T>(Array const & other )
-// 		{
-// 			this->_size = other._size;
-// 			this->array = new T[_size];
-// 			for (unsigned int i = 0; i < _size; i++)
-// 				this->array[i] = other.array[i];
-// 		}
+Instead, vector containers may allocate some extra storage to accommodate for possible growth,
+and thus the container may have an actual capacity greater than the
+storage strictly needed to contain its elements (i.e., its size).
+Libraries can implement different strategies for growth to balance between
+memory usage and reallocations, but in any case, reallocations should only happen
+at logarithmically growing intervals of size so that the insertion of
+individual elements at the end of the vector can be provided
+with amortized constant time complexity (see push_back).
 
-// 		virtual ~Array<T>(void)
-// 		{
-// 			if (this->array)
-// 				delete [] this->array;
-// 		}
+Therefore, compared to arrays, vectors consume more memory in exchange
+for the ability to manage storage and grow dynamically in an efficient way.
 
-// 		Array & operator=(Array const & other)
-// 		{
-// 			this->_size = other._size;
-// 			if (this->array)
-// 				delete [] this->array;
-// 			this->array = new T[_size];
-// 			for (unsigned int i = 0; i < _size; i++)
-// 				this->array[i] = other.array[i];
-// 			return *this;
-// 		}
-
-// 		class OutArrayIndex: public std::exception{
-// 			public:
-// 				virtual const char* what() const throw()
-// 				{ return ("\e[0;31mERROR: You are out of the Array index\e[0m");} };
-
-// 		unsigned int	size() const
-// 		{
-// 			return (_size);
-// 		}
-
-// 		T & operator[](unsigned int index)
-// 		{
-// 			if (index >= size() || index < 0)
-// 				throw OutArrayIndex();
-// 			return (this->array[index]);
-// 			exit(0);
-// 		}
+Compared to the other dynamic sequence containers
+(deques, lists and forward_lists), vectors are very efficient accessing
+its elements (just like arrays) and relatively efficient adding or
+removing elements from its end. For operations that involve inserting
+or removing elements at positions other than the end, they perform worse
+than the others, and have less consistent iterators and references than lists and forward_lists.
+*/

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 14:52:06 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/04/19 16:33:36 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/05 15:00:59 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ int main()
 	// allocate space for five ints
 	int* arr = myAllocator.allocate(5);
 
-	// construct arr[0] and arr[3]  // construct sert a construire un objet mais a quoi ca sert réellement
-	myAllocator.construct(arr + 2, 100);
+	// construct arr[0] and arr[3]  // construct sert a construire un objet
+	myAllocator.construct(arr, 100);
 	arr[3] = 10;
 
 	std::cout << arr[3] << std::endl;
@@ -38,3 +38,4 @@ int main()
 
 	return 0;
 }
+
