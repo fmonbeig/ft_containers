@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   stack.hpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/05 14:37:21 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/06 14:39:56 by fmonbeig         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+// /* ************************************************************************** */
+// /*                                                                            */
+// /*                                                        :::      ::::::::   */
+// /*   stack.hpp                                          :+:      :+:    :+:   */
+// /*                                                    +:+ +:+         +:+     */
+// /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
+// /*                                                +#+#+#+#+#+   +#+           */
+// /*   Created: 2022/05/05 14:37:21 by fmonbeig          #+#    #+#             */
+// /*   Updated: 2022/05/06 16:33:10 by fmonbeig         ###   ########.fr       */
+// /*                                                                            */
+// /* ************************************************************************** */
 
 #ifndef STACK_HPP
 #define STACK_HPP
@@ -27,6 +27,7 @@ namespace ft
 		//   MEMBER OBJECT						        //
 		// +------------------------------------------+ //
 			Container c;
+
 		public:
 		// +------------------------------------------+ //
 		//   MEMBER TYPE						        //
@@ -98,19 +99,31 @@ namespace ft
 
 	template< class T, class Container >
 	bool operator!=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
-	{ return (lhs.c != rhs.c); }
+	{ return (!(lhs == rhs)); }
 
 	template< class T, class Container >
 	bool operator<=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
-	{ return (lhs.c <= rhs.c); }
+	{
+		if (lhs == rhs)
+			return true;
+		return (lhs < rhs);
+	}
 
 	template< class T, class Container >
 	bool operator>( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
-	{ return (lhs.c > rhs.c); }
+	{
+		if (lhs == rhs)
+			return false;
+		return (!(lhs < rhs));
+	}
 
 	template< class T, class Container >
 	bool operator>=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
-	{ return (lhs.c >= rhs.c); }
+	{
+		if (lhs == rhs)
+			return true;
+		return (!(lhs < rhs));
+	}
 }
 
 #endif

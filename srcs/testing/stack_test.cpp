@@ -21,30 +21,19 @@ TEST(stack, PUSH_TOP)
 	mine.push(-34);
 	mine.push(42);
 	EXPECT_EQ(real.top(), mine.top());
+	EXPECT_EQ(real.top(), 42);
+	EXPECT_EQ(mine.top(), 42);
 }
 
-TEST(stack, PUSH_TOP)
+TEST(stack, SIZE)
 {
-	//INITIALIZE
 	std::stack<int>	real;
 	ft::stack<int>	mine;
 
 	real.push(44);
-	real.push(-34);
-	real.push(42);
-
 	mine.push(44);
-	mine.push(-34);
-	mine.push(42);
-
-	//TOP & PUSH
-	EXPECT_EQ(real.top(), mine.top());
 	//SIZE
 	EXPECT_EQ(real.size(), mine.size());
-	//POP
-	real.pop();
-	mine.pop();
-	EXPECT_EQ(real.top(), mine.top());
 }
 
 
@@ -61,7 +50,6 @@ TEST(stack, EMPTY)
 	mine.push(-34);
 	mine.push(42);
 
-	//EMPTY
 	EXPECT_EQ(real.empty(), mine.empty());
 	real.pop();
 	real.pop();
@@ -70,31 +58,94 @@ TEST(stack, EMPTY)
 	mine.pop();
 	mine.pop();
 	EXPECT_EQ(real.empty(), mine.empty());
-
 }
 
-TEST(stack, OPERATOR)
+TEST(stack, OPERATOR_WITH_EQUALITY)
 {
-	//INITIALIZE
 	std::stack<int>	real;
 	ft::stack<int>	mine;
 
 	real.push(44);
 	real.push(-34);
-	real.push(42);
-
 	mine.push(44);
 	mine.push(-34);
-	mine.push(42);
 
-	//OPERATOR (NO CHANGE)
 	EXPECT_EQ(real == real, true);
 	EXPECT_EQ(mine == mine, true);
 
-	// //COPY CONSTRUCT + Operator =
-	// std::stack<int>	real2(real);
-	// ft::stack<int>	mine2(mine);
+	EXPECT_EQ(real != real, false);
+	EXPECT_EQ(mine != mine, false);
 
-	// EXPECT_EQ();
+	EXPECT_EQ(real <= real, true);
+	EXPECT_EQ(mine <= mine, true);
 
+	EXPECT_EQ(real >= real, true);
+	EXPECT_EQ(mine >= mine, true);
+
+	EXPECT_EQ(real < real, false);
+	EXPECT_EQ(mine < mine, false);
+
+	EXPECT_EQ(real > real, false);
+	EXPECT_EQ(mine > mine, false);
+}
+
+TEST(stack, OPERATOR_NOT_EQUAL)
+{
+	std::stack<int>	real;
+	std::stack<int>	real2;
+	ft::stack<int>	mine;
+	ft::stack<int>	mine2;
+
+	real.push(44);
+	real.push(-34);
+	real2.push(44);
+	real2.push(-32);
+
+	mine.push(44);
+	mine.push(-34);
+	mine2.push(44);
+	mine2.push(-32);
+
+	EXPECT_EQ(real == real2, false);
+	EXPECT_EQ(mine == mine2, false);
+
+	EXPECT_EQ(real != real2, true);
+	EXPECT_EQ(mine != mine2, true);
+
+	EXPECT_EQ(real <= real2, true);
+	EXPECT_EQ(mine <= mine2, true);
+
+	EXPECT_EQ(real >= real2, false);
+	EXPECT_EQ(mine >= mine2, false);
+
+	EXPECT_EQ(real < real2, true);
+	EXPECT_EQ(mine < mine2, true);
+
+	EXPECT_EQ(real > real2, false);
+	EXPECT_EQ(mine > mine2, false);
+}
+
+TEST(stack, COPY)
+{
+	std::stack<int>	real;
+	ft::stack<int>	mine;
+
+	real.push(44);
+	real.push(42);
+	mine.push(44);
+	mine.push(42);
+
+	std::stack<int>	real2(real);
+	ft::stack<int>	mine2(mine);
+
+	EXPECT_EQ(real2.top(), mine2.top());
+	EXPECT_EQ(real2.top(), 42);
+	EXPECT_EQ(mine2.top(), 42);
+
+	std::stack<int>	real3 = real;
+	ft::stack<int>	mine3 = mine;
+
+	EXPECT_EQ(real3.top(), mine3.top());
+	EXPECT_EQ(real3.top(), 42);
+	EXPECT_EQ(mine3.top(), 42);
 }
