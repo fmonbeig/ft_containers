@@ -6,30 +6,28 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 14:37:21 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/05 17:58:31 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/06 14:39:56 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <iostream>
 #include <memory>
 #include <vector>
+#include "compare.hpp"
 
 namespace ft
 {
-
-	template< class T, class Container = std::vector<T>> //FIXME a changer avec mon vector
+	template< class T, class Container = std::vector<T> > //FIXME a changer avec mon vector
 	class stack
 	{
-		public:
+		private:
 		// +------------------------------------------+ //
 		//   MEMBER OBJECT						        //
 		// +------------------------------------------+ //
-
-			Container C;
-
+			Container c;
+		public:
 		// +------------------------------------------+ //
 		//   MEMBER TYPE						        //
 		// +------------------------------------------+ //
@@ -40,80 +38,79 @@ namespace ft
 			typedef typename Container::const_reference	const_reference;
 
 		// +------------------------------------------+ //
-		//   MEMBER FUNCTION					        //
+		//   CONSTRUCT / DESTRUCT / COPY				//
 		// +------------------------------------------+ //
 
-			stack(){}
+			explicit stack( const Container& cont = Container() )
+			{ c = cont; }
+
 			virtual ~stack(){}
 
-			stack(stack const & other): C(other.C)
+			stack(stack const & other): c(other.c)
 			{}
 
 			stack & operator=(stack & rhs)
 			{
 				if (this != &rhs)
-				{
-					// destroy container c ??
-					C = rhs.C;
-				}
+					c = rhs.c;
 				return *this;
 			}
+		// +------------------------------------------+ //
+		//   FRIEND								        //
+		// +------------------------------------------+ //
+
+			friend bool operator==(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+			{ return (lhs.c == rhs.c); }
+
+			friend bool operator<(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+			{ return (lhs.c < rhs.c); }
 		// +------------------------------------------+ //
 		//   ELEMENT ACCESS						        //
 		// +------------------------------------------+ //
 
-		value_type & top()
-		{ return (C.back()); }
+			value_type & top()
+			{ return (c.back()); }
 
 		// +------------------------------------------+ //
 		//   CAPACITY							        //
 		// +------------------------------------------+ //
 
-		bool empty() const
-		{ return (C.empty()); }
+			bool empty() const
+			{ return (c.empty()); }
 
-		size_type size() const
-		{ return (C.size()); }
+			size_type size() const
+			{ return (c.size()); }
 
 		// +------------------------------------------+ //
 		//   MODIFIERS							        //
 		// +------------------------------------------+ //
 
-		void push( value_type const & value )
-		{ C.push_back(value); }
+			void push( value_type const & value )
+			{ c.push_back(value); }
 
-		void pop()
-		{ C.pop_back(); }
-
-
+			void pop()
+			{ c.pop_back(); }
 	};
+
+	// +------------------------------------------+ //
+	//   OPERATOR							        //
+	// +------------------------------------------+ //
+
+	template< class T, class Container >
+	bool operator!=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+	{ return (lhs.c != rhs.c); }
+
+	template< class T, class Container >
+	bool operator<=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+	{ return (lhs.c <= rhs.c); }
+
+	template< class T, class Container >
+	bool operator>( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+	{ return (lhs.c > rhs.c); }
+
+	template< class T, class Container >
+	bool operator>=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+	{ return (lhs.c >= rhs.c); }
 }
-
-    operator==(const array<_Tp, _Nm>& __one, const array<_Tp, _Nm>& __two)
-    { return std::equal(__one.begin(), __one.end(), __two.begin()); }
-
-  template<typename _Tp, std::size_t _Nm>
-    _GLIBCXX20_CONSTEXPR
-    inline bool
-    operator==(const array<_Tp, _Nm>& __one, const array<_Tp, _Nm>& __two)
-    { return std::equal(__one.begin(), __one.end(), __two.begin()); }
-
-
-template< class T, class Alloc >
-bool operator==( const ft::stack<T,Alloc>& lhs,
-                 const ft::stack<T,Alloc>& rhs );
- { return ft::equal(lhs.begin(), lhs.end(), rhs.begin()); }
-
-
-
-/*
-operator==
-operator!=
-operator<
-operator<=
-operator>
-operator>=
-
-*/
 
 #endif

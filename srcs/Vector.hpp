@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/04/20 17:30:05 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/06 11:35:16 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,37 @@ class vector
 		void swap(vector<T,Allocator>&);
 		void clear();
 };
+
+
+
+	// template <class T, class Alloc>
+	// bool operator==(const vector<T, Alloc> & lhs, const vector<T, Alloc> & rhs)
+	// { return (ft::equal(C.begin(), C.end(), other.begin())); }
+
+	// template< class T, class Alloc >
+	// bool operator!=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+	// { return (lhs == rhs); }
+
+	// template< class T, class Alloc >
+	// bool operator<( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+	// { return (ft::lexicographical_compare(C.begin(), C.end(),
+	// 				  other.begin(), other.end())); }
+
+	// template< class T, class Alloc >
+	// bool operator<=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+	// {}
+
+	// template< class T, class Alloc >
+	// bool operator>( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+	// {
+
+	// }
+
+	// template< class T, class Alloc >
+	// bool operator>=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+	// {
+
+	// }
 #endif
 
 /*********

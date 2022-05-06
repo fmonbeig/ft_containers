@@ -12,7 +12,7 @@ NAME	= containers
 
 # list of your source files
 
-SRCS	= test.cpp
+SRCS	= main.cpp
 
 # Compiler
 CC		= c++
