@@ -13,9 +13,8 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <memory>
 #include <vector>
-#include "compare.hpp"
+#include "utility.hpp"
 
 namespace ft
 {
