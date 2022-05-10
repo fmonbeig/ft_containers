@@ -6,13 +6,13 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/10 15:32:32 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:36:28 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include "vector.hpp"
 #include <vector>
+#include "vector.hpp"
 
 int main()
 {
@@ -26,5 +26,4 @@ int main()
 	mine.push_back(-34);
 
 	std::cout << "REAL : " << real[0] << std::endl << "MINE : " << mine[0] << std::endl;
-
 }

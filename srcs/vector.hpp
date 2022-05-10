@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/10 15:31:20 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:26:41 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <sstream>
+#include <stdexcept>
 #include "utility.hpp"
 
 namespace ft
@@ -62,6 +64,11 @@ class vector
 			_cap = count;
 		}		//how to use it std::vector<int> v(size);
 
+		// template< class InputIt >
+		// vector( InputIt first, InputIt last,
+        // const Allocator& alloc = Allocator() );
+		//Constructs the container with the contents of the range [first, last).
+
 		vector( const vector& other )
 		{
 			_ptr = _alloc.allocate(other._size);
@@ -103,8 +110,46 @@ class vector
 		// +------------------------------------------+ //
 		//   ELEMENT ACCESS						        //
 		// +------------------------------------------+ //
+
+		reference at( size_type pos )
+		{
+			if (pos > _size)
+			{
+				std::stringstream ss;
+				std::stringstream ss2;
+				std::string str_pos;
+				std::string str_size;
+
+				ss << pos;
+				ss >> str_pos;
+				ss2 << _size;
+				ss2 >> str_size;
+				throw std::out_of_range("vector::_M_range_check: __n (which is " + str_pos + ") >= this->size() (which is " + str_size + ")");
+			}
+			return (_ptr[pos]);
+		}
+
+		const_reference at( size_type pos ) const
+		{
+			if (pos > _size)
+			{
+				std::stringstream ss;
+				std::stringstream ss2;
+				std::string str_pos;
+				std::string str_size;
+
+				ss << pos;
+				ss >> str_pos;
+				ss2 << _size;
+				ss2 >> str_size;
+				throw std::out_of_range("vector::_M_range_check: __n (which is " + str_pos + ") >= this->size() (which is " + str_size + ")");
+			}
+			return (_ptr[pos]);
+		}
+
 		T & operator[](unsigned int index)
 		{ return (_ptr[index]); }
+
 		// +------------------------------------------+ //
 		//   CAPACITY							        //
 		// +------------------------------------------+ //

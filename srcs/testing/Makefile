@@ -12,7 +12,7 @@ CXXFLAGS += $(INCLUDE)
 
 MAIN = gtest_main.cpp
 
-FILES = stack_test #requests_gtests
+FILES =  vector_test #stack_test #requests_gtests
 
 CONTAINERS_OBJS_PATH = ../../objs/
 
