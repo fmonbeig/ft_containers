@@ -1,15 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Vector.hpp                                         :+:      :+:    :+:   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/09 18:06:43 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:31:20 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
@@ -24,32 +23,22 @@ namespace ft
 template<class T, class Allocator = std::allocator<T> >
 class vector
 {
-	private:
-		// +------------------------------------------+ //
-		//   MEMBER OBJECT						        //
-		// +------------------------------------------+ //
-			allocator_type	_ptr;
-			size_t			_size;
-			size_t			_cap;
-			// T*	_ptr;
-			// rajouter une structure d'iterateur avec begin / end ?
 	public:
 		// +------------------------------------------+ //
 		//   MEMBER TYPE						        //
 		// +------------------------------------------+ //
-
-		typedef	T										value_type;
-		typedef Allocator								allocator_type;
-		typedef typename Allocator::reference			reference;
-		typedef typename Allocator::const_reference		const_reference;
-		typedef typename Allocator::pointer				pointer;
-		typedef typename Allocator::const_pointer		const_pointer;
-		typedef implementation defined					iterator; //NB : Je ne sais pas trop comment ca fonctionne
-		typedef implementation defined					const_iterator;
-		typedef implementation defined					size_type;
-		typedef implementation defined					difference_type;
-		typedef std::reverse_iterator<iterator>			reverse_iterator; //FIXME mettre son iterateur
-		typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef	T											value_type;
+		typedef Allocator									allocator_type;
+		typedef typename Allocator::reference				reference;
+		typedef typename Allocator::const_reference			const_reference;
+		typedef typename Allocator::pointer					pointer;
+		typedef typename Allocator::const_pointer			const_pointer;
+		// typedef implementation defined					iterator; //NB : Je ne sais pas trop comment ca fonctionne
+		// typedef implementation defined					const_iterator;
+		typedef std::size_t									size_type;
+		typedef std::ptrdiff_t								difference_type;
+		// typedef std::reverse_iterator<iterator>			reverse_iterator; //FIXME mettre son iterateur
+		// typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		// +------------------------------------------+ //
 		//   MEMBER FUNCTIONS							//
@@ -57,48 +46,47 @@ class vector
 
 		explicit vector(const Allocator& alloc = Allocator())
 		{
-			_ptr = alloc;
-			_ptr.allocate(0);
-			_ptr.construct();
+			_alloc = alloc;
+			_ptr = _alloc.allocate(0);
 			_size = 0;
 			_cap = 0;
-		} // Create the first pointer
+		}		// Create the first pointer
 
 		explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 		{
 			_ptr = alloc;
-			_ptr.allocate(count);
-			for (int i = 0; i < count; i++)
-				_ptr.construct(_ptr + i, value);
+			_ptr = _alloc.allocate(count);
+			for (size_t i = 0; i < count; i++)
+				_alloc.construct(_ptr + i, value);
 			_size = count;
 			_cap = count;
 		}		//how to use it std::vector<int> v(size);
 
 		vector( const vector& other )
 		{
-			_ptr.allocate(other._size);
-			for (int i = 0; i < _size.other; i++)
-				_ptr.construct(_ptr + i, other._ptr[i]);
+			_ptr = _alloc.allocate(other._size);
+			for (size_t i = 0; i < other._size; i++)
+				_alloc.construct(_ptr + i, other._ptr[i]);
 			_size = other._size;
 			_cap = other._cap;
 		}
 
 		~vector()
 		{
-			for(size_t i = 0; i < _size; i++)
-				_ptr.destroy(_ptr + i);
-			_ptr.desallocate(_size);
+			for (size_t i = 0; i < _size; i++)
+				_alloc.destroy(_ptr + i);
+			_alloc.deallocate(_ptr, _cap);
 		}
 
 		vector & operator=(vector & other)
 		{
-			for(size_t i = 0; i < _size; i++)
-				_ptr.destroy(_ptr + i);
-			_ptr.desallocate(_size);
+			for (size_t i = 0; i < _size; i++)
+				_alloc.destroy(_ptr + i);
+			_alloc.deallocate(_ptr, _cap);
 
-			_ptr.allocate(other._size);
-			for (int i = 0; i < _size.other; i++)
-				_ptr.construct(_ptr + i, other._ptr[i]);
+			_ptr = _alloc.allocate(other._cap);
+			for (size_t i = 0; i < other._size; i++)
+				_alloc.construct(_ptr + i, other._ptr[i]);
 			_size = other._size;
 			return *this;
 		}
@@ -115,10 +103,29 @@ class vector
 		// +------------------------------------------+ //
 		//   ELEMENT ACCESS						        //
 		// +------------------------------------------+ //
-
+		T & operator[](unsigned int index)
+		{ return (_ptr[index]); }
 		// +------------------------------------------+ //
 		//   CAPACITY							        //
 		// +------------------------------------------+ //
+
+		void reserve( size_type new_cap )
+		{
+			// NB is there a max capacity
+			if (new_cap > _cap)
+			{
+				T* temp = _alloc.allocate(new_cap);
+
+				for (size_t i = 0; i < _size; i++)
+				{
+					_alloc.construct(temp + i, _ptr[i]);
+					_alloc.destroy(_ptr + i);
+				}
+				_alloc.deallocate(_ptr, _cap);
+				_ptr = temp;
+				_cap = new_cap;
+			}
+		}
 
 		// +------------------------------------------+ //
 		//   MODIFIERS							        //
@@ -126,25 +133,25 @@ class vector
 
 		void push_back( const T& value )
 		{
-			if (_size > _cap)
-			{
-				allocator_type	temp; // copier _ptr en allouant la mémoire + construct
-				// recalculate ALL iterator
-				for(size_t i = 0; i < _size; i++)
-				_ptr.destroy(_ptr + i);
-				_ptr.desallocate(_size);
-				// delete + reallocated everything + the value
-				// recalculate _size and _cap value
-			}
-			else
-			{
-				//recalculate only the last iterator (past the end)
-				// add the value
-				// recalculate _size and _cap value  .size() + .capacity()
-
-			}
+			if (_size + 1 > _cap)
+				this->reserve(_size * 1.7);
+			_alloc.construct(_ptr + _size, value);
+			_size++;
 		}
+
+	private:
+		// +------------------------------------------+ //
+		//   MEMBER OBJECT						        //
+		// +------------------------------------------+ //
+			value_type *	_ptr;
+			allocator_type	_alloc;
+			size_t			_size; // how many construct object they are
+			size_t			_cap; // how many memory they are
+			// rajouter une structure d'iterateur avec begin / end ?
 };
+
+
+
 }
 
 
@@ -210,7 +217,7 @@ than the others, and have less consistent iterators and references than lists an
  * OPERATOR	== 402
  * VECTOR	== 484
  *
- * /
+ */
 
 /*
 		typedef typename Allocator::reference reference;

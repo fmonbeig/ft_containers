@@ -21,12 +21,6 @@ namespace ft
 	template< class T, class Container = std::vector<T> > //FIXME a changer avec mon vector
 	class stack
 	{
-		private:
-		// +------------------------------------------+ //
-		//   MEMBER OBJECT						        //
-		// +------------------------------------------+ //
-			Container c;
-
 		public:
 		// +------------------------------------------+ //
 		//   MEMBER TYPE						        //
@@ -90,6 +84,12 @@ namespace ft
 
 			void pop()
 			{ c.pop_back(); }
+
+			private:
+		// +------------------------------------------+ //
+		//   MEMBER OBJECT						        //
+		// +------------------------------------------+ //
+			Container c;
 	};
 
 	// +------------------------------------------+ //

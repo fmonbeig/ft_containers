@@ -1,5 +1,5 @@
-srcs/main.cpp: srcs/main.cpp srcs/stack.hpp srcs/compare.hpp
+srcs/main.cpp: srcs/main.cpp srcs/vector.hpp srcs/utility.hpp
 
-srcs/stack.hpp:
+srcs/vector.hpp:
 
-srcs/compare.hpp:
+srcs/utility.hpp:
