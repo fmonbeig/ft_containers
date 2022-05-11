@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/10 16:26:41 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/11 15:21:39 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sstream>
 #include <stdexcept>
 #include "utility.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft
 {
@@ -35,12 +36,12 @@ class vector
 		typedef typename Allocator::const_reference			const_reference;
 		typedef typename Allocator::pointer					pointer;
 		typedef typename Allocator::const_pointer			const_pointer;
-		// typedef implementation defined					iterator; //NB : Je ne sais pas trop comment ca fonctionne
-		// typedef implementation defined					const_iterator;
 		typedef std::size_t									size_type;
 		typedef std::ptrdiff_t								difference_type;
-		// typedef std::reverse_iterator<iterator>			reverse_iterator; //FIXME mettre son iterateur
-		// typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+		// typedef ft::iterator_traits<T>::value_type		iterator;
+		// typedef ft::iterator_traits<T>::difference_type	const_iterator;
+		// typedef ft::reverse_iterator<T>					reverse_iterator;
+		// typedef ft::reverse_iterator<const T>			const_reverse_iterator;
 
 		// +------------------------------------------+ //
 		//   MEMBER FUNCTIONS							//
