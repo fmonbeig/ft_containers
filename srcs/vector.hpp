@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/11 15:21:39 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/12 16:53:32 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include "utility.hpp"
 #include "iterator_traits.hpp"
+#include "reverse_iterator.hpp"
+#include "vector_iterator.hpp"
 
 namespace ft
 {
@@ -32,16 +34,16 @@ class vector
 		// +------------------------------------------+ //
 		typedef	T											value_type;
 		typedef Allocator									allocator_type;
-		typedef typename Allocator::reference				reference;
-		typedef typename Allocator::const_reference			const_reference;
-		typedef typename Allocator::pointer					pointer;
-		typedef typename Allocator::const_pointer			const_pointer;
+		typedef typename Allocator::reference				reference;		 //T&
+		typedef typename Allocator::const_reference			const_reference; //const T&
+		typedef typename Allocator::pointer					pointer;		// T*
+		typedef typename Allocator::const_pointer			const_pointer; // const T*
 		typedef std::size_t									size_type;
 		typedef std::ptrdiff_t								difference_type;
-		// typedef ft::iterator_traits<T>::value_type		iterator;
-		// typedef ft::iterator_traits<T>::difference_type	const_iterator;
-		// typedef ft::reverse_iterator<T>					reverse_iterator;
-		// typedef ft::reverse_iterator<const T>			const_reverse_iterator;
+		typedef ft::vector_iterator<T>						iterator;
+		typedef ft::vector_iterator<const T>				const_iterator;
+		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::reverse_iterator<const iterator>		const_reverse_iterator;
 
 		// +------------------------------------------+ //
 		//   MEMBER FUNCTIONS							//
@@ -152,6 +154,13 @@ class vector
 		{ return (_ptr[index]); }
 
 		// +------------------------------------------+ //
+		//   ITERATORS							        //
+		// +------------------------------------------+ //
+
+		iterator begin() { iterator it(_ptr); return (it);}
+		iterator end()	 { iterator it(_ptr + _size); return (it);}
+
+		// +------------------------------------------+ //
 		//   CAPACITY							        //
 		// +------------------------------------------+ //
 
@@ -193,7 +202,6 @@ class vector
 			allocator_type	_alloc;
 			size_t			_size; // how many construct object they are
 			size_t			_cap; // how many memory they are
-			// rajouter une structure d'iterateur avec begin / end ?
 };
 
 

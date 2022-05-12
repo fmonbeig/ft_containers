@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/11 17:48:36 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:32:49 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,24 @@ int main()
 
 	real.push_back(44);
 	real.push_back(-34);
+	real.push_back(112);
 
+	std::cout << "REAL -- BEGIN" << std::endl;
+	std::cout << *real.begin() << std::endl;
+	std::cout << "REAL -- ALL VECTOR" << std::endl;
+	for(std::vector<int>::iterator it = real.begin(); it != real.end(); it++ )
+		std::cout << *it << std::endl;
 
-	std::cout << "REAL : " << real[0] << std::endl << "MINE : " << mine[0] << std::endl;
+	mine.push_back(44);
+	mine.push_back(-34);
+	mine.push_back(112);
+
+	std::cout << "mine -- BEGIN" << std::endl;
+	std::cout << *mine.begin() << std::endl;
+	std::cout << "mine -- ALL VECTOR" << std::endl;
+	for(ft::vector<int>::iterator it = mine.begin(); it != mine.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+
 }

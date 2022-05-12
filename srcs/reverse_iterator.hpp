@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/11 18:00:57 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/12 17:56:09 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ namespace ft
 			template <class U>
 			reverse_iterator( const reverse_iterator<U>& other ) { _it = other._it; };
 
-			reverse_iterator & operator=(reverse_iterator & rhs) { _it = rhs._it; }
-			reverse_iterator & operator+=( difference_type n ) { _it -=n, return (*this); }
-			reverse_iterator & operator-=( difference_type n ) { _it +=n, return (*this); }
+			reverse_iterator & operator=(reverse_iterator const & rhs) { _it = rhs._it; return (*this);}
+			reverse_iterator & operator+=( difference_type n ) { _it -=n; return (*this); }
+			reverse_iterator & operator-=( difference_type n ) { _it +=n; return (*this); }
 
 			// +------------------------------------------+ //
 			//   ACCESS							            //
@@ -46,12 +46,13 @@ namespace ft
 
 			reference operator*() const { return *_it; }
 			pointer operator->() const { return _it; }
-			reference operator[](diffenrence_type n) const
+			reference operator[](difference_type n) const
 			{
-				reverse_iterator temp_it = _it;
+				// reverse_iterator temp_it = _it;
 
-				temp_it -= n;
-				return (*(temp_it));
+				// temp_it -= n;
+				// return (*(temp_it));
+				return (this->base()[-n - 1]);
 			}
 
 			iterator_type base() const
@@ -67,10 +68,14 @@ namespace ft
 
 			reverse_iterator& operator++() { _it--; return *this; }
 			reverse_iterator& operator--() { _it++; return *this; }
-			reverse_iterator& operator++(int) { reverse_iterator temp_it(*this); _it--; return temp_it; }
-			reverse_iterator& operator--(int) { reverse_iterator temp_it(*this); _it++; return temp_it; }
-			reverse_iterator operator+( difference_type n ) const { it - n; return *this;}
-			reverse_iterator operator-( difference_type n ) const { it + n; return *this;}
+			reverse_iterator operator++(int) { _it--; return (reverse_iterator(_it - 1)); }
+			reverse_iterator operator--(int) { _it++; return (reverse_iterator(_it + 1)); }
+
+			reverse_iterator operator+( difference_type n ) const { _it - n; return *this;}
+			reverse_iterator operator-( difference_type n ) const { _it + n; return *this;}
+
+			difference_type operator+(const reverse_iterator & x)  { return (_it - x._it); }
+			difference_type operator-(const reverse_iterator & x)  { return (_it + x._it); }
 
 	};
 
@@ -100,16 +105,6 @@ namespace ft
 	template <class _IteratorL, class _IteratorR>
 	bool operator>=(const reverse_iterator<_IteratorL>& lhs, const reverse_iterator<_IteratorR>& rhs)
 	{ return (lhs.base() >= rhs.base()); }
-
-	template< class Iterator >
-	typename ft::reverse_iterator<Iterator>::difference_type
-	operator-( const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs )
-	{ return (rhs.base() - lhs.base()); }
-
-	template< class Iter >
-	reverse_iterator<Iter>
-	operator+( typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it )
-	{ return (&it[n]); }
 }
 
 

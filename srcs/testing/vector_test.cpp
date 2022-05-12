@@ -9,7 +9,7 @@
 
 */
 
-TEST(vector, PUSH)
+TEST(vector, PUSHBACK)
 {
 	std::vector<int>	real;
 	ft::vector<int>	mine;
@@ -21,13 +21,4 @@ TEST(vector, PUSH)
 	mine.push_back(-34);
 	mine.push_back(42);
 	EXPECT_EQ(real.at(1), mine.at(1));
-
-	try
-	{
-		mine.at(44);
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
 }
