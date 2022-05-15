@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/12 16:53:32 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/15 19:46:52 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class vector
 		typedef std::size_t									size_type;
 		typedef std::ptrdiff_t								difference_type;
 		typedef ft::vector_iterator<T>						iterator;
-		typedef ft::vector_iterator<const T>				const_iterator;
+		typedef ft::vector_iterator<T const>				const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const iterator>		const_reverse_iterator;
 
@@ -159,6 +159,8 @@ class vector
 
 		iterator begin() { iterator it(_ptr); return (it);}
 		iterator end()	 { iterator it(_ptr + _size); return (it);}
+		const_iterator begin() const { const_iterator it(_ptr); return (it);}
+		const_iterator end() const	 { const_iterator it(_ptr + _size); return (it);}
 
 		// +------------------------------------------+ //
 		//   CAPACITY							        //

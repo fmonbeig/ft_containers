@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/12 15:32:49 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/15 19:21:34 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main()
 	std::cout << "REAL -- BEGIN" << std::endl;
 	std::cout << *real.begin() << std::endl;
 	std::cout << "REAL -- ALL VECTOR" << std::endl;
-	for(std::vector<int>::iterator it = real.begin(); it != real.end(); it++ )
+	for(std::vector<int>::const_iterator it = real.begin(); it != real.end(); it++ )
 		std::cout << *it << std::endl;
 
 	mine.push_back(44);
@@ -36,7 +36,7 @@ int main()
 	std::cout << "mine -- BEGIN" << std::endl;
 	std::cout << *mine.begin() << std::endl;
 	std::cout << "mine -- ALL VECTOR" << std::endl;
-	for(ft::vector<int>::iterator it = mine.begin(); it != mine.end(); it++)
+	for(ft::vector<int>::const_iterator it = mine.begin(); it != mine.end(); it++)
 	{
 		std::cout << *it << std::endl;
 	}
