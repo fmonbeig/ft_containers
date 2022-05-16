@@ -6,35 +6,37 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/12 17:56:09 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/16 17:13:20 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR
 #define REVERSE_ITERATOR
 
-#include "iterator_traits.hpp"
-
 namespace ft
 {
 	template< class Iter >
 	class reverse_iterator
 	{
-		typedef				Iter											iterator_type;
-		typedef typename	ft::iterator_traits<Iter>::iterator_category	iterator_category;
-		typedef typename	ft::iterator_traits<Iter>::difference_type		difference_type;
-		typedef typename	ft::iterator_traits<Iter>::value_type			value_type; //T
-		typedef typename	ft::iterator_traits<Iter>::pointer				pointer;    //T*
-		typedef typename	ft::iterator_traits<Iter>::reference			reference;  // T&
-
-		protected:
-			iterator_type	_it;
-
 		public:
+			typedef				Iter											iterator_type;
+			typedef typename	std::random_access_iterator_tag					iterator_category;
+			typedef 			long int										difference_type;
+			typedef typename	Iter::value_type								value_type; //T
+			typedef typename	Iter::pointer									pointer;    //T*
+			typedef typename	Iter::reference									reference;  // T&
+			// typedef typename	Iter::const_pointer								const_pointer;    //T*
+			// typedef typename	Iter::const_reference							const_reference;  // T&
+
+			// +------------------------------------------+ //
+			//   CONSTRUCT...					            //
+			// +------------------------------------------+ //
 			reverse_iterator(){ _it = Iter(); }
 			explicit reverse_iterator( iterator_type x ) { _it = Iter(x); }
+
 			template <class U>
-			reverse_iterator( const reverse_iterator<U>& other ) { _it = other._it; };
+			reverse_iterator( const reverse_iterator<U>& other ) { _it = other.base(); };
+			reverse_iterator( reverse_iterator const & other ) { _it = other.base(); };
 
 			reverse_iterator & operator=(reverse_iterator const & rhs) { _it = rhs._it; return (*this);}
 			reverse_iterator & operator+=( difference_type n ) { _it -=n; return (*this); }
@@ -44,7 +46,11 @@ namespace ft
 			//   ACCESS							            //
 			// +------------------------------------------+ //
 
-			reference operator*() const { return *_it; }
+			// operator reverse_iterator<Iter const>() const
+			// {	return (reverse_iterator<Iter const>(_it)); };
+
+			reference operator*() { return *_it; }
+			// const_reference operator*() const { return *_it; }
 			pointer operator->() const { return _it; }
 			reference operator[](difference_type n) const
 			{
@@ -71,12 +77,22 @@ namespace ft
 			reverse_iterator operator++(int) { _it--; return (reverse_iterator(_it - 1)); }
 			reverse_iterator operator--(int) { _it++; return (reverse_iterator(_it + 1)); }
 
-			reverse_iterator operator+( difference_type n ) const { _it - n; return *this;}
-			reverse_iterator operator-( difference_type n ) const { _it + n; return *this;}
+			reverse_iterator operator+( difference_type n ) const
+			{
+				reverse_iterator temp(*this);
+				return (temp -= n);
+			}
+			reverse_iterator operator-( difference_type n ) const
+			{
+				reverse_iterator temp(*this);
+				return (temp += n);
+			}
 
 			difference_type operator+(const reverse_iterator & x)  { return (_it - x._it); }
 			difference_type operator-(const reverse_iterator & x)  { return (_it + x._it); }
 
+			protected:
+				iterator_type	_it;
 	};
 
 	// +------------------------------------------+ //

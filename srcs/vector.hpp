@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/15 19:46:52 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/16 16:00:47 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class vector
 		typedef ft::vector_iterator<T>						iterator;
 		typedef ft::vector_iterator<T const>				const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
-		typedef ft::reverse_iterator<const iterator>		const_reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		// +------------------------------------------+ //
 		//   MEMBER FUNCTIONS							//
@@ -157,10 +157,16 @@ class vector
 		//   ITERATORS							        //
 		// +------------------------------------------+ //
 
-		iterator begin() { iterator it(_ptr); return (it);}
-		iterator end()	 { iterator it(_ptr + _size); return (it);}
 		const_iterator begin() const { const_iterator it(_ptr); return (it);}
 		const_iterator end() const	 { const_iterator it(_ptr + _size); return (it);}
+
+		iterator begin() { iterator it(_ptr); return (it);}
+		iterator end()	 { iterator it(_ptr + _size); return (it);}
+
+		reverse_iterator rbegin() { return reverse_iterator(_ptr + _size - 1); }
+		reverse_iterator rend() { return reverse_iterator(_ptr - 1); }
+		const_reverse_iterator rbegin() const { return const_reverse_iterator(_ptr + _size - 1); }
+		const_reverse_iterator rend() const { return const_reverse_iterator(_ptr - 1); }
 
 		// +------------------------------------------+ //
 		//   CAPACITY							        //
@@ -200,7 +206,7 @@ class vector
 		// +------------------------------------------+ //
 		//   MEMBER OBJECT						        //
 		// +------------------------------------------+ //
-			value_type *	_ptr;
+			pointer			_ptr;
 			allocator_type	_alloc;
 			size_t			_size; // how many construct object they are
 			size_t			_cap; // how many memory they are
