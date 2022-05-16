@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/16 16:00:47 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/16 19:16:58 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ class vector
 				_alloc.construct(_ptr + i, value);
 			_size = count;
 			_cap = count;
-		}		//how to use it std::vector<int> v(size);
+		}		//how to use --> it std::vector<int> v(size);
 
 		// template< class InputIt >
 		// vector( InputIt first, InputIt last,
@@ -101,7 +101,32 @@ class vector
 			return *this;
 		}
 
-		// void assign(InputIterator first, InputIterator last);
+		void assign( size_type count, const T& value )
+		{
+			for (size_t i = 0; i < _size; i++)
+				_alloc.destroy(_ptr + i);
+			this->reserve(count);
+			_size = count;
+			for (size_t i = 0; i < _size; i++)
+				_alloc.construct(_ptr + i, value);
+		}
+
+		// template< class InputIt > // la fonction avec le int rentre la dedans
+		// void assign(InputIt first, InputIt last)
+		// {
+		// 	size_t count = 0;
+
+		// 	for (size_t i = 0; i < _size; i++)
+		// 		_alloc.destroy(_ptr + i);
+		// 	for (; first != last; first++)
+		// 		count++;
+		// 	this->reserve(count);
+		// 	_size = count;
+
+		// 	std::cout << *first << std::endl;
+			// for (size_t i = 0; i < _size; i++)
+			// 	_alloc.construct(_ptr + i, *(first + i));
+		// }
 
 		allocator_type get_allocator() const
 		{ return (_ptr); }
