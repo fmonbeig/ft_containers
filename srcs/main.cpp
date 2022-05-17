@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/16 18:35:23 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:27:58 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ int main()
 
 	std::cout << "MINE -- ASSIGN" << std::endl;
 	mine.assign(2,42);
-	for(ft::vector<int>::const_iterator it = mine.begin(); it != mine.end(); it++ )
+	for(ft::vector<int>::iterator it = mine.begin(); it != mine.end(); it++ )
 		std::cout << *it << std::endl;
 
+	bool boolout = ft::is_integral<ft::vector<int>::const_iterator>::value;
 
+	std::cout << boolout << std::endl;
 }
 
 

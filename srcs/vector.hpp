@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/16 19:16:58 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:39:02 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,13 @@ class vector
 
 		~vector()
 		{
-			for (size_t i = 0; i < _size; i++)
-				_alloc.destroy(_ptr + i);
+			this->clear();
 			_alloc.deallocate(_ptr, _cap);
 		}
 
 		vector & operator=(vector & other)
 		{
-			for (size_t i = 0; i < _size; i++)
-				_alloc.destroy(_ptr + i);
+			this->clear();
 			_alloc.deallocate(_ptr, _cap);
 
 			_ptr = _alloc.allocate(other._cap);
@@ -103,30 +101,31 @@ class vector
 
 		void assign( size_type count, const T& value )
 		{
-			for (size_t i = 0; i < _size; i++)
-				_alloc.destroy(_ptr + i);
+			// std::cout << "NORMAL" << std::endl;
+			this->clear();
 			this->reserve(count);
 			_size = count;
 			for (size_t i = 0; i < _size; i++)
 				_alloc.construct(_ptr + i, value);
 		}
 
-		// template< class InputIt > // la fonction avec le int rentre la dedans
-		// void assign(InputIt first, InputIt last)
-		// {
-		// 	size_t count = 0;
+		/* if is_integral::value is true (int...) the ::type will be valid
+		in this case we inverse the ::value to avoid integral type */
 
-		// 	for (size_t i = 0; i < _size; i++)
-		// 		_alloc.destroy(_ptr + i);
-		// 	for (; first != last; first++)
-		// 		count++;
-		// 	this->reserve(count);
-		// 	_size = count;
+		template< class InputIt >
+		void assign(InputIt first, InputIt last,
+			typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+		{
+			size_t count = 0;
 
-		// 	std::cout << *first << std::endl;
-			// for (size_t i = 0; i < _size; i++)
-			// 	_alloc.construct(_ptr + i, *(first + i));
-		// }
+			this->clear();
+			for (int i = 0; (first + i) != last; i++)
+				count++;
+			this->reserve(count);
+			_size = count;
+			for (size_t i = 0; i < _size; i++)
+				_alloc.construct(_ptr + i, *(first + i));
+		}
 
 		allocator_type get_allocator() const
 		{ return (_ptr); }
@@ -225,6 +224,13 @@ class vector
 				this->reserve(_size * 1.7);
 			_alloc.construct(_ptr + _size, value);
 			_size++;
+		}
+
+		void clear()
+		{
+			for (size_t i = 0; i < _size; i++)
+				_alloc.destroy(_ptr + i);
+			_size = 0;
 		}
 
 	private:

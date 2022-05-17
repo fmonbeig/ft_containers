@@ -53,18 +53,16 @@ TEST(vector, ASSIGNV2)
 
 	real.assign(temp_real.begin(),temp_real.end());
 
-	for(int i=0; i < 3; i++)
-		std::cout << temp_real[i] << std::endl;
-	// ft::vector<int>		mine;
-	// ft::vector<int>		temp_mine;
+	ft::vector<int>		mine;
+	ft::vector<int>		temp_mine;
 
-	// temp_mine.push_back(44);
-	// temp_mine.push_back(14);
-	// temp_mine.push_back(98989);
+	temp_mine.push_back(44);
+	temp_mine.push_back(14);
+	temp_mine.push_back(98989);
 
-	// mine.assign(temp_mine.begin(),temp_mine.end());
+	mine.assign(temp_mine.begin(),temp_mine.end());
 
-	// bool result = std::equal(real.begin(), real.end(), mine.begin());
+	bool result = ft::equal(mine.begin(), mine.end(), temp_real.begin());
 
-	// EXPECT_EQ(result, true);
+	EXPECT_EQ(result, true);
 }
