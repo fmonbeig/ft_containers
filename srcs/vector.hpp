@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/17 11:39:02 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/17 16:33:41 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <limits>
 #include <string>
 #include <memory>
 #include <sstream>
@@ -43,7 +44,7 @@ class vector
 		typedef ft::vector_iterator<T>						iterator;
 		typedef ft::vector_iterator<T const>				const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator; //FIXME Problem on this one
 
 		// +------------------------------------------+ //
 		//   MEMBER FUNCTIONS							//
@@ -67,10 +68,15 @@ class vector
 			_cap = count;
 		}		//how to use --> it std::vector<int> v(size);
 
-		// template< class InputIt >
-		// vector( InputIt first, InputIt last,
-        // const Allocator& alloc = Allocator() );
-		//Constructs the container with the contents of the range [first, last).
+		template< class InputIt >
+		vector( InputIt first, InputIt last, const Allocator& alloc = Allocator())
+		{
+			_alloc = alloc;
+			_ptr = _alloc.allocate(0);
+			_size = 0;
+			_cap = 0;
+			this->assign(first,last);
+		}
 
 		vector( const vector& other )
 		{
@@ -174,31 +180,49 @@ class vector
 			return (_ptr[pos]);
 		}
 
-		T & operator[](unsigned int index)
-		{ return (_ptr[index]); }
+		reference operator[](unsigned int index) { return (_ptr[index]); }
+		const_reference operator[]( unsigned int index ) const { return (_ptr[index]); }
+
+		reference front() { return (_ptr[0]);}
+		const_reference front() const { return (_ptr[0]);}
+
+		reference back() { return (_ptr[_size - 1]);}
+		const_reference back() const { return (_ptr[_size - 1]);}
+
+		T*	data() { return _ptr; }
+		const T* data() const { return _ptr; }
 
 		// +------------------------------------------+ //
 		//   ITERATORS							        //
 		// +------------------------------------------+ //
 
-		const_iterator begin() const { const_iterator it(_ptr); return (it);}
-		const_iterator end() const	 { const_iterator it(_ptr + _size); return (it);}
+		iterator 		begin() { iterator it(_ptr); return (it);}
+		const_iterator	begin() const { const_iterator it(_ptr); return (it);}
 
-		iterator begin() { iterator it(_ptr); return (it);}
-		iterator end()	 { iterator it(_ptr + _size); return (it);}
+		iterator		end() { iterator it(_ptr + _size); return (it);}
+		const_iterator	end() const	 { const_iterator it(_ptr + _size); return (it);}
 
-		reverse_iterator rbegin() { return reverse_iterator(_ptr + _size - 1); }
-		reverse_iterator rend() { return reverse_iterator(_ptr - 1); }
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(_ptr + _size - 1); }
-		const_reverse_iterator rend() const { return const_reverse_iterator(_ptr - 1); }
+		reverse_iterator		rbegin() { return reverse_iterator(_ptr + _size - 1); }
+		const_reverse_iterator	rbegin() const { return const_reverse_iterator(_ptr + _size - 1); }
+
+		reverse_iterator		rend() { return reverse_iterator(_ptr - 1); }
+		const_reverse_iterator	rend() const { return const_reverse_iterator(_ptr - 1); }
 
 		// +------------------------------------------+ //
 		//   CAPACITY							        //
 		// +------------------------------------------+ //
 
+		bool empty() const
+		{
+			if (_size == 0)
+				return true;
+			return false;
+		}
+
 		void reserve( size_type new_cap )
 		{
-			// NB is there a max capacity
+			if (new_cap > this->max_size())
+				throw std::length_error("vector");
 			if (new_cap > _cap)
 			{
 				T* temp = _alloc.allocate(new_cap);
@@ -214,6 +238,11 @@ class vector
 			}
 		}
 
+		size_type size() const { return _size; }
+		size_type max_size() const { return std::numeric_limits<difference_type>::max(); }
+		size_type capacity() const { return _cap; }
+
+
 		// +------------------------------------------+ //
 		//   MODIFIERS							        //
 		// +------------------------------------------+ //
@@ -221,7 +250,12 @@ class vector
 		void push_back( const T& value )
 		{
 			if (_size + 1 > _cap)
-				this->reserve(_size * 1.7);
+			{
+				if (_size == 0)
+					this->reserve(2);
+				else
+					this->reserve(_size * 2);
+			}
 			_alloc.construct(_ptr + _size, value);
 			_size++;
 		}
@@ -233,14 +267,32 @@ class vector
 			_size = 0;
 		}
 
+		iterator insert( iterator pos, const T& value )
+		{
+			if (_size + 1 > _cap)
+			{
+				if (_size == 0)
+					this->reserve(2);
+				else
+					this->reserve(_size * 2);
+			}
+			_alloc.construct(_ptr + _size, value);
+			for (size_t i = 0; pos != this.end(); i++)
+				pos + i + 1 = pos + i;
+		}
+
+		// iterator insert( const_iterator pos, T&& value );
+
+		// void insert( iterator pos, size_type count, const T& value );
+
+		// template< class InputIt >
+		// void insert( iterator pos, InputIt first, InputIt last );
+
 	private:
-		// +------------------------------------------+ //
-		//   MEMBER OBJECT						        //
-		// +------------------------------------------+ //
-			pointer			_ptr;
-			allocator_type	_alloc;
-			size_t			_size; // how many construct object they are
-			size_t			_cap; // how many memory they are
+		pointer			_ptr;
+		allocator_type	_alloc;
+		size_t			_size; // how many construct object they are
+		size_t			_cap; // how many memory they are
 };
 
 

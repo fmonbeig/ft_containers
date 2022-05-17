@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/17 11:27:58 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/17 16:03:51 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,27 @@ int main()
 	std::vector<int>	real;
 	ft::vector<int>		mine;
 
-	real.push_back(44);
-	real.push_back(-34);
-	real.push_back(112);
+	// real.push_back(44);
+	// real.push_back(-34);
+	// real.push_back(112);
 
 
 
-	std::cout << "REAL -- ASSIGN" << std::endl;
-	real.assign(2,42);
-	for(std::vector<int>::const_iterator it = real.begin(); it != real.end(); it++ )
-		std::cout << *it << std::endl;
+	// std::cout << "REAL -- ASSIGN" << std::endl;
+	// std::vector<int>	temp_real(real.begin(), real.end());
+	// for(std::vector<int>::const_iterator it = temp_real.begin(); it != temp_real.end(); it++ )
+	// 	std::cout << *it << std::endl;
 
 
+	// mine.push_back(44);
+	// mine.push_back(-34);
+	// mine.push_back(112);
 
-	mine.push_back(44);
-	mine.push_back(-34);
-	mine.push_back(112);
+	// ft::vector<int>	temp_mine(mine.begin(), mine.end());
+	// std::cout << "MINE -- ASSIGN" << std::endl;
+	// for(ft::vector<int>::const_iterator it = temp_mine.begin(); it != temp_mine.end(); it++ )
+	// 	std::cout << *it << std::endl;
 
-	std::cout << "MINE -- ASSIGN" << std::endl;
-	mine.assign(2,42);
-	for(ft::vector<int>::iterator it = mine.begin(); it != mine.end(); it++ )
-		std::cout << *it << std::endl;
-
-	bool boolout = ft::is_integral<ft::vector<int>::const_iterator>::value;
-
-	std::cout << boolout << std::endl;
 }
 
 
