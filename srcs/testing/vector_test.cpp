@@ -98,22 +98,43 @@ TEST(vector, CAPACITY)
 	EXPECT_EQ(mine.size(), (size_t)3);
 }
 
+
 TEST(vector, INSERT)
 {
 	std::vector<int>		real;
+	std::vector<int>		Radd;
 
 	real.push_back(44);
 	real.push_back(-34);
 	real.push_back(112);
 
-	std::vector<int>::iterator tmp = real.insert(real.begin() + 1, 99);
-	std::cout << *tmp << std::endl;
+	Radd.push_back(777);
+	Radd.push_back(778);
+	Radd.push_back(779);
+	Radd.push_back(800);
 
-	EXPECT_EQ(*tmp, 99);
-	EXPECT_EQ(*(real.begin() + 1), 99);
+	real.insert(real.begin() + 1, 99);
+	real.insert(real.begin() + 3, 5, 200);
+	real.insert(real.begin() + 2, Radd.begin(), Radd.end());
 
+	ft::vector<int>		mine;
+	ft::vector<int>		Madd;
 
-	for(std::vector<int>::const_iterator it = real.begin(); it != real.end(); it++ )
-		std::cout << *it << std::endl;
+	mine.push_back(44);
+	mine.push_back(-34);
+	mine.push_back(112);
+
+	Madd.push_back(777);
+	Madd.push_back(778);
+	Madd.push_back(779);
+	Madd.push_back(800);
+
+	mine.insert(mine.begin() + 1, 99);
+	mine.insert(mine.begin() + 3, 5, 200);
+	mine.insert(mine.begin() + 2, Madd.begin(), Madd.end());
+
+	for (int i = 0; real.begin() + i != real.end(); i++)
+		EXPECT_EQ(*(real.begin() + i), *(mine.begin() + i));
 
 }
+

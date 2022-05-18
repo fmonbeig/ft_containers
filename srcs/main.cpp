@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/18 14:54:07 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:12:26 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int main()
 {
 	// std::vector<int>	real;
 	ft::vector<int>		mine;
+	ft::vector<int>		add;
+
 
 	// real.push_back(44);
 	// real.push_back(-34);
@@ -31,14 +33,17 @@ int main()
 	// for(std::vector<int>::const_iterator it = real.begin(); it != real.end(); it++ )
 	// 	std::cout << *it << std::endl;
 
-
 	mine.push_back(44);
 	mine.push_back(-34);
 	mine.push_back(112);
 
-	ft::vector<int>::const_iterator it2 = mine.insert(mine.begin() + 2, 9999);
+	add.push_back(777);
+	add.push_back(778);
+	add.push_back(779);
+	add.push_back(800);
 
-	std::cout << *it2 << std::endl;
+	mine.insert(mine.begin() + 2, add.begin(), add.end());
+
 
 	std::cout << "LIST" << std::endl;
 

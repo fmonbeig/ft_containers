@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/18 14:52:53 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:13:24 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,8 +290,23 @@ class vector
 			_size += count;
 		}
 
-		// template< class InputIt >
-		// void insert( iterator pos, InputIt first, InputIt last );
+		template< class InputIt >
+		void insert( iterator pos, InputIt first, InputIt last,
+			typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+		{
+			difference_type index = pos - begin();
+			difference_type count = last - first;
+
+			if (count == 0)
+				return ;
+			if (_size + count > _cap)
+				this->reserve(_cap + count);
+			iterator newPos(&_ptr[index]);
+			movePtrRight(count, newPos, end());
+			for (long i = 0; i < count; i++)
+				_alloc.construct(&(*(newPos + i)), *(first + i));
+			_size += count;
+		}
 
 	private:
 		pointer			_ptr;
