@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/17 16:33:41 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 14:52:53 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ class vector
 		typedef typename Allocator::const_pointer			const_pointer; // const T*
 		typedef std::size_t									size_type;
 		typedef std::ptrdiff_t								difference_type;
-		typedef ft::vector_iterator<T>						iterator;
-		typedef ft::vector_iterator<T const>				const_iterator;
+		typedef ft::vector_iterator<T>						iterator; // pas besoin de faire de classe iterateur on peut juste ecrire T
+		typedef ft::vector_iterator<T const>				const_iterator; // T*
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator; //FIXME Problem on this one
 
@@ -269,21 +269,26 @@ class vector
 
 		iterator insert( iterator pos, const T& value )
 		{
-			if (_size + 1 > _cap)
-			{
-				if (_size == 0)
-					this->reserve(2);
-				else
-					this->reserve(_size * 2);
-			}
-			_alloc.construct(_ptr + _size, value);
-			for (size_t i = 0; pos != this.end(); i++)
-				pos + i + 1 = pos + i;
+			difference_type index = pos - begin();
+
+			insert(pos, 1, value);
+			return begin() + index;
 		}
 
-		// iterator insert( const_iterator pos, T&& value );
+		void insert( iterator pos, size_type count, const T& value )
+		{
+			difference_type index = pos - begin();
 
-		// void insert( iterator pos, size_type count, const T& value );
+			if (count == 0)
+				return ;
+			if (_size + count > _cap)
+				this->reserve(_cap + count);
+			iterator newPos(&_ptr[index]);
+			movePtrRight(count, newPos, end());
+			for (size_t i = 0; i < count; i++)
+				_alloc.construct(&(*(newPos + i)), value);
+			_size += count;
+		}
 
 		// template< class InputIt >
 		// void insert( iterator pos, InputIt first, InputIt last );
@@ -293,6 +298,15 @@ class vector
 		allocator_type	_alloc;
 		size_t			_size; // how many construct object they are
 		size_t			_cap; // how many memory they are
+
+		void movePtrRight(size_t count, iterator start, iterator end)
+		{
+			for (iterator it = end - 1; it != start - 1; it--)
+			{
+				_alloc.construct(&(*(it + count)), *it);
+				_alloc.destroy(&(*(it)));
+			}
+		}
 };
 
 
