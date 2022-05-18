@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/18 16:13:02 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 18:17:35 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,36 @@ class vector
 			return begin() + index;
 		}
 
+		void pop_back(){ _alloc.destroy(&(*(end()))); _size -= 1;}
+
+		void resize( size_type count, T value = T() )
+		{
+			if (_size == count)
+				return ;
+			if (_size > count)
+			{
+				for(size_t i = _size - count; i < _size; i++)
+					_alloc.destroy(_ptr + i);
+			}
+			else if (_size < count)
+			{
+				if (_size + count > _cap)
+					this->reserve(_cap + count);
+				for(size_t i = _size; i < _size + count; i++)
+					_alloc.construct(_ptr + i, value);
+			}
+
+			_size = count;
+		}
+
+		void swap( vector& other )
+		{
+			swapping(_ptr, other._ptr);
+			swapping(_alloc, other._alloc);
+			swapping(_size, other._size);
+			swapping(_cap, other._cap);
+		}
+
 	private:
 		pointer			_ptr;
 		allocator_type	_alloc;
@@ -355,12 +385,15 @@ class vector
 				_alloc.destroy(&(*(first + count)));
 			}
 		}
+
+		template <typename X>
+		void swapping( X& a, X& b )
+		{
+			X temp = a;
+			a = b;
+			b = temp;
+		}
 };
-
-
-
-}
-
 
 
 	// template <class T, class Alloc>
@@ -391,6 +424,8 @@ class vector
 	// {
 
 	// }
+	
+}
 #endif
 
 /*********

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/18 16:04:18 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 18:12:45 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,8 @@ int main()
 	real.push_back(44);
 	real.push_back(-34);
 	real.push_back(112);
-	real.push_back(550);
-	real.push_back(610);
 
-	std::cout << "REAL -- ERASE IT" << std::endl;
-
-	std::vector<int>::const_iterator it3 = real.erase(real.begin() + 1, real.begin() + 3);
-	std::cout << *it3 << std::endl;
-
-	std::ptrdiff_t count = (real.begin() + 3) - (real.begin() + 1);
-
-	std::cout << count << std::endl;
+	real.resize(5, 99);
 
 	std::cout << "LIST REAL" << std::endl;
 
@@ -44,13 +35,9 @@ int main()
 	mine.push_back(44);
 	mine.push_back(-34);
 	mine.push_back(112);
-	mine.push_back(550);
-	mine.push_back(610);
 
-	std::cout << "MINE -- ERASE IT" << std::endl;
+	mine.resize(5, 99);
 
-	ft::vector<int>::const_iterator it2 = mine.erase(mine.begin() + 1, mine.begin() + 3);
-	std::cout << *it2 << std::endl;
 
 	std::cout << "LIST" << std::endl;
 

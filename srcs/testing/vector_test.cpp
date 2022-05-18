@@ -147,7 +147,8 @@ TEST(vector, ERASE)
 	real.push_back(112);
 	real.push_back(560);
 	real.push_back(610);
-
+	real.push_back(9910);
+	real.pop_back();
 
 	real.erase(real.begin());
 	real.erase((real.begin() + 2), (real.begin() + 4));
@@ -159,9 +160,69 @@ TEST(vector, ERASE)
 	mine.push_back(112);
 	mine.push_back(560);
 	mine.push_back(610);
+	mine.push_back(9910);
+	mine.pop_back();
 
 	mine.erase(mine.begin());
 	mine.erase((mine.begin() + 2), (mine.begin() + 4));
+
+	for (int i = 0; real.begin() + i != real.end(); i++)
+		EXPECT_EQ(*(real.begin() + i), *(mine.begin() + i));
+}
+
+TEST(vector, SWAP)
+{
+	std::vector<int>	real;
+	std::vector<int>	real2;
+
+	real.push_back(44);
+	real.push_back(-34);
+	real.push_back(112);
+
+	real2.push_back(1);
+	real2.push_back(2);
+	real2.push_back(3);
+
+	real.swap(real2);
+
+
+	ft::vector<int>		mine;
+	ft::vector<int>		mine2;
+
+	mine.push_back(44);
+	mine.push_back(-34);
+	mine.push_back(112);
+
+	mine2.push_back(1);
+	mine2.push_back(2);
+	mine2.push_back(3);
+
+	mine.swap(mine2);
+
+	for (int i = 0; real.begin() + i != real.end(); i++)
+		EXPECT_EQ(*(real.begin() + i), *(mine.begin() + i));
+
+}
+
+TEST(vector, RESIZE)
+{
+	std::vector<int>	real;
+
+	real.push_back(44);
+	real.push_back(-34);
+	real.push_back(112);
+
+	real.resize(2);
+	real.resize(5, 99);
+
+	ft::vector<int>		mine;
+
+	mine.push_back(44);
+	mine.push_back(-34);
+	mine.push_back(112);
+
+	mine.resize(2);
+	mine.resize(5, 99);
 
 	for (int i = 0; real.begin() + i != real.end(); i++)
 		EXPECT_EQ(*(real.begin() + i), *(mine.begin() + i));
