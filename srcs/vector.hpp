@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/18 15:13:24 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:13:02 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class vector
 		typedef std::size_t									size_type;
 		typedef std::ptrdiff_t								difference_type;
 		typedef ft::vector_iterator<T>						iterator; // pas besoin de faire de classe iterateur on peut juste ecrire T
+		// typedef T*						iterator; // pas besoin de faire de classe iterateur on peut juste ecrire T
 		typedef ft::vector_iterator<T const>				const_iterator; // T*
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator; //FIXME Problem on this one
@@ -308,6 +309,29 @@ class vector
 			_size += count;
 		}
 
+		iterator erase( iterator pos )
+		{
+			difference_type index = pos - begin();
+
+			_alloc.destroy(&(*(pos)));
+			movePtrLeft(1, pos, end());
+			_size -= 1;
+			return begin() + index;
+		}
+
+		iterator erase( iterator first, iterator last,
+			typename ft::enable_if<!ft::is_integral<iterator>::value>::type* = 0)
+		{
+			difference_type index = first - begin();
+			difference_type count = last - first;
+
+			for(int i = 0; (first + i) != last; i++)
+				_alloc.destroy(&(*(first + i)));
+			movePtrLeft(count, first, last);
+			_size -= count;
+			return begin() + index;
+		}
+
 	private:
 		pointer			_ptr;
 		allocator_type	_alloc;
@@ -320,6 +344,15 @@ class vector
 			{
 				_alloc.construct(&(*(it + count)), *it);
 				_alloc.destroy(&(*(it)));
+			}
+		}
+
+		void movePtrLeft(size_t count, iterator first, iterator last)
+		{
+			for (; first != last ; first++)
+			{
+				_alloc.construct(&(*(first)), *(first + count));
+				_alloc.destroy(&(*(first + count)));
 			}
 		}
 };

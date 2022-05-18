@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/18 15:12:26 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:04:18 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,40 @@
 
 int main()
 {
-	// std::vector<int>	real;
+	std::vector<int>	real;
+
+	real.push_back(44);
+	real.push_back(-34);
+	real.push_back(112);
+	real.push_back(550);
+	real.push_back(610);
+
+	std::cout << "REAL -- ERASE IT" << std::endl;
+
+	std::vector<int>::const_iterator it3 = real.erase(real.begin() + 1, real.begin() + 3);
+	std::cout << *it3 << std::endl;
+
+	std::ptrdiff_t count = (real.begin() + 3) - (real.begin() + 1);
+
+	std::cout << count << std::endl;
+
+	std::cout << "LIST REAL" << std::endl;
+
+	for(std::vector<int>::const_iterator it = real.begin(); it != real.end(); it++ )
+		std::cout << *it << std::endl;
+
 	ft::vector<int>		mine;
-	ft::vector<int>		add;
-
-
-	// real.push_back(44);
-	// real.push_back(-34);
-	// real.push_back(112);
-
-	// real.insert(real.begin() + 3, 9999);
-
-	// std::cout << "LIST" << std::endl;
-
-	// for(std::vector<int>::const_iterator it = real.begin(); it != real.end(); it++ )
-	// 	std::cout << *it << std::endl;
 
 	mine.push_back(44);
 	mine.push_back(-34);
 	mine.push_back(112);
+	mine.push_back(550);
+	mine.push_back(610);
 
-	add.push_back(777);
-	add.push_back(778);
-	add.push_back(779);
-	add.push_back(800);
+	std::cout << "MINE -- ERASE IT" << std::endl;
 
-	mine.insert(mine.begin() + 2, add.begin(), add.end());
-
+	ft::vector<int>::const_iterator it2 = mine.erase(mine.begin() + 1, mine.begin() + 3);
+	std::cout << *it2 << std::endl;
 
 	std::cout << "LIST" << std::endl;
 

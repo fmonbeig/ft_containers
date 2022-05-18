@@ -138,3 +138,32 @@ TEST(vector, INSERT)
 
 }
 
+TEST(vector, ERASE)
+{
+	std::vector<int>		real;
+
+	real.push_back(44);
+	real.push_back(-34);
+	real.push_back(112);
+	real.push_back(560);
+	real.push_back(610);
+
+
+	real.erase(real.begin());
+	real.erase((real.begin() + 2), (real.begin() + 4));
+
+	ft::vector<int>		mine;
+
+	mine.push_back(44);
+	mine.push_back(-34);
+	mine.push_back(112);
+	mine.push_back(560);
+	mine.push_back(610);
+
+	mine.erase(mine.begin());
+	mine.erase((mine.begin() + 2), (mine.begin() + 4));
+
+	for (int i = 0; real.begin() + i != real.end(); i++)
+		EXPECT_EQ(*(real.begin() + i), *(mine.begin() + i));
+}
+
