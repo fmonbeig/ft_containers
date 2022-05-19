@@ -228,3 +228,37 @@ TEST(vector, RESIZE)
 		EXPECT_EQ(*(real.begin() + i), *(mine.begin() + i));
 }
 
+TEST(vector, OPERATOR)
+{
+	std::vector<int>	real;
+	std::vector<int>	real2;
+
+	real.push_back(44);
+	real.push_back(-34);
+	real.push_back(112);
+
+	real2.push_back(26);
+	real2.push_back(25);
+	real2.push_back(32);
+	real2.push_back(32);
+
+	ft::vector<int>	mine;
+	ft::vector<int>	mine2;
+
+	mine.push_back(44);
+	mine.push_back(-34);
+	mine.push_back(112);
+
+	mine2.push_back(26);
+	mine2.push_back(25);
+	mine2.push_back(32);
+	mine2.push_back(32);
+
+	EXPECT_EQ((real == real2), (mine == mine2));
+	EXPECT_EQ((real != real2), (mine != mine2));
+	EXPECT_EQ((real >= real2), (mine >= mine2));
+	EXPECT_EQ((real > real2), (mine > mine2));
+	EXPECT_EQ((real <= real2), (mine <= mine2));
+	EXPECT_EQ((real < real2), (mine < mine2));
+}
+

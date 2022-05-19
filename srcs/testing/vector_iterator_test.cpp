@@ -93,7 +93,7 @@ TEST(vector, RevIterator)
 	EXPECT_EQ(*it_real, *it_mine);
 }
 
-TEST(vector, RevIteratorConst) //FIXME Problem sur le rev it const
+TEST(vector, RevIteratorConst)
 {
 	std::vector<int>	real;
 	ft::vector<int>		mine;
@@ -106,8 +106,11 @@ TEST(vector, RevIteratorConst) //FIXME Problem sur le rev it const
 	mine.push_back(-34);
 	mine.push_back(112);
 
-	std::vector< int>::const_reverse_iterator it_real;
-	ft::vector< int>::const_reverse_iterator  it_mine;
+	std::vector<int>::const_reverse_iterator it_real;
+
+
+
+	ft::vector<int>::reverse_iterator  it_mine;
 
 	//BEGIN() CONST
 	it_real = real.rbegin();
@@ -121,6 +124,8 @@ TEST(vector, RevIteratorConst) //FIXME Problem sur le rev it const
 
 	EXPECT_EQ(*it_real, *it_mine);
 }
+
+
 
 // std::vector<int>	real;
 // 	ft::vector<int>		mine;
