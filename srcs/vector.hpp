@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/19 17:02:42 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/20 14:29:05 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
-#include "utility.hpp"
-#include "iterator_traits.hpp"
+#include "utils.hpp"
 #include "reverse_iterator.hpp"
 #include "vector_iterator.hpp"
 
@@ -45,8 +44,6 @@ class vector
 		typedef const T*									const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-		// typedef ft::vector_iterator<T>						iterator; // pas besoin de faire de classe iterateur on peut juste ecrire T
-		// typedef ft::vector_iterator<T const>				const_iterator; // T*
 
 		// +------------------------------------------+ //
 		//   MEMBER FUNCTIONS							//
@@ -109,7 +106,6 @@ class vector
 
 		void assign( size_type count, const T& value )
 		{
-			// std::cout << "NORMAL" << std::endl;
 			this->clear();
 			this->reserve(count);
 			_size = count;

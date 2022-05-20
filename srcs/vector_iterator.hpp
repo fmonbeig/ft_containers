@@ -6,14 +6,14 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/17 11:26:52 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/20 14:28:54 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_ITERATOR
 #define VECTOR_ITERATOR
 
-#include "iterator_traits.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -25,8 +25,6 @@ namespace ft
 			typedef	T				value_type;
 			typedef	T*				pointer;
 			typedef	T&				reference;
-			// typedef	const T*		const_pointer;
-			// typedef	const T&		const_reference;
 			typedef	std::ptrdiff_t	difference_type;
 			typedef	std::size_t		size_type;
 
