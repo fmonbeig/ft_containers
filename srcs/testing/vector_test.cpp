@@ -148,6 +148,9 @@ TEST(vector, ERASE)
 	real.push_back(560);
 	real.push_back(610);
 	real.push_back(9910);
+	real.push_back(9910);
+	real.push_back(9910);
+	real.push_back(9910);
 	real.pop_back();
 
 	real.erase(real.begin());
@@ -160,6 +163,9 @@ TEST(vector, ERASE)
 	mine.push_back(112);
 	mine.push_back(560);
 	mine.push_back(610);
+	mine.push_back(9910);
+	mine.push_back(9910);
+	mine.push_back(9910);
 	mine.push_back(9910);
 	mine.pop_back();
 

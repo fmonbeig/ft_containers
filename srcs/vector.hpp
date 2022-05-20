@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/20 14:29:05 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/20 17:57:28 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include <stdexcept>
 #include "utils.hpp"
 #include "reverse_iterator.hpp"
-#include "vector_iterator.hpp"
 
 namespace ft
 {
@@ -59,7 +58,7 @@ class vector
 
 		explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 		{
-			_ptr = alloc;
+			_alloc = alloc;
 			_ptr = _alloc.allocate(count);
 			for (size_t i = 0; i < count; i++)
 				_alloc.construct(_ptr + i, value);
@@ -79,6 +78,7 @@ class vector
 
 		vector( const vector& other )
 		{
+			_alloc = other._alloc;
 			_ptr = _alloc.allocate(other._size);
 			for (size_t i = 0; i < other._size; i++)
 				_alloc.construct(_ptr + i, other._ptr[i]);
@@ -94,6 +94,7 @@ class vector
 
 		vector & operator=(vector const & other)
 		{
+			_alloc = other._alloc;
 			this->clear();
 			_alloc.deallocate(_ptr, _cap);
 
@@ -101,6 +102,7 @@ class vector
 			for (size_t i = 0; i < other._size; i++)
 				_alloc.construct(_ptr + i, other._ptr[i]);
 			_size = other._size;
+			_cap = other._cap;
 			return *this;
 		}
 
@@ -311,7 +313,7 @@ class vector
 			difference_type index = pos - begin();
 
 			_alloc.destroy(&(*(pos)));
-			movePtrLeft(1, pos, end());
+			movePtrLeft(1, pos);
 			_size -= 1;
 			return begin() + index;
 		}
@@ -324,30 +326,34 @@ class vector
 
 			for(int i = 0; (first + i) != last; i++)
 				_alloc.destroy(&(*(first + i)));
-			movePtrLeft(count, first, last);
+			movePtrLeft(count, first);
 			_size -= count;
 			return begin() + index;
 		}
 
-		void pop_back(){ _alloc.destroy(&(*(end()))); _size -= 1;}
+		void pop_back(){ _alloc.destroy(&(*(end() - 1))); _size -= 1;}
 
 		void resize( size_type count, T value = T() )
 		{
+			checkSize(count);
+			if (count == 0)
+				return (clear());
 			if (_size == count)
 				return ;
 			if (_size > count)
 			{
-				for(size_t i = _size - count; i < _size; i++)
-					_alloc.destroy(_ptr + i);
+				iterator it = end();
+				size_t diff = _size - count;
+				while (diff--)
+					this->_alloc.destroy(--it);
 			}
-			else if (_size < count)
+			if (_size < count)
 			{
 				if (_size + count > _cap)
 					this->reserve(_cap + count);
 				for(size_t i = _size; i < _size + count; i++)
 					_alloc.construct(_ptr + i, value);
 			}
-
 			_size = count;
 		}
 
@@ -374,13 +380,19 @@ class vector
 			}
 		}
 
-		void movePtrLeft(size_t count, iterator first, iterator last)
+		void movePtrLeft(size_t count, iterator first)
 		{
-			for (; first != last ; first++)
+			for (; first + count != end() ; first++)
 			{
 				_alloc.construct(&(*(first)), *(first + count));
 				_alloc.destroy(&(*(first + count)));
 			}
+		}
+
+		void checkSize(size_t n)
+		{
+			if (n > max_size()) //NB ca serait alloc.max_size() ??
+				throw std::out_of_range("vector");
 		}
 
 		template <typename X>
@@ -394,7 +406,7 @@ class vector
 
 	template<class T, class Allocator>
 	bool operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
-		{ return (ft::equal(lhs.begin(), lhs.end(), rhs.begin())); }
+		{ return lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()); }
 
 	template<class T, class Allocator>
 	bool operator<(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)
@@ -429,7 +441,7 @@ class vector
 	}
 
 	template< class T, class Allocator>
-	void swap( std::vector<T, Allocator>& lhs, std::vector<T, Allocator>& rhs )
+	void swap( ft::vector<T, Allocator>& lhs, ft::vector<T, Allocator>& rhs )
 	{ lhs.swap(rhs); }
 }
 #endif

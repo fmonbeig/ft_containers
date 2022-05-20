@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:25:48 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/20 14:31:15 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:14:40 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ namespace ft
 	template<>
 	struct is_integral<unsigned short> { static const bool value = true; };
 
-	// template<>
-	// struct is_integral<size_t> { static const bool value = true; };
+	template<>
+	struct is_integral<size_t> { static const bool value = true; };
 
 	template<>
 	struct is_integral<char> { static const bool value = true; };
