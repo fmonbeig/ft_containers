@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/23 15:43:53 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/23 17:49:15 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,22 @@ class vector
 			this->assign(first,last);
 		}
 
+		// vector( const vector& other )
+		// {
+		// 	_alloc = other._alloc;
+		// 	_ptr = _alloc.allocate(other._cap);
+		// 	_size = other._size;
+		// 	_cap = other._cap;
+		// 	for (size_t i = 0; i < other._size; i++)
+		// 		_alloc.construct(_ptr + i, other._ptr[i]);
+		// }
+
 		vector( const vector& other )
 		{
 			_alloc = other._alloc;
-			_ptr = _alloc.allocate(other._cap);
+			_ptr = _alloc.allocate(other._size);
 			_size = other._size;
-			_cap = other._cap;
+			_cap = other._size;
 			for (size_t i = 0; i < other._size; i++)
 				_alloc.construct(_ptr + i, other._ptr[i]);
 		}
