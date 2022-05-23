@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/20 17:57:28 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/23 15:43:53 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ class vector
 		vector( const vector& other )
 		{
 			_alloc = other._alloc;
-			_ptr = _alloc.allocate(other._size);
-			for (size_t i = 0; i < other._size; i++)
-				_alloc.construct(_ptr + i, other._ptr[i]);
+			_ptr = _alloc.allocate(other._cap);
 			_size = other._size;
 			_cap = other._cap;
+			for (size_t i = 0; i < other._size; i++)
+				_alloc.construct(_ptr + i, other._ptr[i]);
 		}
 
 		~vector()
@@ -222,7 +222,7 @@ class vector
 		void reserve( size_type new_cap )
 		{
 			if (new_cap > this->max_size())
-				throw std::length_error("vector");
+				throw std::length_error("vector::reserve");
 			if (new_cap > _cap)
 			{
 				T* temp = _alloc.allocate(new_cap);
@@ -252,7 +252,7 @@ class vector
 			if (_size + 1 > _cap)
 			{
 				if (_size == 0)
-					this->reserve(2);
+					this->reserve(1);
 				else
 					this->reserve(_size * 2);
 			}
@@ -281,8 +281,10 @@ class vector
 
 			if (count == 0)
 				return ;
-			if (_size + count > _cap)
+			if (_size + count > _cap * 2)
 				this->reserve(_cap + count);
+			else
+				this->reserve(_cap * 2);
 			iterator newPos(&_ptr[index]);
 			movePtrRight(count, newPos, end());
 			for (size_t i = 0; i < count; i++)
@@ -299,8 +301,10 @@ class vector
 
 			if (count == 0)
 				return ;
-			if (_size + count > _cap)
+			if (_size + count > _cap * 2)
 				this->reserve(_cap + count);
+			else
+				this->reserve(_cap * 2);
 			iterator newPos(&_ptr[index]);
 			movePtrRight(count, newPos, end());
 			for (long i = 0; i < count; i++)
@@ -349,10 +353,10 @@ class vector
 			}
 			if (_size < count)
 			{
-				if (_size + count > _cap)
-					this->reserve(_cap + count);
-				for(size_t i = _size; i < _size + count; i++)
-					_alloc.construct(_ptr + i, value);
+				if (count > _cap * 2)
+					this->reallocateMemoryAndValue(count, count, value);
+				else
+					this->reallocateMemoryAndValue(_cap * 2, count, value);
 			}
 			_size = count;
 		}
@@ -394,6 +398,50 @@ class vector
 			if (n > max_size()) //NB ca serait alloc.max_size() ??
 				throw std::out_of_range("vector");
 		}
+
+		void reallocateMemoryAndValue(size_t new_cap, size_t new_size, T value = T())
+		{
+			size_t i = 0;
+
+			if (new_cap > this->max_size())
+				throw std::length_error("vector");
+
+			T* temp = _alloc.allocate(new_cap);
+
+			for (; i < _size; i++)
+			{
+				_alloc.construct(temp + i, _ptr[i]);
+				_alloc.destroy(_ptr + i);
+			}
+				for (; i < new_size ; i++)
+					_alloc.construct(temp + i, value);
+			_alloc.deallocate(_ptr, _cap);
+			_ptr = temp;
+			_cap = new_cap;
+		}
+
+		// void reallocateMemoryAndValue(size_t new_cap, T value = T())
+		// {
+		// 	size_t i = 0;
+
+		// 	if (new_cap > this->max_size())
+		// 		throw std::length_error("vector");
+		// 	if (new_cap > _cap)
+		// 	{
+		// 		T* temp = _alloc.allocate(new_cap);
+
+		// 		for (; i < _size; i++)
+		// 		{
+		// 			_alloc.construct(temp + i, _ptr[i]);
+		// 			_alloc.destroy(_ptr + i);
+		// 		}
+		// 			for (; i < new_cap ; i++)
+		// 				_alloc.construct(temp + i, value);
+		// 		_alloc.deallocate(_ptr, _cap);
+		// 		_ptr = temp;
+		// 		_cap = new_cap;
+		// 	}
+		// }
 
 		template <typename X>
 		void swapping( X& a, X& b )
