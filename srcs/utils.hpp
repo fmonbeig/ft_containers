@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:25:48 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/20 15:14:40 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/24 14:00:59 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define UTILS_HPP
 
 #include <cstddef>
+#include "pair.hpp"
 
 namespace ft
 {
@@ -156,7 +157,6 @@ namespace ft
 		}
 		return (true);
 	}
-
 }
 
 #endif
