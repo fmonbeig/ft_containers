@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/23 18:03:54 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/24 11:12:15 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Awesome {
 	public:
 
 		Awesome( void ) : _n( 42 ) { std::cout << "Default constructor" << std::endl; } //should not happen too often or else there is a wrong use of allocator (which calls the copy constructor)
-		Awesome( int n ) : _n( n ) { std::cout << "Int constructor" << std::endl; (void)n; }
+		Awesome( int n ) : _n( n ) { (void)n; }
 		Awesome( Awesome const &rhs ) : _n( 42 ) { *this = rhs;}
 		virtual ~Awesome(void) {}
 
@@ -67,6 +67,21 @@ void	print_vector(ft::vector<T> &test)
 	typename ft::vector<T>::iterator		end = test.end();
 	std::cout << "size : " << test.size() << ", capacity : " << test.capacity() << std::endl;
 	for (typename ft::vector<T>::iterator it = beg; it != end; it++)
+	{
+		std::cout << *it << " ";
+		if (((it - beg) % 10 == 9) && it > beg)
+			std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+template <class T>
+void	print_vector(std::vector<T> &test)
+{
+	typename std::vector<T>::iterator		beg = test.begin();
+	typename std::vector<T>::iterator		end = test.end();
+	std::cout << "size : " << test.size() << ", capacity : " << test.capacity() << std::endl;
+	for (typename std::vector<T>::iterator it = beg; it != end; it++)
 	{
 		std::cout << *it << " ";
 		if (((it - beg) % 10 == 9) && it > beg)
@@ -118,26 +133,63 @@ void	resize_tests(void)
 template <class T>
 void	insert_tests()
 {
-	std::cout << std::endl << "INSERT TESTS" << std::endl;
-	ft::vector<T> test(1, 1);
-	ft::vector<T> test2(5, 5);
+	std::cout << std::endl << "REAL INSERT TESTS" << std::endl;
+	std::vector<T> test(1, 1);
+	std::vector<T> test2(5, 5);
 
 	test.insert(test.begin(), 200, 12);
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.begin() + 12, 200, 30);
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.end(), 12, 50);
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.end() - 1, 0, 60);
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.end() - 1, 1, 70);
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.begin() + 412, test2.begin(), test2.end());
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.begin() + 6, test2.begin(), test2.end());
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
 	test.insert(test.end(), test2.begin(), test2.end());
-	print_vector<T>(test);
+	// print_vector<T>(test);
+	std::cout << test.capacity() << std::endl;
+
+	std::cout << std::endl << "MINE INSERT TESTS" << std::endl;
+	ft::vector<T> mine(1, 1);
+	ft::vector<T> mine2(5, 5);
+
+	mine.insert(mine.begin(), 200, 12);
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.begin() + 12, 200, 30);
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.end(), 12, 50);
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.end() - 1, 0, 60);
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.end() - 1, 1, 70);
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.begin() + 412, mine2.begin(), mine2.end());
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.begin() + 6, mine2.begin(), mine2.end());
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
+	mine.insert(mine.end(), mine2.begin(), mine2.end());
+	std::cout << mine.capacity() << std::endl;
+	// print_vector<T>(mine);
 }
 
 template <class T>
@@ -250,10 +302,10 @@ void	max_size_tests(void)
 
 void	awesome_tests(void)
 {
-	std::cout << std::endl << "AWESOME TESTS" << std::endl;
-	ft::vector<Awesome> test(21, 12);
+	std::cout << std::endl << "REAL AWESOME TESTS" << std::endl;
+	std::vector<Awesome> test(21, 12);
 	print_vector<Awesome>(test);
-	ft::vector<Awesome> test2;
+	std::vector<Awesome> test2;
 	print_vector<Awesome>(test2);
 	test2.push_back(12);
 	test2.push_back(8);
@@ -262,8 +314,9 @@ void	awesome_tests(void)
 	std::cout << "SAME ?" << (test.begin() + 1 == test2.begin() + 1) << std::endl;
 	test.assign(test2.begin(), test2.end());
 	print_vector<Awesome>(test);
+	std::cout << "HERE --> MINE "<< test.capacity() << " test2 : "<<test2.capacity() << std::endl;
 	test = test2;
-	print_vector<Awesome>(test);
+	std::cout << "HERE --> MINE "<< test.capacity() << " test2 : "<<test2.capacity() << std::endl;
 	std::cout << "SAME ?" << (test.begin() + 1 == test2.begin() + 1) << std::endl;
 	test.insert(test.end(), test2.begin(), test2.end());
 	print_vector<Awesome>(test);
@@ -271,26 +324,51 @@ void	awesome_tests(void)
 	test2 = test;
 	print_vector<Awesome>(test);
 	std::cout << "end awesome test" << std::endl;
+
+	std::cout << std::endl << "MINE AWESOME TESTS" << std::endl;
+	ft::vector<Awesome> mine(21, 12);
+	print_vector<Awesome>(mine);
+	ft::vector<Awesome> mine2;
+	print_vector<Awesome>(mine2);
+	mine2.push_back(12);
+	mine2.push_back(8);
+	mine2.push_back(16);
+	print_vector<Awesome>(mine2);
+	std::cout << "SAME ?" << (mine.begin() + 1 == mine2.begin() + 1) << std::endl;
+	mine.assign(mine2.begin(), mine2.end());
+	print_vector<Awesome>(mine);
+	std::cout << "HERE --> MINE "<< mine.capacity() << " MINE2 : "<<mine2.capacity() << std::endl;
+	mine = mine2;
+	std::cout << "HERE --> MINE "<< mine.capacity() << " MINE2 : "<<mine2.capacity() << std::endl;
+
+	std::cout << "SAME ?" << (mine.begin() + 1 == mine2.begin() + 1) << std::endl;
+	mine.insert(mine.end(), mine2.begin(), mine2.end());
+	print_vector<Awesome>(mine);
+	mine.insert(mine.begin(), mine2.begin(), mine2.end());
+	mine2 = mine;
+	print_vector<Awesome>(mine);
+	std::cout << "end awesome mine" << std::endl;
 }
 
 int main()
 {
-	push_pop_back_tests<int>();
-	resize_tests<int>();
-	insert_tests<int>();
-	reserve_tests<int>();
-	copy_swap_tests<int>();
-	reverse_it_tests<int>();
-	erase_clear_tests<int>();
-	max_size_tests();
+	// push_pop_back_tests<int>();
+	// resize_tests<int>();
+	// reserve_tests<int>();
+	// copy_swap_tests<int>();
+	// reverse_it_tests<int>();
+	// erase_clear_tests<int>();
+	// push_pop_back_tests<Awesome>();
+	// resize_tests<Awesome>();
+	// reserve_tests<Awesome>();
+	// copy_swap_tests<Awesome>();
+	// reverse_it_tests<Awesome>();
+	// erase_clear_tests<Awesome>();
+
+	// insert_tests<Awesome>(); // FIXME
+	// insert_tests<int>();
+	// max_size_tests();
 	awesome_tests();
-	push_pop_back_tests<Awesome>();
-	resize_tests<Awesome>();
-	insert_tests<Awesome>(); // FIXME
-	reserve_tests<Awesome>();
-	copy_swap_tests<Awesome>();
-	reverse_it_tests<Awesome>();
-	erase_clear_tests<Awesome>();
 }
 
 
