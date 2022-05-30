@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/24 15:26:24 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/30 17:17:12 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,35 +19,81 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <functional>
+#include "pair.hpp"
 #include "utils.hpp"
+#include "reverse_iterator.hpp"
+#include "avl_tree.hpp"
 
 namespace ft
 {
 template<
-	class Key,
-	class T,
-	class Compare = std::less<Key>,
-	class Allocator = std::allocator<std::pair<const Key, T> >
+	typename Key,
+	typename T,
+	typename Compare = std::less<Key>,// Function object for performing comparisons. ex : Compare(x, y)
+	typename Allocator = std::allocator<ft::pair<const Key, T>>>
 class map
 {
 	public:
 		typedef Key										key_type;
 		typedef T										mapped_type;
 		typedef typename std::pair<const Key, T>		value_type;
+
 		typedef std::size_t 							size_type;
 		typedef std::ptrdiff_t							difference_type;
+
 		typedef Compare									key_compare;
 		typedef Allocator								Allocator_type;
 		typedef value_type&								reference;
 		typedef const value_type&						const_reference;
+
 		typedef typename Allocator:pointer				pointer;
 		typedef typename Allocator:const_pointer		const_pointer;
-		typedef //										iterator;
-		typedef //										const_iterator;
-		typedef ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		//typedef 										iterator;
+		//typedef 										const_iterator;
+		// typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		// typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+	public:
+
+		/*	std::map::value_compare is a function object that compares objects of type
+			std::map::value_type (key-value pairs) by comparing of the first components of the pairs.
+			binary_function is a base class for creating function objects with two arguments.*/
+		class value_compare : public std::binary_function<value_type, value_type, bool>
+		{
+			//friend class map<Key, T, Compare, Allocator>;
+			protected :
+				Compare comp;
+				value_compare(Compare c): comp(c) {}
+
+			public :
+				bool operator()( const value_type& lhs, const value_type& rhs ) const
+				{ return comp(lhs.first, rhs.first); }
+		};
+
+		// +------------------------------------------+ //
+		//   MEMBER FUNCTIONS							//
+		// +------------------------------------------+ //
+
+		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
+			_tree(comp, alloc) {} // construction de l'arbre
+
+		// template< class InputIt >
+		// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
+		// _ptr(comp, alloc)
+		// {
+
+		// }
+		// map( const map& other )
+		// {
+
+		// }
 
 
+
+
+	protected:
+		avl_tree	_tree;
 
 
 };
