@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 16:17:36 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/30 18:07:54 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:26:09 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,54 @@ namespace ft
 	class avl_tree
 	{
 		public:
-			typedef typename avl_tree::avl_node node;
-
-		public:
-			struct avl_node
+			struct node
 			{
-				avl_node(T val, node *dad, node *Lchild, node *Rchild):
-					_value(val), _dad(dad), _Lchild(Lchild), _Rchild(Rchild)
-
-				T		_value;
+				T		*_key;
 				node	*_dad;
-				node	*_Lchild;
-				node	*_Rchild;
+				node	*_left;
+				node	*_right;
+				int		_height;
 			};
 
 		protected:
 			Allocator				_allocPair;
 			std::allocator<node>	_allocNode;
-			Compare			_comp;
-			avl_tree::node	*root;
+			Compare					_comp;
+			Allocator				_alloc;
+			node					*_root;
 
 		public:
 			avl_tree(const Compare &comp, const Allocator& alloc)
 			{
-				_alloc = Allocator();
+				_alloc = alloc;
 				_comp = comp;
-				root = _allocNode.allocate(1);
+				_root = NULL;
+			}
+
+			~avl_tree() {}
+			//destroy every node
+
+			void	insert(const T& value )
+			{
+				if (_root == NULL)
+					_root = new_node(value);
+			}
+
+			T	*rootKey()
+			{
+				return (_root->_key);
+			}
+
+			node	*new_node(const T& value)
+			{
+				node *ptr = _allocNode.allocate(1);
+				ptr->_dad = NULL;
+				ptr->_left = NULL;
+				ptr->_right = NULL;
+				ptr->_height = 0;
+				ptr->_key = _allocPair.allocate(1);
+				_allocPair.construct(ptr->_key, value);
+				return (ptr);
 			}
 	};
 }

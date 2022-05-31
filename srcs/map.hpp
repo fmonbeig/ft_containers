@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/30 17:17:12 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:37:40 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ template<
 	typename Key,
 	typename T,
 	typename Compare = std::less<Key>,// Function object for performing comparisons. ex : Compare(x, y)
-	typename Allocator = std::allocator<ft::pair<const Key, T>>>
+	typename Allocator = std::allocator<ft::pair<const Key, T> > >
 class map
 {
 	public:
 		typedef Key										key_type;
 		typedef T										mapped_type;
-		typedef typename std::pair<const Key, T>		value_type;
+		typedef typename ft::pair<const Key, T>			value_type;
 
 		typedef std::size_t 							size_type;
 		typedef std::ptrdiff_t							difference_type;
@@ -47,8 +47,8 @@ class map
 		typedef value_type&								reference;
 		typedef const value_type&						const_reference;
 
-		typedef typename Allocator:pointer				pointer;
-		typedef typename Allocator:const_pointer		const_pointer;
+		typedef typename Allocator::pointer				pointer;
+		typedef typename Allocator::const_pointer		const_pointer;
 		//typedef 										iterator;
 		//typedef 										const_iterator;
 		// typedef ft::reverse_iterator<iterator>			reverse_iterator;
@@ -76,7 +76,7 @@ class map
 		// +------------------------------------------+ //
 
 		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-			_tree(comp, alloc) {} // construction de l'arbre
+			_tree(comp, alloc), _size(0) {} // construction de l'arbre
 
 		// template< class InputIt >
 		// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
@@ -89,11 +89,25 @@ class map
 
 		// }
 
+		// +------------------------------------------+ //
+		//   MODIFIERS									//
+		// +------------------------------------------+ //
 
+		// std::pair<iterator, bool> insert( const value_type& value );
+		void	insert( const value_type& value )
+		{
+			_tree.insert(value);
+			_size++;
+		}
 
+		value_type *rootKey() // renvoie une value const Key, a voir si on doit le changer ( phase iterateur)
+		{
+			return _tree.rootKey();
+		}
 
 	protected:
-		avl_tree	_tree;
+		avl_tree<value_type, Compare, Allocator>	_tree;
+		size_t										_size;
 
 
 };
@@ -120,3 +134,6 @@ les règles suivantes sont utilisées :
 	https://fr.wikipedia.org/wiki/Arbre_binaire_de_recherche
 	https://fr.wikipedia.org/wiki/Arbre_AVL
 */
+
+
+// S'il y a des duplications alors on ne les prends pas en compte
