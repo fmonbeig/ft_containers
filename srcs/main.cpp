@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/01 17:30:21 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/01 18:06:36 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,18 @@ int main()
 	ft::map<int, int> mine;
 
 	ft::pair<int, int> add(100, 42);
-	ft::pair<int, int> add2(63, 42);
-	ft::pair<int, int> add3(1, 42);
-	ft::pair<int, int> add4(12, 42);
-	ft::pair<int, int> add5(777, 42);
+	ft::pair<int, int> add2(50, 42);
+	ft::pair<int, int> add3(10, 42);
+	ft::pair<int, int> add4(2, 42);
+	ft::pair<int, int> add5(6, 42);
+	ft::pair<int, int> add6(7, 42);
 
 	mine.insert(add);
 	mine.insert(add2);
 	mine.insert(add3);
 	mine.insert(add4);
 	mine.insert(add5);
+	mine.insert(add6);
 
 	mine.print_tree();
 

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/01 17:30:51 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/01 18:24:43 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ class map
 			value_type	*_key;
 			node		*_left;
 			node		*_right;
+			node		*_dad;
 			int			_height;
 		};
 
@@ -128,7 +129,7 @@ class map
 		}
 
 		void	print_tree()
-		{ printTree(_root, " ", true); }
+		{ printTree(_root, "********* ", true); }
 
 		void	rootKey()
 		{
@@ -163,6 +164,7 @@ class map
 			_allocNode.construct(N, node());
 			N->_left = NULL;
 			N->_right = NULL;
+			N->_dad = NULL;
 			N->_height = 1;
 			N->_key = _allocPair.allocate(1);
 			_allocPair.construct(N->_key, value);
@@ -330,81 +332,47 @@ class map
 		}
 
 		// Print the tree
-		void printTree(node *root, std::string indent, bool last) {
-		if (root != NULL) {
-			std::cout << indent;
-			if (last) {
-			std::cout << "R----";
-			indent += "   ";
-			} else {
-			std::cout << "L----";
-			indent += "|  ";
+		void printTree(node *root, std::string indent, bool last)
+		{
+			if (root != NULL) {
+				std::cout << indent;
+				if (last) {
+				std::cout << "R----";
+				indent += "   ";
+				} else {
+				std::cout << "L----";
+				indent += "|  ";
+				}
+				std::cout << root->_key->first << std::endl;
+				// printInfoNOde(root);
+				printTree(root->_left, indent, false);
+				printTree(root->_right, indent, true);
 			}
-			std::cout << root->_key->first << std::endl;
-			printTree(root->_left, indent, false);
-			printTree(root->_right, indent, true);
 		}
+
+		void printInfoNode(node *N)
+		{
+			std::cout << "NODE " << N->_key->first << " HEIGHT LEFT = " << height(N->_left) << " HEIGHT RIGHT = " << height(N->_right) << " HEIGHT = " << height(N->_left) - height(N->_right);
+			if (N->_left)
+				std::cout<< " Value N->_left "<< N->_left->_key->first;
+			if (N->_right)
+				std::cout<< " Value N->_right "<< N->_right->_key->first;
+			std::cout<< std::endl;
 		}
 };
 
 }
 #endif
 
+// A faire
 
-
-// AVL tree implementation in C++
-
-// #include <iostream>
-// using namespace std;
-
-// class Node {
-//    public:
-//   int key;
-//   Node *left;
-//   Node *right;
-//   int height;
-// };
+// rajouter la suppression de l'arbre a la sortie de map, le faire en mode recursif voir printTree
+// tester le delete
+// comprendre le system d'iterateur
+// reussir a rajouter le dad dans la creation des nodes
 
 
 
-
-
-
-
-
-
-// // Print the tree
-// void printTree(Node *root, string indent, bool last) {
-//   if (root != nullptr) {
-//     cout << indent;
-//     if (last) {
-//       cout << "R----";
-//       indent += "   ";
-//     } else {
-//       cout << "L----";
-//       indent += "|  ";
-//     }
-//     cout << root->key << endl;
-//     printTree(root->left, indent, false);
-//     printTree(root->right, indent, true);
-//   }
-// }
-
-// int main() {
-//   Node *root = NULL;
-//   root = insert_node(root, 33);
-//   root = insertNode(root, 13);
-//   root = insertNode(root, 53);
-//   root = insertNode(root, 9);
-//   root = insertNode(root, 21);
-//   root = insertNode(root, 61);
-//   root = insertNode(root, 8);
-//   root = insertNode(root, 11);
-//   printTree(root, "", true);
-//   root = deleteNode(root, 13);
-//   cout << "After deleting " << endl;
-//   printTree(root, "", true);
-// }
 
 // Map utilise des arbres pour equilibré l'acces a ses données
 // A verifier
