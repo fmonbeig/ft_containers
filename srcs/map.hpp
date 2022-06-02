@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/02 14:36:21 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/02 18:21:20 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ struct node
 	node		*_left;
 	node		*_right;
 	node		*_dad;
+	node		*_end;
 	int			_height;
 };
 
@@ -64,8 +65,8 @@ class map
 
 		typedef typename Allocator::pointer							pointer;
 		typedef typename Allocator::const_pointer					const_pointer;
-		typedef map_iterator<node<value_type>, value_type>			iterator;
-		typedef const map_iterator<node<value_type>, value_type>	const_iterator;
+		typedef map_iterator<Compare, node<value_type>, value_type>			iterator;
+		typedef const map_iterator<Compare, node<value_type>, value_type>	const_iterator;
 		//typedef ft::reverse_iterator<iterator>					reverse_iterator;
 		//typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 	protected:
@@ -103,12 +104,14 @@ class map
 		Allocator				_allocPair;
 		node					*_root;
 
+
 		// +------------------------------------------+ //
 		//   CONSTRUCTOR && DESTRUCTOR					//
 		// +------------------------------------------+ //
 	public:
 		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-			_comp(comp), _size(0), _allocNode(std::allocator<node>()),_allocPair(alloc), _root(NULL) {} // construction de l'arbre
+			_comp(comp), _size(0), _allocNode(std::allocator<node>()),_allocPair(alloc),
+			_root(NULL) {}
 
 		// template< class InputIt >
 		// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
@@ -121,7 +124,7 @@ class map
 
 		// }
 
-		// supprimer son arbre binaire de maniere recursif
+		// supprimer son arbre binaire de maniere recursif a partir de root (et bien penser supprimer end dans le root)
 
 
 		// +------------------------------------------+ //
@@ -138,14 +141,43 @@ class map
 			return iterator(node_value_min(_root));
 		}
 
+		iterator	end()
+		{
+			return iterator(node_value_max(_root)->_end);
+		}
+
+		const iterator	end() const
+		{
+			return iterator(node_value_max(_root)->_end);
+		}
+
 		// +------------------------------------------+ //
 		//   MODIFIERS									//
 		// +------------------------------------------+ //
 
-		// std::pair<iterator, bool> insert( const value_type& value );
+		/* At each insert we have to recalculate the new end()
+		*
+		*/
 		void	insert( const value_type& value )
 		{
+			node *ancient_max = NULL;
+			node *new_max = NULL;
+
+			if (_root)
+				ancient_max = node_value_max(_root);
 			_root = insert_node(_root, value, NULL);
+			if (ancient_max == NULL)
+			{
+				_root->_end = new_node(value, _root);
+				return ;
+			}
+			new_max = node_value_max(_root);
+			if (_comp(ancient_max->_key->first, new_max->_key->first)) // if new value is the biggest value in map then we free _end
+			{
+				free_node(ancient_max->_end);
+				new_max->_end = new_node(value, new_max);
+				new_max->_end->_left = new_max->_end->_dad;
+			}
 			_size++;
 		}
 
@@ -180,6 +212,7 @@ class map
 			N->_left = NULL;
 			N->_right = NULL;
 			N->_dad = parent;
+			N->_end = NULL;
 			N->_height = 1;
 			N->_key = _allocPair.allocate(1);
 			_allocPair.construct(N->_key, value);
@@ -367,7 +400,7 @@ class map
 				indent += "|  ";
 				}
 				std::cout << root->_key->first << std::endl;
-				// printInfoNOde(root);
+				printInfoNode(root);
 				printTree(root->_left, indent, false);
 				printTree(root->_right, indent, true);
 			}

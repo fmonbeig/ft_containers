@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/02 14:46:15 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/02 18:42:10 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int main()
 	ft::pair<int, int> add2(50, 42);
 	ft::pair<int, int> add3(4, 42);
 	ft::pair<int, int> add4(2, 42);
-	ft::pair<int, int> add5(50, 42);
+	ft::pair<int, int> add5(999, 42);
 	ft::pair<int, int> add6(7, 42);
 
 	mine.insert(add);
@@ -59,10 +59,30 @@ int main()
 	mine.insert(add5);
 	mine.insert(add6);
 
-	ft::map<int, int>::iterator it = mine.begin();
-	std::cout << it->first << std::endl;
-	it++;
-	std::cout << it->first << std::endl;
+	// int i = 0;
+
+	// for (ft::map<int, int>::iterator it = mine.begin(); i < 5; ++it)
+	// {
+	// 	std::cout << it->first << std::endl;
+		// i++;
+	// }
+	// for (ft::map<int, int>::iterator it = mine.end(); it != mine.begin();)
+	// {
+	// 	--it;
+	// 	std::cout << it->first << std::endl;
+	// }
+	// for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
+	// {
+	// 	// --it;
+	// 	std::cout << it->first << std::endl;
+	// }
+
+	// FIXME : mettre le dad a jour lors de rotation
+	ft::map<int, int>::iterator it = mine.end();
+	it--;
+	it--;
+	it--;
+		std::cout << it->first << std::endl;
 
 
 	// mine.print_tree();

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/02 15:01:24 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/02 18:36:54 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 namespace ft
 {
-	template<typename node, typename T>
+	template<typename Compare, typename node, typename T>
 	class map_iterator
 	{
 		public:
@@ -31,12 +31,15 @@ namespace ft
 			typedef std::bidirectional_iterator_tag	iterator_category;
 
 		private:
-			node *_current;
+			node 	*_current;
+			Compare	_comp;
 
 		public:
-			map_iterator(){_current = NULL; }
-			map_iterator(node *ptr){ _current = ptr; }
-			map_iterator( const map_iterator& other ) { _current = other._current; };
+			map_iterator(): _current(NULL){}
+			map_iterator(node *ptr): _current(ptr), _comp(Compare()) {}
+			map_iterator( const map_iterator& other ) { _current = other._current; _comp = other._comp;};
+
+			virtual ~map_iterator(){};
 
 			map_iterator &operator=(map_iterator const &rhs)
 			{
@@ -45,6 +48,7 @@ namespace ft
 				return (*(this));
 			}
 
+			// reference operator*() const { return *_ptr; } // NB A tester
 			pointer operator->() const { return _current->_key; }
 
 			// +------------------------------------------+ //
@@ -58,7 +62,17 @@ namespace ft
 				else if (_current->_right == NULL)
 				{
 					if (_current->_dad)
-						_current = _current->_dad;
+					{
+						if (_comp(_current->_key->first, _current->_dad->_key->first))
+							_current = _current->_dad;
+						else
+						{
+							if (_current->_dad->_dad)
+								_current = _current->_dad->_dad;
+							else
+								_current = find_end(_current);
+						}
+					}
 					else
 						_current = _current->_right;
 				}
@@ -74,7 +88,10 @@ namespace ft
 
 			map_iterator& operator--()
 			{
-				_current = _current->_left;
+				if (_current->_left)
+					_current = _current->_left;
+				else if (_current->_dad)
+					_current = _current->_dad;
 				return *this;
 			}
 
@@ -85,10 +102,25 @@ namespace ft
 				return (map_iterator(temp));
 			}
 
+			bool operator==(const map_iterator& rhs)
+			{ return (_current == rhs._current); }
+
+			bool operator!=(const map_iterator& rhs)
+			{ return (_current != rhs._current); }
+
 			// vector_iterator& operator++() { _ptr++; return *this; }
 			// vector_iterator& operator--() { _ptr--; return *this; }
 			// vector_iterator operator++(int) {_ptr++; return (vector_iterator(_ptr - 1)); }
 			// vector_iterator operator--(int) { _ptr--; return (vector_iterator(_ptr + 1)); }
+
+			node *find_end(node *N)
+			{
+				while (N->_dad)
+					N = N->_dad;
+				while (N->_right)
+					N = N->_right;
+				return N->_end;
+			}
 
 	};
 }
