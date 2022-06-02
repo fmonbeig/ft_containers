@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/01 18:24:43 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/02 14:36:21 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,22 @@
 #include "pair.hpp"
 #include "utils.hpp"
 #include "reverse_iterator.hpp"
+#include "map_iterator.hpp"
 
 namespace ft
 {
+
+template<typename T>
+struct node
+{
+	node(){}
+	T			*_key;
+	node		*_left;
+	node		*_right;
+	node		*_dad;
+	int			_height;
+};
+
 template<
 	typename Key,
 	typename T,
@@ -34,27 +47,29 @@ template<
 class map
 {
 		// +------------------------------------------+ //
-		//   TYPEDEF FOR MAP							//
+		//   TYPEDEF 									//
 		// +------------------------------------------+ //
 	public:
-		typedef Key										key_type;
-		typedef T										mapped_type;
-		typedef typename ft::pair<const Key, T>			value_type;
+		typedef Key													key_type;
+		typedef T													mapped_type;
+		typedef typename ft::pair<const Key, T>						value_type;
 
-		typedef std::size_t 							size_type;
-		typedef std::ptrdiff_t							difference_type;
+		typedef std::size_t 										size_type;
+		typedef std::ptrdiff_t										difference_type;
 
-		typedef Compare									key_compare;
-		typedef Allocator								Allocator_type;
-		typedef value_type&								reference;
-		typedef const value_type&						const_reference;
+		typedef Compare												key_compare;
+		typedef Allocator											Allocator_type;
+		typedef value_type&											reference;
+		typedef const value_type&									const_reference;
 
-		typedef typename Allocator::pointer				pointer;
-		typedef typename Allocator::const_pointer		const_pointer;
-		//typedef 										iterator;
-		//typedef 										const_iterator;
-		//typedef ft::reverse_iterator<iterator>			reverse_iterator;
-		//typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef typename Allocator::pointer							pointer;
+		typedef typename Allocator::const_pointer					const_pointer;
+		typedef map_iterator<node<value_type>, value_type>			iterator;
+		typedef const map_iterator<node<value_type>, value_type>	const_iterator;
+		//typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		//typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+	protected:
+		typedef node<value_type>								node;
 
 		// +------------------------------------------+ //
 		//   STRUCT AND CLASS FOR MAP 					//
@@ -76,15 +91,6 @@ class map
 				{ return comp(lhs.first, rhs.first); }
 		};
 
-		struct node
-		{
-			node(){}
-			value_type	*_key;
-			node		*_left;
-			node		*_right;
-			node		*_dad;
-			int			_height;
-		};
 
 		// +------------------------------------------+ //
 		//   PRIVATE MEMBER								//
@@ -117,6 +123,21 @@ class map
 
 		// supprimer son arbre binaire de maniere recursif
 
+
+		// +------------------------------------------+ //
+		//   MODIFIERS									//
+		// +------------------------------------------+ //
+
+		iterator	begin()
+		{
+			return iterator(node_value_min(_root));
+		}
+
+		const iterator	begin() const
+		{
+			return iterator(node_value_min(_root));
+		}
+
 		// +------------------------------------------+ //
 		//   MODIFIERS									//
 		// +------------------------------------------+ //
@@ -124,17 +145,12 @@ class map
 		// std::pair<iterator, bool> insert( const value_type& value );
 		void	insert( const value_type& value )
 		{
-			_root = insert_node(_root, value);
+			_root = insert_node(_root, value, NULL);
 			_size++;
 		}
 
 		void	print_tree()
 		{ printTree(_root, "********* ", true); }
-
-		void	rootKey()
-		{
-			std::cout << _root->_key->first << " " <<  _root->_key->second<< std::endl;
-		}
 
 		value_compare value_comp() const { return (value_compare(Compare())); };
 
@@ -147,7 +163,6 @@ class map
 */
 
 	private:
-		// si a > b alors on renvoie a sinon c 'est b
 		int	max(int a, int b)
 		{ return (a > b) ? a : b; }
 
@@ -158,13 +173,13 @@ class map
 			return N->_height;
 		}
 
-		node	*new_node(const value_type& value)
+		node	*new_node(const value_type& value, node *parent)
 		{
 			node *N = _allocNode.allocate(1);
 			_allocNode.construct(N, node());
 			N->_left = NULL;
 			N->_right = NULL;
-			N->_dad = NULL;
+			N->_dad = parent;
 			N->_height = 1;
 			N->_key = _allocPair.allocate(1);
 			_allocPair.construct(N->_key, value);
@@ -209,20 +224,23 @@ class map
 		}
 
 		// Insert a node in a recursive way
-		node *insert_node(node *root, const value_type value)
+		node *insert_node(node *root, const value_type value, node *parent) //FIXME si deux fois la meme il faut return
 		{
 			// Find the correct postion and insert the N
 			if (root == NULL)
 			{
-				return (new_node(value));
+				return (new_node(value, parent));
 			}
 			if (_comp(value.first, root->_key->first)) // if value lower than root key
-				root->_left = insert_node(root->_left, value);
-			else if (!(_comp(value.first, root->_key->first)))
-				root->_right = insert_node(root->_right, value);
+				root->_left = insert_node(root->_left, value, root);
+			else if (!(_comp(value.first, root->_key->first))) // if value higher or equal than root key
+			{
+				if (value.first == root->_key->first)
+					return root;
+				root->_right = insert_node(root->_right, value, root);
+			}
 			else
 				return root;
-
 			// Update the balance factor of each node you pass through and balance the tree
 			root->_height = 1 + max(height(root->_left), height(root->_right));
 			int balanceFactor = getBalanceFactor(root);
@@ -262,7 +280,13 @@ class map
 			return temp;
 		}
 
-		// Delete a node
+		node *node_value_max(node *N)
+		{
+			node *temp = N;
+			while (temp->_right != NULL)
+				temp = temp->_right;
+			return temp;
+		}
 
 		node *deleteNode(node *root, const value_type value)
 		{
@@ -300,8 +324,7 @@ class map
 			if (root == NULL)
 				return root;
 
-			// Update the balance factor of each node and
-			// balance the tree
+			// Update the balance factor of each node and balance the tree
 			root->_height = 1 + max(height(root->_left), height(root->_right));
 			int balanceFactor = getBalanceFactor(root);
 			if (balanceFactor > 1)

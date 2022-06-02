@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/01 18:06:36 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/02 14:46:15 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,37 @@
 #include "stack.hpp"
 #include "map.hpp"
 
-
 int main()
 {
-	// std::map<std::string, int> real;
+	// std::map<int, int> real;
 
-	// std::pair<std::string, int> add("bonjour", 42);
-	// std::pair<std::string, int> add2("bonjour", 99);
+	// std::pair<int, int> add(2, 42);
+	// std::pair<int, int> add2(3, 99);
+	// std::pair<int, int> add3(99, 99);
+	// std::pair<int, int> add4(4, 99);
+	// std::pair<int, int> add5(150, 99);
 
+	// real.insert(add);
 	// real.insert(add2);
-	// real.insert(add);
-	// real.insert(add);
-	// real.insert(add);
+	// real.insert(add3);
+	// real.insert(add4);
+	// real.insert(add5);
 
-	// std::map<std::string, int>::iterator it = real.find("bofnjour");
-	// std::cout << it->second << std::endl;
+	// for (std::map<int, int>::iterator it = real.begin();it != real.end();++it)
+	// 	std::cout << it->first << std::endl;
+	// std::cout << real.at(4)<< std::endl;
+	//Returns a reference to the mapped value of the element with key equivalent to key
+	// Ici 99 car std::pair<int, int> add4(4, 99);
+	// std::cout << real[400]<< std::endl;
+	//Returns a reference to the value that is mapped to a key equivalent to key,
+	//performing an insertion if such key does not already exist.
 
 	ft::map<int, int> mine;
-
 	ft::pair<int, int> add(100, 42);
 	ft::pair<int, int> add2(50, 42);
-	ft::pair<int, int> add3(10, 42);
+	ft::pair<int, int> add3(4, 42);
 	ft::pair<int, int> add4(2, 42);
-	ft::pair<int, int> add5(6, 42);
+	ft::pair<int, int> add5(50, 42);
 	ft::pair<int, int> add6(7, 42);
 
 	mine.insert(add);
@@ -51,7 +59,13 @@ int main()
 	mine.insert(add5);
 	mine.insert(add6);
 
-	mine.print_tree();
+	ft::map<int, int>::iterator it = mine.begin();
+	std::cout << it->first << std::endl;
+	it++;
+	std::cout << it->first << std::endl;
+
+
+	// mine.print_tree();
 
 
 	// mine.rootKey();
