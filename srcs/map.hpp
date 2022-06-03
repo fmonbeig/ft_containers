@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/02 18:21:20 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/03 19:16:39 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,26 @@ template<typename T>
 struct node
 {
 	node(){}
+
+	node &operator=(node const &rhs)
+	{
+		if (this != &rhs)
+		{
+			this->_key = rhs._key;
+			this->_left = rhs._left;
+			this->_right = rhs._right;
+			this->_dad = rhs._dad;
+			this->_end = rhs._end;
+		}
+		return (*(this));
+	}
 	T			*_key;
 	node		*_left;
 	node		*_right;
 	node		*_dad;
 	node		*_end;
 	int			_height;
+
 };
 
 template<
@@ -180,6 +194,34 @@ class map
 			}
 			_size++;
 		}
+		void	erase( iterator pos )
+		{
+			std::cout <<"KEY ROOT " << _root->_key->first << "-----" << std::endl;
+
+			_root = deleteNode(_root, *pos.getnode()->_key);
+
+			std::cout <<"LAST KEY ROOT " << _root->_key->first << "-----" << std::endl;
+			std::cout <<"LAST RIGHT ROOT " << _root->_right->_key->first << "-----" << std::endl;
+			// node *ancient_max = NULL;
+			// node *new_max = NULL;
+
+			// if (_root)
+			// 	ancient_max = node_value_max(_root);
+			// _root = insert_node(_root, value, NULL);
+			// if (ancient_max == NULL)
+			// {
+			// 	_root->_end = new_node(value, _root);
+			// 	return ;
+			// }
+			// new_max = node_value_max(_root);
+			// if (_comp(ancient_max->_key->first, new_max->_key->first)) // if new value is the biggest value in map then we free _end
+			// {
+			// 	free_node(ancient_max->_end);
+			// 	new_max->_end = new_node(value, new_max);
+			// 	new_max->_end->_left = new_max->_end->_dad;
+			// }
+			// _size++;
+		}
 
 		void	print_tree()
 		{ printTree(_root, "********* ", true); }
@@ -221,31 +263,135 @@ class map
 
 		void	free_node(node *N)
 		{
+			std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
 			_allocPair.deallocate(N->_key, 1);
 			_allocPair.destroy(N->_key);
+			// if (N->_end)
+			// {
+			// 	std::cout << "DESTROY END = " << N->_end->_key->first << std::endl;
+			// 	_allocPair.deallocate(N->_end->_key, 1);
+			// 	_allocPair.destroy(N->_end->_key);
+			// 	_allocNode.deallocate(N->_end, 1);
+			// 	_allocNode.destroy(N->_end);
+			// }
 			_allocNode.deallocate(N, 1);
 			_allocNode.destroy(N);
+			N = NULL;
 		}
 
 		node *rightRotate(node *y)
 		{
+			// std::cout << "RIGHT ROTATE" << std::endl;
+			// if (y)
+			// {
+			// 	if(y->_dad)
+			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad " << y->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad == NULL" << std::endl;
+			// }
+
 			node *x = y->_left;
 			node *B = x->_right;
+
+			// if (x)
+			// {
+			// 	if(x->_dad)
+			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad " << x->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad == NULL" << std::endl;
+			// }
+			// if (B)
+			// {
+			// 	if(B->_dad)
+			// 	std::cout << "NODE B = " << B->_key->first<< std::endl; //<< " OLD Dad " << B->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE B = " << B->_key->first << " OLD Dad == NULL" << std::endl;
+			// }
+
+			x->_dad = y->_dad;
+			y->_dad = x;
 			x->_right = y;
 			y->_left = B;
+			if (B)
+				B->_dad = y;
 			y->_height = max(height(y->_left), height(y->_right)) + 1;
 			x->_height = max(height(x->_left), height(x->_right)) + 1;
+
+			// if (y)
+			// {
+			// 	if(y->_dad)
+			// 		std::cout << "NODE Y = " << y->_key->first << " NEW Dad " << y->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE Y = " << y->_key->first << " NEW Dad == NULL" << std::endl;
+			// }
+			// if (x)
+			// {
+			// 	if(x->_dad)
+			// 		std::cout << "NODE X = " << x->_key->first << " NEW Dad " << x->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE X = " << x->_key->first << " NEW Dad == NULL" << std::endl;
+			// }
+			// if (B)
+			// {
+			// 	if(B->_dad)
+			// 		std::cout << "NODE B = " << B->_key->first << " NEW Dad " << B->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE B = " << B->_key->first << " NEW Dad == NULL" << std::endl;
+			// }
+			// std::cout << "=======" << std::endl;
 			return x;
 		}
 
 		node *leftRotate(node *x)
 		{
+			// std::cout << "LEFT ROTATE" << std::endl;
+			// if (x)
+			// {
+			// 	if(x->_dad)
+			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad " << x->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad == NULL" << std::endl;
+			// }
+
 			node *y = x->_right;
 			node *B = y->_left;
+
+			// if (y)
+			// {
+			// 	if(y->_dad)
+			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad " << y->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad == NULL" << std::endl;
+			// }
+			// if (B)
+			// {
+			// 	if(B->_dad)
+			// 	std::cout << "NODE B = " << B->_key->first<< std::endl; //<< " OLD Dad " << B->_dad->_key->first << std::endl;
+			// 	else
+			// 		std::cout << "NODE B = " << B->_key->first << " OLD Dad == NULL" << std::endl;
+			// }
+			y->_dad = x->_dad;
+			x->_dad = y;
 			y->_left = x;
 			x->_right = B;
+			if (B)
+				B->_dad = x;
 			x->_height = max(height(x->_left), height(x->_right)) + 1;
 			y->_height = max(height(y->_left), height(y->_right)) + 1;
+
+			// if(y->_dad)
+			// 	std::cout << "NODE Y = " << y->_key->first << " NEW Dad " << y->_dad->_key->first << std::endl;
+			// else
+			// 	std::cout << "NODE Y = " << y->_key->first << " NEW Dad == NULL" << std::endl;
+			// if(x->_dad)
+			// 	std::cout << "NODE X = " << x->_key->first << " NEW Dad " << x->_dad->_key->first << std::endl;
+			// else
+			// 	std::cout << "NODE X = " << x->_key->first << " NEW Dad == NULL" << std::endl;
+			// if(B->_dad)
+			// 	std::cout << "NODE B = " << B->_key->first << " NEW Dad " << B->_dad->_key->first << std::endl;
+			// else
+			// 	std::cout << "NODE B = " << B->_key->first << " NEW Dad == NULL" << std::endl;
+			// std::cout << "=======" << std::endl;
 			return y;
 		}
 
@@ -257,7 +403,7 @@ class map
 		}
 
 		// Insert a node in a recursive way
-		node *insert_node(node *root, const value_type value, node *parent) //FIXME si deux fois la meme il faut return
+		node *insert_node(node *root, const value_type value, node *parent)
 		{
 			// Find the correct postion and insert the N
 			if (root == NULL)
@@ -324,33 +470,68 @@ class map
 		node *deleteNode(node *root, const value_type value)
 		{
 			// Find the node and delete it
+			// std::cout <<"RIGHT ROOT " << _root->_right->_key->first << "-----" << std::endl;
 			if (root == NULL)
 				return root;
 			if (_comp(value.first, root->_key->first))
 				root->_left = deleteNode(root->_left, value);
-			else if (!(_comp(value.first, root->_key->first)))
+			else if (!(_comp(value.first, root->_key->first)) && value.first != root->_key->first )
+			{
+				// std::cout << "RIGHT " << value.first << " " << root->_key->first <<std::endl<< std::endl;
 				root->_right = deleteNode(root->_right, value);
+			}
 			else
 			{
+				// std::cout << "EQUAL " << value.first << " " << root->_key->first <<std::endl<< std::endl;
 				if ((root->_left == NULL) || (root->_right == NULL))
 				{
+					// std::cout << " ONE ROOT IS NULL " << std::endl<< std::endl;
 					node *temp = root->_left ? root->_left : root->_right;
 					if (temp == NULL)
 					{
+						// std::cout << "Leaf Node = NULL" << std::endl<< std::endl<< std::endl;
 						temp = root;
 						root = NULL;
+						// free_node(root);
+						// root = NULL;
 					}
 					else
 					{
-						*root = *temp;
-						free_node(temp);
+						// std::cout << "SWAPPING TIME" << std::endl<< std::endl;
+						node swap;
+
+						swap._key = root->_key;
+
+						// std::cout <<"ROOT->_KEY ==== " << root->_key->first << "-----" << std::endl;
+						// std::cout <<"BEFORE ROOT " << _root->_right->_key->first << "-----" << std::endl;
+						// std::cout <<"BEFORE ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
+						// std::cout << root->_key->first << " " << temp->_key->first << std::endl;
+						root->_key = temp->_key;
+						root->_left = temp->_left;
+						root->_right = temp->_right;
+						root->_end = temp->_end;
+
+						temp->_key = swap._key;
+
+						// std::cout <<"AFTER ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
+						// *root = *temp;
+						// std::cout <<"AFTER ROOT " << _root->_right->_key->first << "-----" << std::endl;
 					}
+						free_node(temp);
 				}
 				else
 				{
+					node swap;
+
+					swap._key = root->_key;
+					// std::cout << "NO ROOT IS NULL " << std::endl << std::endl;
 					node *temp = node_value_min(root->_right);
+					if (temp->_key->first == root->_right->_key->first)
+						root->_right = root->_right->_right;
 					root->_key = temp->_key;
-					root->_right = deleteNode(root->_right, temp->_key);
+					root->_end = temp->_end;
+					temp->_key = swap._key;
+					free_node(temp);
 				}
 			}
 
@@ -400,7 +581,7 @@ class map
 				indent += "|  ";
 				}
 				std::cout << root->_key->first << std::endl;
-				printInfoNode(root);
+				//  printInfoNode(root);
 				printTree(root->_left, indent, false);
 				printTree(root->_right, indent, true);
 			}
@@ -408,11 +589,16 @@ class map
 
 		void printInfoNode(node *N)
 		{
-			std::cout << "NODE " << N->_key->first << " HEIGHT LEFT = " << height(N->_left) << " HEIGHT RIGHT = " << height(N->_right) << " HEIGHT = " << height(N->_left) - height(N->_right);
+			std::cout << "NODE " << N->_key->first;
+			//  std::cout << "NODE " << N->_key->first << " HEIGHT LEFT = " << height(N->_left) << " HEIGHT RIGHT = " << height(N->_right) << " HEIGHT = " << height(N->_left) - height(N->_right);
 			if (N->_left)
 				std::cout<< " Value N->_left "<< N->_left->_key->first;
 			if (N->_right)
 				std::cout<< " Value N->_right "<< N->_right->_key->first;
+			if (N->_dad)
+				std::cout << " DAD = " << N->_dad->_key->first;
+			else
+				std::cout << " DAD = NULL ";
 			std::cout<< std::endl;
 		}
 };

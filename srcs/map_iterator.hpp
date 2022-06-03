@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/02 18:36:54 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:58:28 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,14 @@ namespace ft
 
 			map_iterator& operator++()
 			{
+				// if (_current->_dad)
+				// 	std::cout <<"NODE " << _current->_key->first <<" DAD " << _current->_dad->_key->first << std::endl;
+				if(_current  == find_last(_current))
+				{
+					_current = find_end(_current);
+						std::cout << " FIND END" << std::endl;
+					return *this;
+				}
 				if (_current->_right)
 					_current = _current->_right;
 				else if (_current->_right == NULL)
@@ -68,13 +76,12 @@ namespace ft
 						else
 						{
 							if (_current->_dad->_dad)
-								_current = _current->_dad->_dad;
-							else
-								_current = find_end(_current);
+							{
+								if (_comp(_current->_key->first, _current->_dad->_dad->_key->first))
+									_current = _current->_dad->_dad;
+							}
 						}
 					}
-					else
-						_current = _current->_right;
 				}
 				return *this;
 			}
@@ -89,7 +96,11 @@ namespace ft
 			map_iterator& operator--()
 			{
 				if (_current->_left)
+				{
 					_current = _current->_left;
+					while(_current->_right)
+						_current = _current->_right;
+				}
 				else if (_current->_dad)
 					_current = _current->_dad;
 				return *this;
@@ -108,19 +119,30 @@ namespace ft
 			bool operator!=(const map_iterator& rhs)
 			{ return (_current != rhs._current); }
 
-			// vector_iterator& operator++() { _ptr++; return *this; }
-			// vector_iterator& operator--() { _ptr--; return *this; }
-			// vector_iterator operator++(int) {_ptr++; return (vector_iterator(_ptr - 1)); }
-			// vector_iterator operator--(int) { _ptr--; return (vector_iterator(_ptr + 1)); }
-
 			node *find_end(node *N)
 			{
-				while (N->_dad)
-					N = N->_dad;
-				while (N->_right)
-					N = N->_right;
-				return N->_end;
+				node *temp = N;
+
+				while (temp->_dad)
+					temp = temp->_dad;
+				while (temp->_right)
+					temp = temp->_right;
+				return temp->_end;
 			}
+
+			node *find_last(node *N)
+			{
+				node *temp = N;
+
+				while (temp->_dad)
+					temp = temp->_dad;
+				while (temp->_right)
+					temp = temp->_right;
+				return temp;
+			}
+
+			node	*getnode()
+			{ return _current;}
 
 	};
 }
