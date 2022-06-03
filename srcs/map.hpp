@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/03 19:16:39 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/03 19:27:38 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -491,6 +491,7 @@ class map
 					{
 						// std::cout << "Leaf Node = NULL" << std::endl<< std::endl<< std::endl;
 						temp = root;
+						root->_dad->_end = root->_end; // NB we have to check leaks
 						root = NULL;
 						// free_node(root);
 						// root = NULL;
