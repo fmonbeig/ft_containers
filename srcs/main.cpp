@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 16:46:16 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/06 18:08:23 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ int main()
 	// std::map<int, int>::iterator it = real.begin();
 	// std::cout << it->first << std::endl;
 
+	// std::map<int, int>::iterator it = real.begin();
 
+	// std::cout << it->first << std::endl;
 	// int i = 0;
 
-	// for (std::map<int, int>::iterator it = real.begin(); i < 1; ++it)
+	// for (const std::map<int, int>::iterator it = real.begin(); i < 1; ++it)
 	// {
 	// 	std::cout << it->first << std::endl;
 	// 	i++;
@@ -51,7 +53,7 @@ int main()
 	// std::cout << real.empty() << std::endl;
 
 
-	// for (std::map<int, int>::iterator it = real.begin();it != real.end();++it)
+	// for (std::map<int, int>::const_iterator it = real.begin();it != real.end();++it)
 	// 	std::cout << it->first << std::endl;
 	// std::cout << real.at(4)<< std::endl;
 	//Returns a reference to the mapped value of the element with key equivalent to key
@@ -107,8 +109,17 @@ int main()
 	// 	--it;
 	// 	std::cout << it->first << std::endl;
 	// }
-		std::cout << "===========" << std::endl;
-	for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
+	// 	std::cout << "===========" << std::endl;
+
+	// ft::map<int, int>::iterator it = mine.begin();
+	// it = it + 2;
+	// std::cout << it->first << std::endl;
+	// for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
+	// {
+	// 	std::cout << it->first << std::endl;
+	// }
+
+	for (ft::map<int, int>::const_reverse_iterator it = mine.rbegin(); it != mine.rend(); it++)
 	{
 		std::cout << it->first << std::endl;
 	}

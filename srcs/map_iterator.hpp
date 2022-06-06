@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 15:39:37 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/06 17:30:02 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,11 @@ namespace ft
 				return (*this);
 			}
 
+			operator map_iterator<Compare, node, T const>() const
+			{	return (map_iterator<Compare, node, T const>(_current)); };
+
 			reference operator*() const { return *_current->_key; }
-			pointer operator->() const {
-				return _current->_key;
-				if (_current->_end)
-					std::cout << "I Have _end" << std::endl;
-				}
+			pointer operator->() const { return _current->_key; }
 
 			// +------------------------------------------+ //
 			//   OPERATOR							        //
@@ -73,8 +72,8 @@ namespace ft
 
 			map_iterator& operator++()
 			{
-				if (_current->_dad)
-					std::cout <<"NODE " << _current->_key->first <<" DAD " << _current->_dad->_key->first << " END ?? = " << _current->_end<< std::endl;
+				// if (_current->_dad)
+				// 	std::cout <<"NODE " << _current->_key->first <<" DAD " << _current->_dad->_key->first << " END ?? = " << _current->_end<< std::endl;
 				// if(_current  == find_last(_current))
 				// {
 				// 	_current = find_end(_current);

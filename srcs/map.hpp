@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 16:45:23 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/06 18:10:48 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ class map
 		typedef typename Allocator::pointer							pointer;
 		typedef typename Allocator::const_pointer					const_pointer;
 		typedef map_iterator<Compare, node<value_type>, value_type>			iterator;
-		typedef const map_iterator<Compare, node<value_type>, value_type>	const_iterator;
-		//typedef ft::reverse_iterator<iterator>					reverse_iterator;
-		//typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+		typedef map_iterator<Compare, node<value_type>, const value_type>	const_iterator;
+		typedef ft::reverse_iterator<iterator>							reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 	protected:
 		typedef node<value_type>								node;
 
@@ -113,7 +113,6 @@ class map
 
 	protected:
 		Compare					_comp;
-		size_t					_size;
 		std::allocator<node>	_allocNode;
 		Allocator				_allocPair;
 		node					*_root;
@@ -124,7 +123,7 @@ class map
 		// +------------------------------------------+ //
 	public:
 		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-			_comp(comp), _size(0), _allocNode(std::allocator<node>()),_allocPair(alloc),
+			_comp(comp), _allocNode(std::allocator<node>()),_allocPair(alloc),
 			_root(NULL) {}
 
 		// template< class InputIt >
@@ -146,24 +145,28 @@ class map
 		// +------------------------------------------+ //
 
 		iterator	begin()
-		{
-			return iterator(node_value_min(_root));
-		}
+		{ return iterator(node_value_min(_root)); }
 
-		const iterator	begin() const
-		{
-			return iterator(node_value_min(_root));
-		}
+		const_iterator	begin() const
+		{ return const_iterator(node_value_min(_root));}
 
 		iterator	end()
-		{
-			return iterator(node_value_max(_root)->_end);
-		}
+		{ return iterator(node_value_max(_root)->_end); }
 
-		const iterator	end() const
-		{
-			return iterator(node_value_max(_root)->_end);
-		}
+		const_iterator	end() const
+		{ return const_iterator(node_value_max(_root)->_end); }
+
+		reverse_iterator	rbegin()
+		{ return reverse_iterator(end()); }
+
+		const_reverse_iterator	rbegin() const
+		{ return const_reverse_iterator(end()); }
+
+		reverse_iterator	rend()
+		{ return reverse_iterator(begin()); }
+
+		const_reverse_iterator	rend() const
+		{ return const_reverse_iterator(begin()); }
 
 		// +------------------------------------------+ //
 		//   MODIFIERS									//
@@ -194,8 +197,8 @@ class map
 				new_max->_end = new_node(add, new_max);
 				new_max->_end->_left = new_max->_end->_dad;
 			}
-			_size++;
 		}
+		
 		void	erase( iterator pos )
 		{
 			value_type add(0,0);
@@ -232,7 +235,7 @@ class map
 			// 	new_max->_end = new_node(value, new_max);
 			// 	new_max->_end->_left = new_max->_end->_dad;
 			// }
-			// _size++;
+
 		}
 
 		void	print_tree()
@@ -275,12 +278,12 @@ class map
 
 		void	free_node(node *N)
 		{
-			std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
+			// std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
 			_allocPair.deallocate(N->_key, 1);
 			_allocPair.destroy(N->_key);
 			if (N->_end)
 			{
-				std::cout << "DESTROY END = " << N->_end->_key->first << std::endl;
+				// std::cout << "DESTROY END = " << N->_end->_key->first << std::endl;
 				_allocPair.deallocate(N->_end->_key, 1);
 				_allocPair.destroy(N->_end->_key);
 				_allocNode.deallocate(N->_end, 1);
@@ -537,7 +540,7 @@ class map
 					node swap;
 
 					swap._key = root->_key;
-					std::cout << "NO ROOT IS NULL " << std::endl << std::endl;
+					// std::cout << "NO ROOT IS NULL " << std::endl << std::endl;
 
 					node *temp = node_value_min(root->_right);
 					if (temp->_key->first == root->_right->_key->first)
