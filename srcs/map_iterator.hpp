@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/03 15:58:28 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:39:37 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,25 @@ namespace ft
 					this->_current = rhs._current;
 				return (*(this));
 			}
+			map_iterator & operator+=( difference_type n )
+			{
+				for (int i = 0; i < n; ++i)
+					_current++;
+				return (*this);
+			}
+			map_iterator & operator-=( difference_type n )
+			{
+				for (int i = 0; i < n; ++i)
+					_current--;
+				return (*this);
+			}
 
-			// reference operator*() const { return *_ptr; } // NB A tester
-			pointer operator->() const { return _current->_key; }
+			reference operator*() const { return *_current->_key; }
+			pointer operator->() const {
+				return _current->_key;
+				if (_current->_end)
+					std::cout << "I Have _end" << std::endl;
+				}
 
 			// +------------------------------------------+ //
 			//   OPERATOR							        //
@@ -57,32 +73,47 @@ namespace ft
 
 			map_iterator& operator++()
 			{
-				// if (_current->_dad)
-				// 	std::cout <<"NODE " << _current->_key->first <<" DAD " << _current->_dad->_key->first << std::endl;
-				if(_current  == find_last(_current))
-				{
-					_current = find_end(_current);
-						std::cout << " FIND END" << std::endl;
-					return *this;
-				}
+				if (_current->_dad)
+					std::cout <<"NODE " << _current->_key->first <<" DAD " << _current->_dad->_key->first << " END ?? = " << _current->_end<< std::endl;
+				// if(_current  == find_last(_current))
+				// {
+				// 	_current = find_end(_current);
+				// 		std::cout << " FIND END" << std::endl;
+				// 	return *this;
+				// }
 				if (_current->_right)
+				{
 					_current = _current->_right;
+					while (_current->_left != NULL)
+						_current = _current->_left;
+				}
 				else if (_current->_right == NULL)
 				{
-					if (_current->_dad)
+					node *temp = _current;
+					if (_comp(_current->_key->first, _current->_dad->_key->first))
+						_current = _current->_dad;
+					else
 					{
-						if (_comp(_current->_key->first, _current->_dad->_key->first))
-							_current = _current->_dad;
-						else
+						// std::cout << "********1" << std::endl;
+						while (_current->_dad && (!(_comp(_current->_key->first, _current->_dad->_key->first))))
 						{
-							if (_current->_dad->_dad)
-							{
-								if (_comp(_current->_key->first, _current->_dad->_dad->_key->first))
-									_current = _current->_dad->_dad;
-							}
+							_current = _current->_dad;
+							// std::cout << " NOUVEAU NODE " << _current->_key->first << std::endl;
+						}
+						if (_current->_dad && _comp(_current->_key->first, _current->_dad->_key->first))
+						{
+								// std::cout << "**********2" << std::endl;
+							_current = _current->_dad;
+							// std::cout << " NOUVEAU NODE FINAL " << _current->_key->first << std::endl;
+						}
+						if (_comp(_current->_key->first, temp->_key->first))
+						{
+								// std::cout << "**********3" << std::endl;
+							_current = temp->_end;
 						}
 					}
 				}
+				// std::cout <<"APRES ++ " << _current->_key->first << std::endl;
 				return *this;
 			}
 
@@ -98,11 +129,16 @@ namespace ft
 				if (_current->_left)
 				{
 					_current = _current->_left;
-					while(_current->_right)
+					while (_current->_right)
 						_current = _current->_right;
 				}
-				else if (_current->_dad)
-					_current = _current->_dad;
+				else
+				{
+					while (_current->_dad && (_comp(_current->_key->first, _current->_dad->_key->first)))
+						_current = _current->_dad;
+					if (_current->_dad && (!_comp(_current->_key->first, _current->_dad->_key->first)))
+						_current = _current->_dad;
+				}
 				return *this;
 			}
 

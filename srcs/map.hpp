@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/03 19:27:38 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/06 16:45:23 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ class map
 		*/
 		void	insert( const value_type& value )
 		{
+			value_type add(0,0);
 			node *ancient_max = NULL;
 			node *new_max = NULL;
 
@@ -182,26 +183,37 @@ class map
 			_root = insert_node(_root, value, NULL);
 			if (ancient_max == NULL)
 			{
-				_root->_end = new_node(value, _root);
+				_root->_end = new_node(add, _root);
 				return ;
 			}
 			new_max = node_value_max(_root);
 			if (_comp(ancient_max->_key->first, new_max->_key->first)) // if new value is the biggest value in map then we free _end
 			{
 				free_node(ancient_max->_end);
-				new_max->_end = new_node(value, new_max);
+				ancient_max->_end = NULL;
+				new_max->_end = new_node(add, new_max);
 				new_max->_end->_left = new_max->_end->_dad;
 			}
 			_size++;
 		}
 		void	erase( iterator pos )
 		{
-			std::cout <<"KEY ROOT " << _root->_key->first << "-----" << std::endl;
+			value_type add(0,0);
+			node *ancient_max = node_value_max(_root);
+			node *new_max = NULL;
+
+			free_node(ancient_max->_end);
+			// std::cout <<"KEY ROOT " << _root->_key->first << "-----" << std::endl;
 
 			_root = deleteNode(_root, *pos.getnode()->_key);
 
-			std::cout <<"LAST KEY ROOT " << _root->_key->first << "-----" << std::endl;
-			std::cout <<"LAST RIGHT ROOT " << _root->_right->_key->first << "-----" << std::endl;
+			new_max = node_value_max(_root);
+			new_max->_end = new_node(add, new_max);
+			new_max->_end->_left = new_max->_end->_dad;
+
+
+			// std::cout <<"LAST KEY ROOT " << _root->_key->first << "-----" << std::endl;
+			// std::cout <<"LAST RIGHT ROOT " << _root->_right->_key->first << "-----" << std::endl;
 			// node *ancient_max = NULL;
 			// node *new_max = NULL;
 
@@ -266,14 +278,14 @@ class map
 			std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
 			_allocPair.deallocate(N->_key, 1);
 			_allocPair.destroy(N->_key);
-			// if (N->_end)
-			// {
-			// 	std::cout << "DESTROY END = " << N->_end->_key->first << std::endl;
-			// 	_allocPair.deallocate(N->_end->_key, 1);
-			// 	_allocPair.destroy(N->_end->_key);
-			// 	_allocNode.deallocate(N->_end, 1);
-			// 	_allocNode.destroy(N->_end);
-			// }
+			if (N->_end)
+			{
+				std::cout << "DESTROY END = " << N->_end->_key->first << std::endl;
+				_allocPair.deallocate(N->_end->_key, 1);
+				_allocPair.destroy(N->_end->_key);
+				_allocNode.deallocate(N->_end, 1);
+				_allocNode.destroy(N->_end);
+			}
 			_allocNode.deallocate(N, 1);
 			_allocNode.destroy(N);
 			N = NULL;
@@ -491,7 +503,7 @@ class map
 					{
 						// std::cout << "Leaf Node = NULL" << std::endl<< std::endl<< std::endl;
 						temp = root;
-						root->_dad->_end = root->_end; // NB we have to check leaks
+						// root->_dad->_end = root->_end; // NB we have to check leaks
 						root = NULL;
 						// free_node(root);
 						// root = NULL;
@@ -506,16 +518,16 @@ class map
 						// std::cout <<"ROOT->_KEY ==== " << root->_key->first << "-----" << std::endl;
 						// std::cout <<"BEFORE ROOT " << _root->_right->_key->first << "-----" << std::endl;
 						// std::cout <<"BEFORE ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
-						// std::cout << root->_key->first << " " << temp->_key->first << std::endl;
+						std::cout << root->_key->first << " " << temp->_key->first << std::endl;
 						root->_key = temp->_key;
 						root->_left = temp->_left;
 						root->_right = temp->_right;
-						root->_end = temp->_end;
+						// root->_end = temp->_end;
 
 						temp->_key = swap._key;
 
 						// std::cout <<"AFTER ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
-						// *root = *temp;
+
 						// std::cout <<"AFTER ROOT " << _root->_right->_key->first << "-----" << std::endl;
 					}
 						free_node(temp);
@@ -525,13 +537,17 @@ class map
 					node swap;
 
 					swap._key = root->_key;
-					// std::cout << "NO ROOT IS NULL " << std::endl << std::endl;
+					std::cout << "NO ROOT IS NULL " << std::endl << std::endl;
+
 					node *temp = node_value_min(root->_right);
 					if (temp->_key->first == root->_right->_key->first)
 						root->_right = root->_right->_right;
 					root->_key = temp->_key;
-					root->_end = temp->_end;
+					// root->_end = temp->_end;
 					temp->_key = swap._key;
+					if (temp->_right)
+						temp->_right->_dad = root;
+
 					free_node(temp);
 				}
 			}
