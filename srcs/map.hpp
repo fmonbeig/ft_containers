@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/07 15:51:40 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:44:17 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,18 +162,37 @@ class map
 		//   ELEMENT ACCESS								//
 		// +------------------------------------------+ //
 
-		// T& at( const Key& key )
-		// {
-		// 	if (key == find)
-		// 		return ;
-		// 	else
-		// 		throw std::out_of_range("map");
-		// }
+		T& at( const Key& key )
+		{
+			iterator it = find(key);
+			if (it != end() && it->first == key)
+				return it->second;
+			else
+				throw std::out_of_range("map");
+		}
 
-		// const T& at( const Key& key ) const
-		// {
+		const T& at( const Key& key ) const
+		{
+			iterator it = find(key);
+			if (it != end() && it->first == key)
+				return it->second;
+			else
+				throw std::out_of_range("map");
+		}
 
-		// }
+		T& operator[]( const Key& key )
+		{
+			iterator it = find(key);
+			if (it != end() && it->first == key)
+				return it->second;
+			else
+			{
+				value_type	add(key,T());
+				insert(add);
+			}
+			it = find(key);
+			return it->second;
+		}
 
 		// +------------------------------------------+ //
 		//   ITERATORS									// //FIXME faire en sorte que begin et end existe meme s'il n'y a pas de node / size = 0
@@ -206,6 +225,13 @@ class map
 		// +------------------------------------------+ //
 		//   CAPACITY									//
 		// +------------------------------------------+ //
+
+		bool empty() const
+		{
+			if (_size == 0)
+				return 1;
+			return 0;
+		}
 
 		size_type size() const
 		{ return _size; }
@@ -255,6 +281,13 @@ class map
 				insert(*first.operator->());
 		}
 
+		iterator insert( iterator hint, const value_type& value )
+		{
+			(void)hint;
+			insert(value);
+			return find(value.first);
+		}
+
 		void	erase( iterator pos )
 		{
 			value_type	add(0,0);
@@ -269,6 +302,10 @@ class map
 			new_max->_end = new_node(add, new_max);
 			new_max->_end->_left = new_max->_end->_dad;
 		}
+
+		//void erase( iterator first, iterator last );
+
+		//size_type erase( const Key& key );
 
 		void	print_tree() // NB we need to comment this at the end
 		{ printTree(_root, "********* ", true); }

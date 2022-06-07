@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/07 15:51:58 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:36:50 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main()
 	// std::pair<int, int> add2(50, 42);
 	// std::pair<int, int> add3(4, 42);
 	// std::pair<int, int> add4(2, 42);
-	// std::pair<int, int> add5(999, 42);
+	// std::pair<int, int> add5(999, 48);
 	// std::pair<int, int> add6(7, 42);
 
 	// std::pair<int, int> addx(101, 44);
@@ -40,6 +40,8 @@ int main()
 	// real.insert(add4);
 	// real.insert(add5);
 	// real.insert(add6);
+
+	// std::cout << real[1000] << std::endl;
 
 	// std::map<int, int> real2;
 	// real2.insert(addx);
@@ -87,7 +89,7 @@ int main()
 	ft::pair<int, int> add2(50, 42);
 	ft::pair<int, int> add3(4, 42);
 	ft::pair<int, int> add4(2, 42);
-	ft::pair<int, int> add5(999, 42);
+	ft::pair<int, int> add5(999, 48);
 	ft::pair<int, int> add6(7, 42);
 	ft::pair<int, int> add7(12, 42);
 	ft::pair<int, int> add8(-56, 42);
@@ -103,16 +105,16 @@ int main()
 	mine.insert(add8);
 	mine.insert(add9);
 
-	ft::pair<int, int> addx(101, 44);
-	ft::pair<int, int> addy(102, 49);
-	ft::pair<int, int> addz(103, 50);
+	// ft::pair<int, int> addx(101, 44);
+	// ft::pair<int, int> addy(102, 49);
+	// ft::pair<int, int> addz(103, 50);
 
-	ft::map<int, int> mine2;
-	mine2.insert(addx);
-	mine2.insert(addy);
-	mine2.insert(addz);
+	// ft::map<int, int> mine2;
+	// mine2.insert(addx);
+	// mine2.insert(addy);
+	// mine2.insert(addz);
 
-
+	std::cout << mine[999] << std::endl;
 	// mine.insert(mine2.begin(), mine2.end());
 
 	// ft::map<int, int>::iterator it = mine.begin();
@@ -143,11 +145,20 @@ int main()
 	// 	std::cout << "===========" << std::endl;
 
 	// mine.clear();
-	std::cout << "SIZE " <<mine.size() << std::endl;
+	// std::cout << "SIZE " <<mine.size() << std::endl;
 
-	ft::map<int, int>::iterator it = mine.find(17);
+	// ft::map<int, int>::iterator it = mine.find(17);
 
-	std::cout << it->first << std::endl;
+	// std::cout << it->first << std::endl;
+	// try
+	// {
+	// std::cout << mine.at(17) << std::endl;
+
+	// }
+	// catch (const std::exception&e)
+	// {
+	// 	std::cerr << e.what() << std::endl;
+	// }
 
 	// for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
 	// {
