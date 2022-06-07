@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 18:08:23 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:51:58 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,32 @@ int main()
 	// std::pair<int, int> add5(999, 42);
 	// std::pair<int, int> add6(7, 42);
 
+	// std::pair<int, int> addx(101, 44);
+	// std::pair<int, int> addy(102, 49);
+	// std::pair<int, int> addz(103, 50);
+
+
 	// real.insert(add);
 	// real.insert(add2);
 	// real.insert(add3);
 	// real.insert(add4);
 	// real.insert(add5);
 	// real.insert(add6);
+
+	// std::map<int, int> real2;
+	// real2.insert(addx);
+	// real2.insert(addy);
+	// real2.insert(addz);
+
+	// real.clear();
+
+	// std::cout << real.size() << std::endl;
+
+
+	// std::map<int, int>::iterator it = real.begin();
+	// std::cout << it->first << std::endl;
+
+	// real.insert(real2.begin(), real2.end());
 
 	// std::map<int, int>::iterator it = real.begin();
 	// std::cout << it->first << std::endl;
@@ -54,7 +74,7 @@ int main()
 
 
 	// for (std::map<int, int>::const_iterator it = real.begin();it != real.end();++it)
-	// 	std::cout << it->first << std::endl;
+	// 	std::cout << it->first << "  " << it->second << std::endl;
 	// std::cout << real.at(4)<< std::endl;
 	//Returns a reference to the mapped value of the element with key equivalent to key
 	// Ici 99 car std::pair<int, int> add4(4, 99);
@@ -83,18 +103,29 @@ int main()
 	mine.insert(add8);
 	mine.insert(add9);
 
+	ft::pair<int, int> addx(101, 44);
+	ft::pair<int, int> addy(102, 49);
+	ft::pair<int, int> addz(103, 50);
 
-	ft::map<int, int>::iterator it = mine.begin();
-	it++;
-	it++;
-	it++;
-	it++;
-	it++;
-	it++;
+	ft::map<int, int> mine2;
+	mine2.insert(addx);
+	mine2.insert(addy);
+	mine2.insert(addz);
 
-	std::cout << " ERASE OF " << it->first << std::endl;
 
-	mine.erase(it);
+	// mine.insert(mine2.begin(), mine2.end());
+
+	// ft::map<int, int>::iterator it = mine.begin();
+	// it++;
+	// it++;
+	// it++;
+	// it++;
+	// it++;
+	// it++;
+
+	// std::cout << " ERASE OF " << it->first << std::endl;
+
+	// mine.erase(it);
 	// it++;
 	// // mine.erase(it);
 	// int i = 0;
@@ -111,26 +142,22 @@ int main()
 	// }
 	// 	std::cout << "===========" << std::endl;
 
-	// ft::map<int, int>::iterator it = mine.begin();
-	// it = it + 2;
-	// std::cout << it->first << std::endl;
+	// mine.clear();
+	std::cout << "SIZE " <<mine.size() << std::endl;
+
+	ft::map<int, int>::iterator it = mine.find(17);
+
+	std::cout << it->first << std::endl;
+
 	// for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
 	// {
 	// 	std::cout << it->first << std::endl;
 	// }
 
-	for (ft::map<int, int>::const_reverse_iterator it = mine.rbegin(); it != mine.rend(); it++)
-	{
-		std::cout << it->first << std::endl;
-	}
-
-	// FIXME : mettre le dad a jour lors de rotation
-	// ft::map<int, int>::iterator it = mine.end();
-	// it--;
-	// it--;
-	// it--;
+	// for (ft::map<int, int>::const_reverse_iterator it = mine.rbegin(); it != mine.rend(); it++)
+	// {
 	// 	std::cout << it->first << std::endl;
-
+	// }
 
 	// mine.print_tree();
 

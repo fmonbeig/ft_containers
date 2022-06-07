@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 17:30:02 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:04:17 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ namespace ft
 			{	return (map_iterator<Compare, node, T const>(_current)); };
 
 			reference operator*() const { return *_current->_key; }
-			pointer operator->() const { return _current->_key; }
+			pointer operator->() const  { return _current->_key; }
 
 			// +------------------------------------------+ //
 			//   OPERATOR							        //

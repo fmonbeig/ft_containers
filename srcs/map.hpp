@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 18:10:48 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:51:40 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include <iterator>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -27,7 +28,6 @@
 
 namespace ft
 {
-
 template<typename T>
 struct node
 {
@@ -116,6 +116,7 @@ class map
 		std::allocator<node>	_allocNode;
 		Allocator				_allocPair;
 		node					*_root;
+		size_type				_size;
 
 
 		// +------------------------------------------+ //
@@ -124,24 +125,58 @@ class map
 	public:
 		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
 			_comp(comp), _allocNode(std::allocator<node>()),_allocPair(alloc),
-			_root(NULL) {}
+			_root(NULL),_size(0) {}
 
-		// template< class InputIt >
-		// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-		// _ptr(comp, alloc)
-		// {
+		template< class InputIt >
+		map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
+			_comp(comp), _allocNode(std::allocator<node>()), _allocPair(alloc), _root(NULL), _size(0)
+		{ insert(first, last); }
 
-		// }
-		// map( const map& other )
-		// {
+		~map() { clear(); }
 
-		// }
+		map( const map& other )
+		{
+			_comp = other._comp;
+			_allocNode = other._allocNode;
+			_allocPair = other._allocPair;
+			insert(other.begin(), other.end());
+			return *this;
+		}
 
-		// supprimer son arbre binaire de maniere recursif a partir de root (et bien penser supprimer end dans le root)
+		map& operator=( const map& other )
+		{
+			_comp = other._comp;
+			_allocNode = other._allocNode;
+			_allocPair = other._allocPair;
+			clear();
+			insert(other.begin(), other.end());
+			return *this;
+
+		}
+
+		Allocator_type get_allocator() const
+		{ return this->_allocPair;}
 
 
 		// +------------------------------------------+ //
-		//   MODIFIERS									//
+		//   ELEMENT ACCESS								//
+		// +------------------------------------------+ //
+
+		// T& at( const Key& key )
+		// {
+		// 	if (key == find)
+		// 		return ;
+		// 	else
+		// 		throw std::out_of_range("map");
+		// }
+
+		// const T& at( const Key& key ) const
+		// {
+
+		// }
+
+		// +------------------------------------------+ //
+		//   ITERATORS									// //FIXME faire en sorte que begin et end existe meme s'il n'y a pas de node / size = 0
 		// +------------------------------------------+ //
 
 		iterator	begin()
@@ -169,17 +204,31 @@ class map
 		{ return const_reverse_iterator(begin()); }
 
 		// +------------------------------------------+ //
+		//   CAPACITY									//
+		// +------------------------------------------+ //
+
+		size_type size() const
+		{ return _size; }
+
+		size_type max_size() const
+		{ return (_allocNode.max_size()); }
+
+		// +------------------------------------------+ //
 		//   MODIFIERS									//
 		// +------------------------------------------+ //
 
-		/* At each insert we have to recalculate the new end()
-		*
-		*/
+		void clear()
+		{
+			if (_size > 0)
+				destroy_tree(_root);
+		}
+
+		/* At each insert we have to recalculate the new end() */
 		void	insert( const value_type& value )
 		{
-			value_type add(0,0);
-			node *ancient_max = NULL;
-			node *new_max = NULL;
+			value_type	add(0,0);
+			node		*ancient_max = NULL;
+			node		*new_max = NULL;
 
 			if (_root)
 				ancient_max = node_value_max(_root);
@@ -198,48 +247,48 @@ class map
 				new_max->_end->_left = new_max->_end->_dad;
 			}
 		}
-		
+
+		template< class InputIt >
+		void insert( InputIt first, InputIt last )
+		{
+			for(; first != last; first++)
+				insert(*first.operator->());
+		}
+
 		void	erase( iterator pos )
 		{
-			value_type add(0,0);
-			node *ancient_max = node_value_max(_root);
-			node *new_max = NULL;
+			value_type	add(0,0);
+			node		*ancient_max = node_value_max(_root);
+			node		*new_max = NULL;
 
 			free_node(ancient_max->_end);
+			ancient_max->_end = NULL;
 			// std::cout <<"KEY ROOT " << _root->_key->first << "-----" << std::endl;
-
 			_root = deleteNode(_root, *pos.getnode()->_key);
-
 			new_max = node_value_max(_root);
 			new_max->_end = new_node(add, new_max);
 			new_max->_end->_left = new_max->_end->_dad;
-
-
-			// std::cout <<"LAST KEY ROOT " << _root->_key->first << "-----" << std::endl;
-			// std::cout <<"LAST RIGHT ROOT " << _root->_right->_key->first << "-----" << std::endl;
-			// node *ancient_max = NULL;
-			// node *new_max = NULL;
-
-			// if (_root)
-			// 	ancient_max = node_value_max(_root);
-			// _root = insert_node(_root, value, NULL);
-			// if (ancient_max == NULL)
-			// {
-			// 	_root->_end = new_node(value, _root);
-			// 	return ;
-			// }
-			// new_max = node_value_max(_root);
-			// if (_comp(ancient_max->_key->first, new_max->_key->first)) // if new value is the biggest value in map then we free _end
-			// {
-			// 	free_node(ancient_max->_end);
-			// 	new_max->_end = new_node(value, new_max);
-			// 	new_max->_end->_left = new_max->_end->_dad;
-			// }
-
 		}
 
-		void	print_tree()
+		void	print_tree() // NB we need to comment this at the end
 		{ printTree(_root, "********* ", true); }
+
+		// +------------------------------------------+ //
+		//   LOOKUP										//
+		// +------------------------------------------+ //
+
+		iterator find( const Key& key )
+		{ return (find_in_tree(_root, key)); }
+
+		// const_iterator find( const Key& key ) const
+		// {
+
+		// }
+
+
+		// +------------------------------------------+ //
+		//   OBSERVERS									//
+		// +------------------------------------------+ //
 
 		value_compare value_comp() const { return (value_compare(Compare())); };
 
@@ -252,6 +301,7 @@ class map
 */
 
 	private:
+
 		int	max(int a, int b)
 		{ return (a > b) ? a : b; }
 
@@ -260,6 +310,30 @@ class map
 			if (N == NULL)
 				return 0;
 			return N->_height;
+		}
+
+		void destroy_tree(node *N)  //FIXME Some leaks problem
+		{
+			if (N != NULL)
+			{
+				destroy_tree(N->_left);
+				destroy_tree(N->_right);
+				_size--;
+				free_node(N);
+			}
+			_root = NULL;
+		}
+
+		iterator find_in_tree(node *N, const Key& key)  //FIXME Some leaks problem
+		{
+			if (N == NULL)
+				return end();
+			if (N->_key->first == key)
+				return iterator(N);
+			else if (_comp(key, N->_key->first))
+				return find_in_tree(N->_left, key);
+			else
+				return find_in_tree(N->_right, key);
 		}
 
 		node	*new_node(const value_type& value, node *parent)
@@ -278,20 +352,32 @@ class map
 
 		void	free_node(node *N)
 		{
-			// std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
-			_allocPair.deallocate(N->_key, 1);
-			_allocPair.destroy(N->_key);
+			if (N->_key)
+			{
+				// std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
+				_allocPair.deallocate(N->_key, 1);
+				_allocPair.destroy(N->_key);
+				N->_key = NULL;
+			}
 			if (N->_end)
 			{
-				// std::cout << "DESTROY END = " << N->_end->_key->first << std::endl;
-				_allocPair.deallocate(N->_end->_key, 1);
-				_allocPair.destroy(N->_end->_key);
+				// std::cout << "DESTROY END = " << N->_key->first << std::endl;
+				if (N->_end->_key)
+				{
+					_allocPair.deallocate(N->_end->_key, 1);
+					_allocPair.destroy(N->_end->_key);
+					N->_end->_key= NULL;
+				}
 				_allocNode.deallocate(N->_end, 1);
 				_allocNode.destroy(N->_end);
+				N->_end = NULL;
 			}
-			_allocNode.deallocate(N, 1);
-			_allocNode.destroy(N);
-			N = NULL;
+			if (N)
+			{
+				_allocNode.deallocate(N, 1);
+				_allocNode.destroy(N);
+				N = NULL;
+			}
 		}
 
 		node *rightRotate(node *y)
@@ -423,6 +509,7 @@ class map
 			// Find the correct postion and insert the N
 			if (root == NULL)
 			{
+				_size++;
 				return (new_node(value, parent));
 			}
 			if (_comp(value.first, root->_key->first)) // if value lower than root key
@@ -533,6 +620,7 @@ class map
 
 						// std::cout <<"AFTER ROOT " << _root->_right->_key->first << "-----" << std::endl;
 					}
+						_size--;
 						free_node(temp);
 				}
 				else
@@ -550,7 +638,7 @@ class map
 					temp->_key = swap._key;
 					if (temp->_right)
 						temp->_right->_dad = root;
-
+					_size--;
 					free_node(temp);
 				}
 			}
