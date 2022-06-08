@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/08 17:18:08 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/08 18:17:02 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <functional>
+#include <string>
 #include "pair.hpp"
 #include "utils.hpp"
 #include "reverse_iterator.hpp"
@@ -144,17 +145,16 @@ class map
 		~map()
 		{
 			clear();
-			//Destroy _end
+			// Destroy _end
 			_allocPair.deallocate(_end->_key, 1);
 			_allocPair.destroy(_end->_key);
 			_allocNode.deallocate(_end, 1);
 			_allocNode.destroy(_end);
-			//destroy _begin
+			// destroy _begin
 			_allocPair.deallocate(_begin->_key, 1);
 			_allocPair.destroy(_begin->_key);
 			_allocNode.deallocate(_begin, 1);
 			_allocNode.destroy(_begin);
-
 		}
 
 		map( const map& other ) //NB Ne fonctionne pas (peut etre lié a end())
@@ -538,10 +538,12 @@ class map
 			// std::cout << "NODE FREE = " << N->_key->first << " END = " << N->_end << std::endl;
 
 				// std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
-			_allocPair.deallocate(N->_key, 1);
-			_allocPair.destroy(N->_key);
-			N->_key = NULL;
-
+			if (N->_key)
+			{
+				_allocPair.deallocate(N->_key, 1);
+				_allocPair.destroy(N->_key);
+				N->_key = NULL;
+			}
 			_allocNode.deallocate(N, 1);
 			_allocNode.destroy(N);
 			N = NULL;
@@ -845,16 +847,10 @@ class map
 		}
 		//FIXME    HERE
 		void	initialize_end()
-		{
-			value_type	add(0,0);
-			_end = new_node(add, NULL);
-		}
+		{ _end = new_node(value_type(key_type(), mapped_type()), NULL); }
 
 		void	initialize_begin()
-		{
-			value_type	add(0,0);
-			_begin = new_node(add, NULL);
-		}
+		{ _begin = new_node(value_type(key_type(), mapped_type()), NULL); }
 
 		// Print the tree
 		void printTree(node *root, std::string indent, bool last)
@@ -941,7 +937,7 @@ class map
 	}
 
 	template < typename Key, typename T, typename Compare, typename Allocator >
-	void swap( std::map<Key,T,Compare,Allocator>& lhs, std::map<Key,T,Compare,Allocator>& rhs )
+	void swap( ft::map<Key,T,Compare,Allocator>& lhs, ft::map<Key,T,Compare,Allocator>& rhs )
 	{ lhs.swap(rhs); }
 
 }
