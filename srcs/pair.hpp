@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 11:32:04 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/24 14:30:33 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/08 14:31:26 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ namespace ft
 	template<class T1, class T2>
 	bool operator==(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
 	{
-		if (lhs.first() == rhs.first())
+		if (lhs.first == rhs.first)
 		{
-			if (lhs.second() == rhs.second())
+			if (lhs.second == rhs.second)
 				return (true);
 		}
 		return (false);
@@ -57,9 +57,9 @@ namespace ft
 	template<class T1, class T2>
 	bool operator<(const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
 	{
-		if (lhs.first() < rhs.first())
+		if (lhs.first < rhs.first)
 		{
-			if (lhs.second() <rhs.second())
+			if (lhs.second <rhs.second)
 				return (true);
 		}
 		return (false);

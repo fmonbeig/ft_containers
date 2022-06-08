@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/07 16:36:50 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:11:53 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 
 int main()
 {
+			// +------------------------------------------+ //
+			//   REAL								        //
+			// +------------------------------------------+ //
 	// std::map<int, int> real;
 	// std::pair<int, int> add(100, 42);
 	// std::pair<int, int> add2(50, 42);
@@ -34,12 +37,24 @@ int main()
 	// std::pair<int, int> addz(103, 50);
 
 
+	// std::map<int, int>::const_iterator ite = real.end();
+
 	// real.insert(add);
 	// real.insert(add2);
 	// real.insert(add3);
 	// real.insert(add4);
 	// real.insert(add5);
 	// real.insert(add6);
+
+	// std::map<int, int>::const_iterator it = real.begin();
+
+
+	// for (;it != ite;++it)
+	// std::cout << it->first << "  " << it->second << std::endl;
+
+	// std::cout << real.size() << std::endl;
+	// real.erase(real.begin(), real.end());
+
 
 	// std::cout << real[1000] << std::endl;
 
@@ -84,6 +99,10 @@ int main()
 	//Returns a reference to the value that is mapped to a key equivalent to key,
 	//performing an insertion if such key does not already exist.
 
+			// +------------------------------------------+ //
+			//   MINE								        //
+			// +------------------------------------------+ //
+
 	ft::map<int, int> mine;
 	ft::pair<int, int> add(100, 42);
 	ft::pair<int, int> add2(50, 42);
@@ -105,6 +124,17 @@ int main()
 	mine.insert(add8);
 	mine.insert(add9);
 
+	ft::map<int, int>::iterator it = mine.upper_bound(999);
+
+	std::cout << it->first << std::endl;
+
+	it = mine.lower_bound(-56);
+	std::cout << it->first << std::endl;
+
+	// ft::map<int, int> mine2(mine);
+
+	// if (mine == mine2 )
+	// 	std::cout << 1 << std::endl;
 	// ft::pair<int, int> addx(101, 44);
 	// ft::pair<int, int> addy(102, 49);
 	// ft::pair<int, int> addz(103, 50);
@@ -114,7 +144,11 @@ int main()
 	// mine2.insert(addy);
 	// mine2.insert(addz);
 
-	std::cout << mine[999] << std::endl;
+
+	// mine.erase(mine.begin(), mine.end());
+
+	// std::cout <<mine.count(99) << std::endl;
+	// std::cout << "SIZE " <<mine.size() << std::endl;
 	// mine.insert(mine2.begin(), mine2.end());
 
 	// ft::map<int, int>::iterator it = mine.begin();

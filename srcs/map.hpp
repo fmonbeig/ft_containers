@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/07 16:44:17 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:17:08 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,12 @@ class map
 
 		~map() { clear(); }
 
-		map( const map& other )
+		map( const map& other ) //NB Ne fonctionne pas (peut etre lié a end())
 		{
 			_comp = other._comp;
 			_allocNode = other._allocNode;
 			_allocPair = other._allocPair;
 			insert(other.begin(), other.end());
-			return *this;
 		}
 
 		map& operator=( const map& other )
@@ -151,7 +150,6 @@ class map
 			clear();
 			insert(other.begin(), other.end());
 			return *this;
-
 		}
 
 		Allocator_type get_allocator() const
@@ -204,7 +202,7 @@ class map
 		const_iterator	begin() const
 		{ return const_iterator(node_value_min(_root));}
 
-		iterator	end()
+		iterator	end() // end () doit etre le meme a chaque fois // on pourrait le créer en dur dans map et en mettre une copie dans chaque node, et on met a jour le end a chaque changement
 		{ return iterator(node_value_max(_root)->_end); }
 
 		const_iterator	end() const
@@ -298,36 +296,147 @@ class map
 			ancient_max->_end = NULL;
 			// std::cout <<"KEY ROOT " << _root->_key->first << "-----" << std::endl;
 			_root = deleteNode(_root, *pos.getnode()->_key);
-			new_max = node_value_max(_root);
-			new_max->_end = new_node(add, new_max);
-			new_max->_end->_left = new_max->_end->_dad;
+
+			if(_root)
+			{
+				new_max = node_value_max(_root);
+				new_max->_end = new_node(add, new_max);
+				new_max->_end->_left = new_max->_end->_dad;
+			}
+			// std::cout << "END HAVE BEEN HAD ON NODE == " << new_max->_key->first << std::endl;
 		}
 
-		//void erase( iterator first, iterator last );
+		void erase( iterator first, iterator last )
+		{
+			map temp(first, last);
+			iterator it = temp.begin();
+			iterator ite = temp.end();
+			ite--;
 
-		//size_type erase( const Key& key );
+			for(; it != ite;)
+			{
+				erase(it);
+				it++;
+			}
+			erase(it);
+		}
 
-		void	print_tree() // NB we need to comment this at the end
-		{ printTree(_root, "********* ", true); }
+		size_type erase( const Key& key )
+		{
+			iterator it = find(key);
+			if (it == end())
+				return 0;
+			else
+			{
+				erase(it);
+				return 1;
+			}
+		}
+
+		void swap( map& other )
+		{
+			Compare					tmp_comp = _comp;
+			std::allocator<node>	tmp_allocNode = _allocNode;
+			Allocator				tmp_allocPair = _allocPair;
+			node					*tmp_root = _root;
+			size_type				tmp_size = _size;
+			_comp = other._comp;
+			_allocNode = other._allocNode;
+			_allocPair = other._allocPair;
+			_root = other._root;
+			_size = other._size;
+			other._comp = tmp_comp;
+			other._allocNode = tmp_allocNode;
+			other._allocPair = tmp_allocPair;
+			other._root = tmp_root;
+			other._size = tmp_size;
+		}
+
+
 
 		// +------------------------------------------+ //
 		//   LOOKUP										//
 		// +------------------------------------------+ //
 
-		iterator find( const Key& key )
+		size_type count( const Key& key ) const
+		{
+			const_iterator it = find(key);
+			if (it == end())
+				return 0;
+			else
+				return 1;
+		}
+
+		iterator find( const Key& key )  //NB problem when we try to find something with 0 data
 		{ return (find_in_tree(_root, key)); }
 
-		// const_iterator find( const Key& key ) const
-		// {
+		const_iterator find( const Key& key ) const
+		{ return (find_in_tree(_root, key)); }
 
-		// }
+		iterator upper_bound( const Key& key )
+		{
+			iterator it = find(key);
+			if (it == end())
+				return end();
+			else
+			{
+				it++;
+				return it;
+			}
+		}
 
+		const_iterator upper_bound( const Key& key ) const
+		{
+			const_iterator it = find(key);
+			if (it == end())
+				return end();
+			else
+			{
+				it++;
+				return it;
+			}
+		}
+
+		iterator lower_bound( const Key& key )
+		{
+			iterator it = find(key);
+			if (it == begin())
+				return end();
+			else
+			{
+				it--;
+				return it;
+			}
+		}
+
+		const_iterator lower_bound( const Key& key ) const
+		{
+			const_iterator it = find(key);
+			if (it == begin())
+				return end();
+			else
+			{
+				it--;
+				return it;
+			}
+		}
+
+		ft::pair<iterator,iterator> equal_range( const Key& key )
+		{ return ft::pair<iterator,iterator>(lower_bound(key), upper_bound(key)); }
+
+		ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+		{ return ft::pair<iterator,iterator>(lower_bound(key), upper_bound(key)); }
 
 		// +------------------------------------------+ //
 		//   OBSERVERS									//
 		// +------------------------------------------+ //
 
+		key_compare key_comp() const {return (_comp);}
+
 		value_compare value_comp() const { return (value_compare(Compare())); };
+
+		void	print_tree() // NB we need to comment this at the end
+			{ printTree(_root, "********* ", true); }
 
 /******************************************************************************************************/
 /************** AVL TREE		AVL TREE		AVL TREE		AVL TREE		AVL TREE **************/
@@ -373,6 +482,18 @@ class map
 				return find_in_tree(N->_right, key);
 		}
 
+		const_iterator find_in_tree(node *N, const Key& key) const //FIXME Some leaks problem
+		{
+			if (N == NULL)
+				return end();
+			if (N->_key->first == key)
+				return iterator(N);
+			else if (_comp(key, N->_key->first))
+				return find_in_tree(N->_left, key);
+			else
+				return find_in_tree(N->_right, key);
+		}
+
 		node	*new_node(const value_type& value, node *parent)
 		{
 			node *N = _allocNode.allocate(1);
@@ -389,6 +510,7 @@ class map
 
 		void	free_node(node *N)
 		{
+			// std::cout << "NODE FREE = " << N->_key->first << " END = " << N->_end << std::endl;
 			if (N->_key)
 			{
 				// std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
@@ -590,7 +712,7 @@ class map
 		}
 
 		// Node with minimum value in it
-		node *node_value_min(node *N)
+		node *node_value_min(node *N) const
 		{
 			node *temp = N;
 			while (temp->_left != NULL)
@@ -598,7 +720,7 @@ class map
 			return temp;
 		}
 
-		node *node_value_max(node *N)
+		node *node_value_max(node *N) const
 		{
 			node *temp = N;
 			while (temp->_right != NULL)
@@ -645,7 +767,7 @@ class map
 						// std::cout <<"ROOT->_KEY ==== " << root->_key->first << "-----" << std::endl;
 						// std::cout <<"BEFORE ROOT " << _root->_right->_key->first << "-----" << std::endl;
 						// std::cout <<"BEFORE ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
-						std::cout << root->_key->first << " " << temp->_key->first << std::endl;
+						// std::cout << root->_key->first << " " << temp->_key->first << std::endl;
 						root->_key = temp->_key;
 						root->_left = temp->_left;
 						root->_right = temp->_right;
@@ -658,6 +780,7 @@ class map
 						// std::cout <<"AFTER ROOT " << _root->_right->_key->first << "-----" << std::endl;
 					}
 						_size--;
+						std::cout << "SIZE " << _size + 1 << " IS NOW " << _size << " after deleting node " << temp->_key->first << std::endl;
 						free_node(temp);
 				}
 				else
@@ -748,38 +871,58 @@ class map
 		}
 };
 
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	bool operator==(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return 0;
+		typename ft::map<Key,T,Compare,Allocator>::const_iterator it_r = rhs.begin();
+		typename ft::map<Key,T,Compare,Allocator>::const_iterator it_l = lhs.begin();
+
+		while (it_l != lhs.end())
+		{
+			if (*it_l != *it_r)
+				return 0;
+			it_l++;
+			it_r++;
+		}
+		return 1;
+	}
+
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	bool operator!=(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
+	{ return (!(lhs == rhs)); }
+
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	bool operator<(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
+	{ return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	bool operator<=(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
+	{
+		if (lhs == rhs)
+			return true;
+		return (lhs < rhs);
+	}
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	bool operator>(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
+	{
+		if (lhs == rhs)
+			return false;
+		return (!(lhs < rhs));
+	}
+
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	bool operator>=(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
+	{
+		if (lhs == rhs)
+			return true;
+		return (!(lhs < rhs));
+	}
+
+	template < typename Key, typename T, typename Compare, typename Allocator >
+	void swap( std::map<Key,T,Compare,Allocator>& lhs, std::map<Key,T,Compare,Allocator>& rhs )
+	{ lhs.swap(rhs); }
+
 }
 #endif
-
-// A faire
-
-// rajouter la suppression de l'arbre a la sortie de map, le faire en mode recursif voir printTree
-// tester le delete
-// comprendre le system d'iterateur
-// reussir a rajouter le dad dans la creation des nodes
-
-
-
-
-// Map utilise des arbres pour equilibré l'acces a ses données
-// A verifier
-// Map ne peut avoir que des cles unique
-// Les elements vont etre choisi par une fonction (autre classe ?) Compare
-// Dans un arbre binaire on range les elements comme suit : si nouveau mot et au dessus du dernier alors on le met a droite sinon c'est a gauche
-// Pas opti car si toujours d'un cote alors l'arbre est desequilibré
-
-/*  https://fr.wikipedia.org/wiki/Arbre_bicolore
-les règles suivantes sont utilisées :
-
-1 - Un nœud est soit rouge soit noir ;
-2 - La racine est noire ;
-3 - Les enfants d'un nœud rouge sont noirs;
-4 - Tous les nœuds ont 2 enfants. Ce sont d'autres nœuds ou des feuilles NIL, qui ne possèdent pas de valeur et qui sont les seuls nœuds sans enfants. Leur couleur est toujours noire et rentre donc en compte lors du calcul de la hauteur noire.
-5 - Le chemin de la racine à n'importe quelle feuille (NIL) contient le même nombre de nœuds noirs. On peut appeler ce nombre de nœuds noirs la hauteur noire.
-
-	https://fr.wikipedia.org/wiki/Arbre_binaire_de_recherche
-	https://fr.wikipedia.org/wiki/Arbre_AVL
-*/
-
-
-// S'il y a des duplications alors on ne les prends pas en compte
