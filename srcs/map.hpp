@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/08 15:17:08 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:18:08 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ class map
 	public:
 		class value_compare : public std::binary_function<value_type, value_type, bool>
 		{
-			//friend class map<Key, T, Compare, Allocator>;
 			protected:
 				Compare comp;
 				value_compare(Compare c): comp(c) {}
@@ -117,6 +116,8 @@ class map
 		Allocator				_allocPair;
 		node					*_root;
 		size_type				_size;
+		node					*_end;
+		node					*_begin;
 
 
 		// +------------------------------------------+ //
@@ -125,20 +126,46 @@ class map
 	public:
 		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
 			_comp(comp), _allocNode(std::allocator<node>()),_allocPair(alloc),
-			_root(NULL),_size(0) {}
+			_root(NULL),_size(0), _end(NULL), _begin(NULL)
+		{
+			initialize_end();
+			initialize_begin();
+		}
 
 		template< class InputIt >
 		map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-			_comp(comp), _allocNode(std::allocator<node>()), _allocPair(alloc), _root(NULL), _size(0)
-		{ insert(first, last); }
+			_comp(comp), _allocNode(std::allocator<node>()), _allocPair(alloc), _root(NULL), _size(0), _end(NULL), _begin(NULL)
+		{
+			initialize_end();
+			initialize_begin();
+			insert(first, last);
+		}
 
-		~map() { clear(); }
+		~map()
+		{
+			clear();
+			//Destroy _end
+			_allocPair.deallocate(_end->_key, 1);
+			_allocPair.destroy(_end->_key);
+			_allocNode.deallocate(_end, 1);
+			_allocNode.destroy(_end);
+			//destroy _begin
+			_allocPair.deallocate(_begin->_key, 1);
+			_allocPair.destroy(_begin->_key);
+			_allocNode.deallocate(_begin, 1);
+			_allocNode.destroy(_begin);
+
+		}
 
 		map( const map& other ) //NB Ne fonctionne pas (peut etre lié a end())
 		{
 			_comp = other._comp;
 			_allocNode = other._allocNode;
 			_allocPair = other._allocPair;
+			_root = NULL;
+			_size = 0;
+			initialize_end();
+			initialize_begin();
 			insert(other.begin(), other.end());
 		}
 
@@ -193,20 +220,28 @@ class map
 		}
 
 		// +------------------------------------------+ //
-		//   ITERATORS									// //FIXME faire en sorte que begin et end existe meme s'il n'y a pas de node / size = 0
+		//   ITERATORS									//
 		// +------------------------------------------+ //
 
 		iterator	begin()
-		{ return iterator(node_value_min(_root)); }
+		{
+			if (_size == 0)
+				return iterator(_begin);
+			return iterator(node_value_min(_root));
+		}
 
 		const_iterator	begin() const
-		{ return const_iterator(node_value_min(_root));}
+		{
+			if (_size == 0)
+				return const_iterator(_begin);
+			return const_iterator(node_value_min(_root));
+		}
 
 		iterator	end() // end () doit etre le meme a chaque fois // on pourrait le créer en dur dans map et en mettre une copie dans chaque node, et on met a jour le end a chaque changement
-		{ return iterator(node_value_max(_root)->_end); }
+		{ return iterator(_end);}
 
 		const_iterator	end() const
-		{ return const_iterator(node_value_max(_root)->_end); }
+		{ return const_iterator(_end); }
 
 		reverse_iterator	rbegin()
 		{ return reverse_iterator(end()); }
@@ -250,25 +285,20 @@ class map
 		/* At each insert we have to recalculate the new end() */
 		void	insert( const value_type& value )
 		{
-			value_type	add(0,0);
-			node		*ancient_max = NULL;
-			node		*new_max = NULL;
-
-			if (_root)
-				ancient_max = node_value_max(_root);
 			_root = insert_node(_root, value, NULL);
-			if (ancient_max == NULL)
+			if (_end->_dad == NULL)
 			{
-				_root->_end = new_node(add, _root);
-				return ;
+				_end->_dad = _root;
+				_end->_left = _root;
 			}
-			new_max = node_value_max(_root);
-			if (_comp(ancient_max->_key->first, new_max->_key->first)) // if new value is the biggest value in map then we free _end
+			else
 			{
-				free_node(ancient_max->_end);
-				ancient_max->_end = NULL;
-				new_max->_end = new_node(add, new_max);
-				new_max->_end->_left = new_max->_end->_dad;
+				node *new_max = node_value_max(_root);
+				if (_comp(_end->_dad->_key->first, new_max->_key->first))
+				{
+					_end->_dad = new_max;
+					_end->_left = new_max;
+				}
 			}
 		}
 
@@ -288,22 +318,19 @@ class map
 
 		void	erase( iterator pos )
 		{
-			value_type	add(0,0);
-			node		*ancient_max = node_value_max(_root);
-			node		*new_max = NULL;
-
-			free_node(ancient_max->_end);
-			ancient_max->_end = NULL;
-			// std::cout <<"KEY ROOT " << _root->_key->first << "-----" << std::endl;
 			_root = deleteNode(_root, *pos.getnode()->_key);
 
-			if(_root)
+			if (_root)
 			{
-				new_max = node_value_max(_root);
-				new_max->_end = new_node(add, new_max);
-				new_max->_end->_left = new_max->_end->_dad;
+				node *new_max = node_value_max(_root);
+				_end->_dad = new_max;
+				_end->_left = new_max;
 			}
-			// std::cout << "END HAVE BEEN HAD ON NODE == " << new_max->_key->first << std::endl;
+			else
+			{
+				_end->_dad = NULL;
+				_end->_left = NULL;
+			}
 		}
 
 		void erase( iterator first, iterator last )
@@ -351,8 +378,6 @@ class map
 			other._root = tmp_root;
 			other._size = tmp_size;
 		}
-
-
 
 		// +------------------------------------------+ //
 		//   LOOKUP										//
@@ -501,7 +526,7 @@ class map
 			N->_left = NULL;
 			N->_right = NULL;
 			N->_dad = parent;
-			N->_end = NULL;
+			N->_end = _end;
 			N->_height = 1;
 			N->_key = _allocPair.allocate(1);
 			_allocPair.construct(N->_key, value);
@@ -511,32 +536,15 @@ class map
 		void	free_node(node *N)
 		{
 			// std::cout << "NODE FREE = " << N->_key->first << " END = " << N->_end << std::endl;
-			if (N->_key)
-			{
+
 				// std::cout << "REAL DESTROY = " << N->_key->first << std::endl;
-				_allocPair.deallocate(N->_key, 1);
-				_allocPair.destroy(N->_key);
-				N->_key = NULL;
-			}
-			if (N->_end)
-			{
-				// std::cout << "DESTROY END = " << N->_key->first << std::endl;
-				if (N->_end->_key)
-				{
-					_allocPair.deallocate(N->_end->_key, 1);
-					_allocPair.destroy(N->_end->_key);
-					N->_end->_key= NULL;
-				}
-				_allocNode.deallocate(N->_end, 1);
-				_allocNode.destroy(N->_end);
-				N->_end = NULL;
-			}
-			if (N)
-			{
-				_allocNode.deallocate(N, 1);
-				_allocNode.destroy(N);
-				N = NULL;
-			}
+			_allocPair.deallocate(N->_key, 1);
+			_allocPair.destroy(N->_key);
+			N->_key = NULL;
+
+			_allocNode.deallocate(N, 1);
+			_allocNode.destroy(N);
+			N = NULL;
 		}
 
 		node *rightRotate(node *y)
@@ -780,7 +788,7 @@ class map
 						// std::cout <<"AFTER ROOT " << _root->_right->_key->first << "-----" << std::endl;
 					}
 						_size--;
-						std::cout << "SIZE " << _size + 1 << " IS NOW " << _size << " after deleting node " << temp->_key->first << std::endl;
+						// std::cout << "SIZE " << _size + 1 << " IS NOW " << _size << " after deleting node " << temp->_key->first << std::endl;
 						free_node(temp);
 				}
 				else
@@ -834,6 +842,18 @@ class map
 				}
 			}
 			return root;
+		}
+		//FIXME    HERE
+		void	initialize_end()
+		{
+			value_type	add(0,0);
+			_end = new_node(add, NULL);
+		}
+
+		void	initialize_begin()
+		{
+			value_type	add(0,0);
+			_begin = new_node(add, NULL);
 		}
 
 		// Print the tree

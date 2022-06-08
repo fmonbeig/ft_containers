@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/08 15:11:53 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:13:56 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@ int main()
 	// std::pair<int, int> add5(999, 48);
 	// std::pair<int, int> add6(7, 42);
 
-	// std::pair<int, int> addx(101, 44);
-	// std::pair<int, int> addy(102, 49);
-	// std::pair<int, int> addz(103, 50);
 
 
 	// std::map<int, int>::const_iterator ite = real.end();
@@ -46,6 +43,9 @@ int main()
 	// real.insert(add5);
 	// real.insert(add6);
 
+	// ite--;
+
+	// std::cout << ite->first << std::endl;
 	// std::map<int, int>::const_iterator it = real.begin();
 
 
@@ -114,6 +114,11 @@ int main()
 	ft::pair<int, int> add8(-56, 42);
 	ft::pair<int, int> add9(1, 42);
 
+	// ft::map<int, int>::iterator it = mine.begin();
+	// std::cout << it->first << std::endl;
+
+	// it = mine.end();
+
 	mine.insert(add);
 	mine.insert(add2);
 	mine.insert(add3);
@@ -124,12 +129,23 @@ int main()
 	mine.insert(add8);
 	mine.insert(add9);
 
-	ft::map<int, int>::iterator it = mine.upper_bound(999);
+	// ft::map<int, int> mine2;
+	// mine2.insert(add7);
+	// mine2.insert(add8);
+	// mine2.insert(add9);
+	ft::map<int, int> mine2(mine);
 
-	std::cout << it->first << std::endl;
+	// mine.insert(mine2.begin(), mine2.end());
 
-	it = mine.lower_bound(-56);
-	std::cout << it->first << std::endl;
+
+
+	// ft::map<int, int>::iterator it = mine.begin();
+	// it--;
+	// std::cout << it->first << std::endl;
+
+
+	// it = mine.lower_bound(-56);
+	// std::cout << it->first << std::endl;
 
 	// ft::map<int, int> mine2(mine);
 
@@ -143,7 +159,11 @@ int main()
 	// mine2.insert(addx);
 	// mine2.insert(addy);
 	// mine2.insert(addz);
-
+//FIXME
+	for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
+	{
+		std::cout << it->first << std::endl;
+	}
 
 	// mine.erase(mine.begin(), mine.end());
 
@@ -194,10 +214,7 @@ int main()
 	// 	std::cerr << e.what() << std::endl;
 	// }
 
-	// for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
-	// {
-	// 	std::cout << it->first << std::endl;
-	// }
+
 
 	// for (ft::map<int, int>::const_reverse_iterator it = mine.rbegin(); it != mine.rend(); it++)
 	// {
