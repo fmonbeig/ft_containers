@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/09 15:53:06 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/09 17:45:29 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,15 @@ namespace ft
 								_current = _current->_dad;
 								// std::cout << " NOUVEAU NODE FINAL " << _current->_key->first << std::endl;
 							}
+							if (_comp(_current->_key->first, temp->_key->first))
+							{
+									// std::cout << "**********3" << std::endl;
+								_current = _current->_end;
+							}
 						}
 					}
 					else
-						_current = temp->_end;
+						_current = _current->_end;
 				}
 				// else if (_current->_right == NULL)
 				// {

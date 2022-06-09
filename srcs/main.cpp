@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/09 15:20:35 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/09 18:29:59 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,102 @@
 
 int main ()
 {
-	ft::map<char, int> mymap;
-	ft::map<char, int>::iterator itlow,itup;
+  std::map<char,int> mymap;
 
-	mymap['a']=20;
-	mymap['b']=40;
-	mymap['c']=60;
-	mymap['d']=80;
-	mymap['e']=100;
+  // first insert function version (single parameter):
+  mymap.insert ( std::pair<char,int>('a',100) );
+  mymap.insert ( std::pair<char,int>('z',200) );
 
-	itlow = mymap.lower_bound ('b');  // itlow points to b
-	itup =  mymap.upper_bound ('d');   // itup points to e (not d!)
+  std::pair<std::map<char,int>::iterator,bool> ret;
+  ret = mymap.insert ( std::pair<char,int>('z',500) );
+  if (ret.second==false) {
+    std::cout << "element 'z' already exists";
+    std::cout << " with a value of " << ret.first->second << '\n';
+  }
 
-	std::cout << "low : " << itlow->first << '\n';
-	std::cout << "up : " << itup->first << '\n';
+  // second insert function version (with hint position):
+  std::map<char,int>::iterator it = mymap.begin();
+  mymap.insert (it, std::pair<char,int>('b',300));  // max efficiency inserting
+  mymap.insert (it, std::pair<char,int>('c',400));  // no max efficiency inserting
 
-	// mymap.print_tree();
+  // third insert function version (range insertion):
+  std::map<char,int> anothermap;
+  anothermap.insert(mymap.begin(),mymap.find('c'));
 
-	mymap.erase(itlow,itup);        // erases [itlow,itup)
+  // showing contents:
+  std::cout << "mymap contains:\n";
+  for (it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 
-	// mymap.erase(itlow->first);        // erases [itlow,itup)
+  std::cout << "anothermap contains:\n";
+  for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 
-	// print content:
-	for (ft::map<char,int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
-		std::cout << it->first << " => " << it->second << '\n';
-
-	return 0;
+  return 0;
 }
+
+// int main()
+// {
+// 	ft::pair<int, std::string>			my_pair(8, "salut");
+// 	ft::map<int, std::string>			test;
+// 	ft::map<int, std::string>::iterator	it;
+
+// 	test.insert(my_pair);
+// 	test.insert(ft::pair<int, std::string>(-4, "bar"));
+// 	test.insert(ft::pair<int, std::string>(2, "machin"));
+// 	test.insert(ft::pair<int, std::string>(3, "foo"));
+// 	test.insert(ft::pair<int, std::string>(746, "Marcel"));
+// 	test.insert(ft::pair<int, std::string>(1, "truc"));
+// 	it = test.begin();
+// 	std::cout << '\n';
+
+// 	// test.print_tree();
+
+// 	while (it != test.end())
+// 	{
+// 		// std::cout << "start of while\n";
+// 		std::cout << it->first << ", " << it->second << '\n';
+// 		it++;
+// 		std::cout << "iterator incremented\n";
+
+// #ifndef STD
+// 		std::cout << it.getPointer() << '\n';
+// 		std::cout << test.end().getPointer() << '\n';
+// #endif
+
+// 	}
+// 	std::cout << "End of display loop\n";
+// }
+
+// int main ()
+// {
+// 	ft::map<char, int> mymap;
+// 	ft::map<char, int>::iterator itlow,itup;
+
+// 	mymap['a']=20;
+// 	mymap['b']=40;
+// 	mymap['c']=60;
+// 	mymap['d']=80;
+// 	mymap['e']=100;
+
+// 	itlow = mymap.lower_bound ('b');  // itlow points to b
+// 	itup =  mymap.upper_bound ('d');   // itup points to e (not d!)
+
+// 	std::cout << "low : " << itlow->first << '\n';
+// 	std::cout << "up : " << itup->first << '\n';
+
+// 	// mymap.print_tree();
+
+// 	mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+// 	// mymap.erase(itlow->first);        // erases [itlow,itup)
+
+// 	// print content:
+// 	for (ft::map<char,int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+// 		std::cout << it->first << " => " << it->second << '\n';
+
+// 	return 0;
+// }
 
 // int main()
 // {
@@ -146,3 +215,10 @@ int main ()
 
 
 // }
+
+  // third insert function version (range insertion):
+
+
+// candidate function not viable: no known conversion from
+// '     std::pair<iterator, bool>' (aka 'pair<map_iterator<std::less<char>, node<pair<const char, int> >, pair<const char, int> >, bool>') to
+// 'const ft::pair<ft::map_iterator<std::less<char>, ft::node<ft::pair<const char, int> >, ft::pair<const char, int> >, bool>' for 1st argument

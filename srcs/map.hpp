@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/09 15:53:56 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/09 18:28:19 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,8 +272,10 @@ class map
 		}
 
 		/* At each insert we have to recalculate the new end() */
-		void	insert( const value_type& value )
+		pair<iterator, bool>	insert( const value_type& value )
 		{
+			size_type temp = _size;
+
 			_root = insert_node(_root, value, NULL);
 			if (_end->_dad == NULL)
 			{
@@ -288,11 +290,8 @@ class map
 					_end->_dad = new_max;
 					_end->_left = new_max;
 				}
-				new_max->_left = NULL;
-				new_max->_right = NULL;
 			}
-			// std::cout << "==================================" << std::endl;
-			// print_tree();
+			return pair<iterator, bool>(find(value.first), temp != size());
 		}
 
 		template< class InputIt >

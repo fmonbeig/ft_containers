@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 11:32:04 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/08 18:22:08 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/09 17:58:43 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ namespace ft
 
 		pair& operator=( const pair& other )
 		{
-			first = other.first;
-			second = other.second;
+			if (this != &other)
+			{
+				first = other.first;
+				second = other.second;
+			}
 			return *this;
 		}
-
 	};
 
 	template<class T1, class T2>
