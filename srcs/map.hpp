@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 13:44:20 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:26:23 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <stdexcept>
 #include <functional>
 #include <string>
+#include <algorithm>
 #include "pair.hpp"
 #include "utils.hpp"
 #include "reverse_iterator.hpp"
@@ -935,18 +936,18 @@ class map
 	bool operator==(const ft::map<Key,T,Compare,Allocator>& lhs, const ft::map<Key,T,Compare,Allocator>& rhs)
 	{
 		if (lhs.size() != rhs.size())
-			return 0;
+			return false;
 		typename ft::map<Key,T,Compare,Allocator>::const_iterator it_r = rhs.begin();
 		typename ft::map<Key,T,Compare,Allocator>::const_iterator it_l = lhs.begin();
 
 		while (it_l != lhs.end())
 		{
 			if (*it_l != *it_r)
-				return 0;
+				return false;
 			it_l++;
 			it_r++;
 		}
-		return 1;
+		return true;
 	}
 
 	template < typename Key, typename T, typename Compare, typename Allocator >

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 13:45:15 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:10:24 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,31 @@ void	print(ft::map<Key, T>& lst)
 		std::cout << it->first << " => " << it->second << '\n';
 }
 
+int main ()
+{
+  ft::map<char,int> foo,bar;
+  foo['a']=100;
+  foo['b']=200;
+  bar['a']=10;
+  bar['z']=1000;
+
+  // foo ({{a,100},{b,200}}) vs bar ({a,10},{z,1000}}):
+  if (foo==bar) std::cout << "foo and bar are equal\n";
+  if (foo!=bar) std::cout << "foo and bar are not equal\n";
+  if (foo< bar) std::cout << "foo is less than bar\n";
+  if (foo> bar) std::cout << "foo is greater than bar\n";
+  // if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+  // if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+
+  // std::pair<char, int> foo('b',200);
+  // std::pair<char, int> bar('z',1000);
+
+  // if (foo< bar) std::cout << "foo is less than bar\n";
+  // if (foo> bar) std::cout << "foo is greater than bar\n";
+
+
+  return 0;
+}
 
 // int main ()
 // {
@@ -95,176 +120,176 @@ void	print(ft::map<Key, T>& lst)
 //   return 0;
 // }
 
-int main()
-{
-	std::cout << _WHITE << "# test_map" << _END << std::endl;
-	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
-	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
-	std::cout << "/* ********************************************************************** */" << _END << std::endl;
-	std::cout << std::endl;
+// int main()
+// {
+// 	std::cout << _WHITE << "# test_map" << _END << std::endl;
+// 	std::cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+// 	std::cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
+// 	std::cout << "/* ********************************************************************** */" << _END << std::endl;
+// 	std::cout << std::endl;
 
 
-	ft::map<std::string, int> mymap;
-	print(mymap);
+// 	ft::map<std::string, int> mymap;
+// 	print(mymap);
 
 
-	std::cout << "mymap" << _PURPLE << "std::string" << _END << ", " << _PURPLE << "int" << _END <<"> mymap;" << std::endl;
+// 	std::cout << "mymap" << _PURPLE << "std::string" << _END << ", " << _PURPLE << "int" << _END <<"> mymap;" << std::endl;
 
-	std::cout << std::endl;
-	std::cout << "mymap.max_size(): " << (mymap.max_size() > 10000) << std::endl;
-	print(mymap);
-	std::cout << std::endl;
-
-
-	print(mymap);
-	mymap.insert(ft::pair<std::string, int>("ft", 42));
-
-	print(mymap);
-	mymap.insert(ft::pair<std::string, int>("one", 1));
+// 	std::cout << std::endl;
+// 	std::cout << "mymap.max_size(): " << (mymap.max_size() > 10000) << std::endl;
+// 	print(mymap);
+// 	std::cout << std::endl;
 
 
-	std::cout << _WHITE << "# testing upper/lower_bound" << _END << std::endl;
-	ft::map<std::string, int>::iterator mit;
-	ft::map<std::string, int>::iterator it;
-	print(mymap);
-	it = mymap.lower_bound("aaa");
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.lower_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("one");
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.lower_bound(\"one\"): " << it->first << ":" << it->second << std::endl;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("oae");
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.lower_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("ft");
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.lower_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("zzz");
-	print(mymap);
+// 	print(mymap);
+// 	mymap.insert(ft::pair<std::string, int>("ft", 42));
 
-	if (it == mymap.end())
-		std::cout << std::setw(40) << "mymap.lower_bound(\"zzz\"): mymap.end()" << std::endl;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("aaa");
-
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.upper_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("oae");
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.upper_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("one");
-
-	if (it == mymap.end())
-		std::cout << std::setw(40) << "mymap.upper_bound(\"one\"): mymap.end()" << std::endl;
-	print(mymap);
-	std::cout << std::endl;
-	it = mymap.upper_bound("ft");
-	print(mymap);
-	std::cout << std::setw(40) << "mymap.upper_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;;
-	std::cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("zzz");
-
-	if (it == mymap.end())
-		std::cout << std::setw(40) << "mymap.upper_bound(\"zzz\"): mymap.end()" << std::endl;
-	print(mymap);
-	std::cout << std::endl;
-
-	print(mymap);
-	mymap.erase("undefined");
-	print(mymap);
-	mymap.erase("ft");
-	print(mymap);
-	std::cout << _WHITE << "# double clear" << _END << std::endl;
-	mymap.clear();
-	print(mymap);
-	mymap.clear();
-	print(mymap);
-	mymap["lol"];
-	print(mymap);
-	mymap.insert(ft::pair<std::string, int>("xD", 123));
-	print(mymap);
-	mymap.insert(mymap.end(), ft::pair<std::string, int>("uch", 442));
-	print(mymap);
-	mymap.insert(mymap.begin(), ft::pair<std::string, int>("uch", 22));
-	print(mymap);
-	mymap.insert(mymap.end(), ft::pair<std::string, int>("uch", 23));
-	print(mymap);
-	mymap.insert(ft::pair<std::string, int>("uch", 23));
-	print(mymap);
-	mymap["lol"] = 8;
+// 	print(mymap);
+// 	mymap.insert(ft::pair<std::string, int>("one", 1));
 
 
-	print(mymap);
-	ft::map<std::string, int> map2;
+// 	std::cout << _WHITE << "# testing upper/lower_bound" << _END << std::endl;
+// 	ft::map<std::string, int>::iterator mit;
+// 	ft::map<std::string, int>::iterator it;
+// 	print(mymap);
+// 	it = mymap.lower_bound("aaa");
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.lower_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.lower_bound("one");
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.lower_bound(\"one\"): " << it->first << ":" << it->second << std::endl;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.lower_bound("oae");
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.lower_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.lower_bound("ft");
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.lower_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.lower_bound("zzz");
+// 	print(mymap);
 
-	print(mymap);
-	print(map2);
-	std::cout << "mymap<" << _PURPLE << "string" << _END << ", " << _PURPLE << "int" << _END <<"> mymap2;" << std::endl;
-	print(mymap);
-	std::cout << "empty line\n";
-	print(map2);
-	std::cout << "empty line2\n";
+// 	if (it == mymap.end())
+// 		std::cout << std::setw(40) << "mymap.lower_bound(\"zzz\"): mymap.end()" << std::endl;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.upper_bound("aaa");
 
-	swap(mymap, map2);
-	std::cout << "empty line3\n";
-	print(mymap);
-	std::cout << "empty line4\n";
-	print(map2);
-	std::cout << "empty line5\n";
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.upper_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.upper_bound("oae");
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.upper_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.upper_bound("one");
 
-	mymap = map2;
-	print(mymap);
-	print(map2);
+// 	if (it == mymap.end())
+// 		std::cout << std::setw(40) << "mymap.upper_bound(\"one\"): mymap.end()" << std::endl;
+// 	print(mymap);
+// 	std::cout << std::endl;
+// 	it = mymap.upper_bound("ft");
+// 	print(mymap);
+// 	std::cout << std::setw(40) << "mymap.upper_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;;
+// 	std::cout << std::endl;
+// 	print(mymap);
+// 	it = mymap.upper_bound("zzz");
 
-	std::cout << std::setw(40) << "map == map2: " << (mymap == map2) << std::endl;
-	print(mymap);
-	print(map2);
-	std::cout << std::endl;
+// 	if (it == mymap.end())
+// 		std::cout << std::setw(40) << "mymap.upper_bound(\"zzz\"): mymap.end()" << std::endl;
+// 	print(mymap);
+// 	std::cout << std::endl;
 
-	mymap.clear();
-	print(mymap);
-	print(map2);
+// 	print(mymap);
+// 	mymap.erase("undefined");
+// 	print(mymap);
+// 	mymap.erase("ft");
+// 	print(mymap);
+// 	std::cout << _WHITE << "# double clear" << _END << std::endl;
+// 	mymap.clear();
+// 	print(mymap);
+// 	mymap.clear();
+// 	print(mymap);
+// 	mymap["lol"];
+// 	print(mymap);
+// 	mymap.insert(ft::pair<std::string, int>("xD", 123));
+// 	print(mymap);
+// 	mymap.insert(mymap.end(), ft::pair<std::string, int>("uch", 442));
+// 	print(mymap);
+// 	mymap.insert(mymap.begin(), ft::pair<std::string, int>("uch", 22));
+// 	print(mymap);
+// 	mymap.insert(mymap.end(), ft::pair<std::string, int>("uch", 23));
+// 	print(mymap);
+// 	mymap.insert(ft::pair<std::string, int>("uch", 23));
+// 	print(mymap);
+// 	mymap["lol"] = 8;
 
-	mymap["satan"] = 666;
-	print(mymap);
-	print(map2);
-	std::cout << std::setw(40) << "mymap == map2: " << (mymap == map2) << std::endl;
-	print(mymap);
-	print(map2);
-	std::cout << std::endl;
-	std::cout << std::setw(40) << "mymap <= map2: " << (mymap <= map2) << std::endl;
-	print(mymap);
-	print(map2);
-	std::cout << std::endl;
-	std::cout << std::setw(40) << "mymap >= map2: " << (mymap >= map2) << std::endl;
-	print(mymap);
-	print(map2);
-	std::cout << std::endl;
-	std::cout << std::setw(40) << "mymap > map2: " << (mymap > map2) << std::endl;
-	print(mymap);
-	print(map2);
-	std::cout << std::endl;
-	std::cout << std::setw(40) << "mymap < map2: " << (mymap > map2) << std::endl;
-	print(mymap);
-	print(map2);
-	std::cout << std::endl;
 
-	return 0;
-}
+// 	print(mymap);
+// 	ft::map<std::string, int> map2;
+
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << "mymap<" << _PURPLE << "string" << _END << ", " << _PURPLE << "int" << _END <<"> mymap2;" << std::endl;
+// 	print(mymap);
+// 	std::cout << "empty line\n";
+// 	print(map2);
+// 	std::cout << "empty line2\n";
+
+// 	swap(mymap, map2);
+// 	std::cout << "empty line3\n";
+// 	print(mymap);
+// 	std::cout << "empty line4\n";
+// 	print(map2);
+// 	std::cout << "empty line5\n";
+
+// 	mymap = map2;
+// 	print(mymap);
+// 	print(map2);
+
+// 	std::cout << std::setw(40) << "map == map2: " << (mymap == map2) << std::endl;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::endl;
+
+// 	mymap.clear();
+// 	print(mymap);
+// 	print(map2);
+
+// 	mymap["satan"] = 666;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::setw(40) << "mymap == map2: " << (mymap == map2) << std::endl;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::endl;
+// 	std::cout << std::setw(40) << "mymap <= map2: " << (mymap <= map2) << std::endl;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::endl;
+// 	std::cout << std::setw(40) << "mymap >= map2: " << (mymap >= map2) << std::endl;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::endl;
+// 	std::cout << std::setw(40) << "mymap > map2: " << (mymap > map2) << std::endl;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::endl;
+// 	std::cout << std::setw(40) << "mymap < map2: " << (mymap > map2) << std::endl;
+// 	print(mymap);
+// 	print(map2);
+// 	std::cout << std::endl;
+
+// 	return 0;
+// }
 
 // int main()
 // {

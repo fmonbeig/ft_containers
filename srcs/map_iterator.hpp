@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/09 17:45:29 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:25:41 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ namespace ft
 			operator map_iterator<Compare, node, T const>() const
 			{	return (map_iterator<Compare, node, T const>(_current)); };
 
-			reference operator*() const { return *_current->_key; }
+			reference operator*() const
+			{
+				// std::cout << *(_current->_key) << std::endl;
+				return ((*_current->_key));
+			}
 			pointer operator->() const  { return _current->_key; }
 
 			// +------------------------------------------+ //
@@ -192,11 +196,11 @@ namespace ft
 				return (map_iterator(temp));
 			}
 
-			bool operator==(const map_iterator& rhs)
-			{ return (_current == rhs._current); }
+			friend bool operator==(const map_iterator& lhs, const map_iterator& rhs)
+			{ return (lhs._current == rhs._current); }
 
-			bool operator!=(const map_iterator& rhs)
-			{ return (_current != rhs._current); }
+			friend bool operator!=(const map_iterator& lhs, const map_iterator& rhs)
+			{ return (lhs._current != rhs._current); }
 
 			node *find_end(node *N)
 			{

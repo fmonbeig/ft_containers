@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/06 18:07:30 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:31:08 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ namespace ft
 
 			/* Acces to the element before we are currently pointing with operator ' -> ' */
 
-			pointer operator->() const
-			{
-				Iter temp = base();
-				temp--;
-				return temp.operator->();
-			}
+			// pointer operator->() const
+			// {
+			// 	Iter temp = base();
+			// 	temp--;
+			// 	return temp.operator->();
+			// }
 
-			// pointer operator->() const { return (&(operator*())); } // FIXME Normalement pas besoin de lui
+			pointer operator->() const { return (&(operator*())); } // FIXME Normalement pas besoin de lui
 
 			/* Acces to the element with operator ' [] ' using operator ' * ' */
 
