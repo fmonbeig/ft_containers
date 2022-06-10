@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 14:10:24 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/10 15:39:10 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,71 +20,31 @@
 #include "map.hpp"
 #include <cstdio>
 #include <iomanip>
+#include <list>
+#include "common.hpp"
 
-/*
-** This is a minimal set of ANSI/VT100 color codes
-*/
-# define _END			"\x1b[0m"
-# define _BOLD			"\x1b[1m"
-# define _UNDER			"\x1b[4m"
-# define _REV			"\x1b[7m"
+#define TESTED_TYPE int
 
-/*
-** Colors
-*/
-# define _GREY			"\x1b[30m"
-# define _RED			"\x1b[31m"
-# define _GREEN			"\x1b[32m"
-# define _YELLOW		"\x1b[33m"
-# define _BLUE			"\x1b[34m"
-# define _PURPLE		"\x1b[35m"
-# define _CYAN			"\x1b[36m"
-# define _WHITE			"\x1b[37m"
 
-/*
-** Inverted, i.e. colored backgrounds
-*/
-# define _IGREY			"\x1b[40m"
-# define _IRED			"\x1b[41m"
-# define _IGREEN		"\x1b[42m"
-# define _IYELLOW		"\x1b[43m"
-# define _IBLUE			"\x1b[44m"
-# define _IPURPLE		"\x1b[45m"
-# define _ICYAN			"\x1b[46m"
-# define _IWHITE		"\x1b[47m"
-
-template <class Key, class T>
-void	print(ft::map<Key, T>& lst)
+int		main(void)
 {
-	std::cout << "printing a map : \n";
-	for (typename ft::map<Key, T>::iterator it = lst.begin(); it != lst.end(); it++)
-		std::cout << it->first << " => " << it->second << '\n';
-}
+	std::list<TESTED_TYPE> lst;
+	std::list<TESTED_TYPE>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+		lst.push_back(i * 3);
 
-int main ()
-{
-  ft::map<char,int> foo,bar;
-  foo['a']=100;
-  foo['b']=200;
-  bar['a']=10;
-  bar['z']=1000;
+	ft::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
+	printSize(vct);
 
-  // foo ({{a,100},{b,200}}) vs bar ({a,10},{z,1000}}):
-  if (foo==bar) std::cout << "foo and bar are equal\n";
-  if (foo!=bar) std::cout << "foo and bar are not equal\n";
-  if (foo< bar) std::cout << "foo is less than bar\n";
-  if (foo> bar) std::cout << "foo is greater than bar\n";
-  // if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-  // if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+		*lst_it++ = i * 5;
+	vct.assign(lst.begin(), lst.end());
+	printSize(vct);
 
-  // std::pair<char, int> foo('b',200);
-  // std::pair<char, int> bar('z',1000);
-
-  // if (foo< bar) std::cout << "foo is less than bar\n";
-  // if (foo> bar) std::cout << "foo is greater than bar\n";
-
-
-  return 0;
+	vct.insert(vct.end(), lst.rbegin(), lst.rend());
+	printSize(vct);
+	return (0);
 }
 
 // int main ()
