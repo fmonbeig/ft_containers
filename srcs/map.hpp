@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/09 18:28:19 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/10 13:44:20 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ class map
 		size_type size() const
 		{ return _size; }
 
-		size_type max_size() const
+		size_type max_size()
 		{ return (_allocNode.max_size()); }
 
 		// +------------------------------------------+ //
@@ -367,16 +367,20 @@ class map
 			Allocator				tmp_allocPair = _allocPair;
 			node					*tmp_root = _root;
 			size_type				tmp_size = _size;
+			node					*tmp_end = _end;
+
 			_comp = other._comp;
 			_allocNode = other._allocNode;
 			_allocPair = other._allocPair;
 			_root = other._root;
 			_size = other._size;
+			_end = other._end;
 			other._comp = tmp_comp;
 			other._allocNode = tmp_allocNode;
 			other._allocPair = tmp_allocPair;
 			other._root = tmp_root;
 			other._size = tmp_size;
+			other._end = tmp_end;
 		}
 
 		// +------------------------------------------+ //
@@ -400,50 +404,82 @@ class map
 
 		iterator upper_bound( const Key& key )
 		{
-			iterator it = find(key);
-			if (it == end())
-				return end();
-			else
+			iterator it = begin();
+			iterator ite = end();
+
+			for(;it != ite; it++)
 			{
-				it++;
-				return it;
+				if (!_comp(it->first, key))
+				{
+					if (it->first == key)
+					{
+						it++;
+						return it;
+					}
+					else
+						return it;
+				}
 			}
+			return ite;
 		}
 
 		const_iterator upper_bound( const Key& key ) const
 		{
-			const_iterator it = find(key);
-			if (it == end())
-				return end();
-			else
+			iterator it = begin();
+			iterator ite = end();
+
+			for(;it != ite; it++)
 			{
-				it++;
-				return it;
+				if (!_comp(it->first, key))
+				{
+					if (it->first == key)
+					{
+						it++;
+						return it;
+					}
+					else
+						return it;
+				}
 			}
+			return ite;
 		}
 
 		iterator lower_bound( const Key& key )
 		{
-			iterator it = find(key);
-			if (it == begin())
-				return end();
-			else
+			iterator it = begin();
+			iterator ite = end();
+
+			// if (!_comp(it->first, key))
+			// 	return(ite);
+
+			for(;it != ite; it++)
 			{
-				// it--;
-				return it;
+				if (!_comp(it->first, key))
+				{
+					// it--;
+					return it;
+				}
 			}
+			return ite;
 		}
 
 		const_iterator lower_bound( const Key& key ) const
 		{
-			const_iterator it = find(key);
-			if (it == begin())
-				return end();
-			else
+			iterator it = begin();
+			iterator ite = end();
+
+			// if (!_comp(it->first, key))
+			// 	return(ite);
+
+			for(;it != ite; it++)
 			{
-				// it--;
-				return it;
+				if (!_comp(it->first, key))
+				{
+					// it--;
+					return it;
+				}
 			}
+			return ite;
 		}
 
 		ft::pair<iterator,iterator> equal_range( const Key& key )
