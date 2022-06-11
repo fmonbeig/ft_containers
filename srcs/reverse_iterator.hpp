@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 14:44:49 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:12:59 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ namespace ft
 			{ return reverse_iterator(_it + n); }
 
 			difference_type operator+(const reverse_iterator & x)  { return (this->base() + x.base()); }
-			difference_type operator-(const reverse_iterator & x)  { return (this->base() - x.base()); }
+			difference_type operator-(const reverse_iterator & x)  { return (x.base() - this->base()); }
 
 			protected:
 				iterator_type	_it;
@@ -160,6 +160,7 @@ namespace ft
 	reverse_iterator<Iter>
 	operator-( typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it )
 	{ return reverse_iterator<Iter>(it.base() + n); }
+
 }
 
 

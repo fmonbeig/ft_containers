@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 16:05:56 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 15:56:31 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,21 +131,6 @@ class vector
 			for (iterator i = begin(); i < begin() + count; i++)
 				_alloc.construct(i, *first++);
 		}
-
-		// template< class InputIt >
-		// void assign(InputIt first, InputIt last,
-		// 	typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
-		// {
-		// 	size_t count = 0;
-
-		// 	this->clear();
-		// 	for (int i = 0; (first + i) != last; i++)
-		// 		count++;
-		// 	this->reserve(count);
-		// 	_size = count;
-		// 	for (size_t i = 0; i < _size; i++)
-		// 		_alloc.construct(_ptr + i, *(first + i));
-		// }
 
 		allocator_type get_allocator() const
 		{ return (_ptr); }
@@ -291,7 +276,7 @@ class vector
 
 			if (count == 0)
 				return ;
-			if (_size + count > _cap * 2)
+			if (_size + count >= _cap * 2)
 				this->reserve(_cap + count);
 			else if (_size + count < _cap * 2 && _size + count > _cap)
 				this->reserve(_cap * 2);
@@ -306,13 +291,12 @@ class vector
 		void insert( iterator pos, InputIt first, InputIt last,
 			typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 		{
-			difference_type index = pos - begin();
+			difference_type index = std::distance(begin(), pos);
 			difference_type count = std::distance(first, last);
-			// difference_type count = last - first;
 
 			if (count == 0)
 				return ;
-			if (_size + count > _cap * 2)
+			if (_size + count >= _cap * 2)
 				this->reserve(_cap + count);
 			else if (_size + count < _cap * 2 && _size + count > _cap)
 				this->reserve(_cap * 2);
@@ -322,26 +306,6 @@ class vector
 				_alloc.construct(&(*(newPos + i)), *first++);
 			_size += count;
 		}
-
-		// template< class InputIt >
-		// void insert( iterator pos, InputIt first, InputIt last,
-		// 	typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
-		// {
-		// 	difference_type index = pos - begin();
-		// 	difference_type count = last - first;
-
-		// 	if (count == 0)
-		// 		return ;
-		// 	if (_size + count > _cap * 2)
-		// 		this->reserve(_cap + count);
-		// 	else if (_size + count < _cap * 2 && _size + count > _cap)
-		// 		this->reserve(_cap * 2);
-		// 	iterator newPos(&_ptr[index]);
-		// 	movePtrRight(count, newPos, end());
-		// 	for (long i = 0; i < count; i++)
-		// 		_alloc.construct(&(*(newPos + i)), *(first + i));
-		// 	_size += count;
-		// }
 
 		iterator erase( iterator pos )
 		{

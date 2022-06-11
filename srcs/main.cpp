@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 15:39:10 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 15:59:20 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,35 @@
 
 #define TESTED_TYPE int
 
-
 int		main(void)
 {
-	std::list<TESTED_TYPE> lst;
-	std::list<TESTED_TYPE>::iterator lst_it;
-	for (int i = 1; i < 5; ++i)
-		lst.push_back(i * 3);
+	const int size = 5;
+	ft::vector<TESTED_TYPE> vct(size);
+	ft::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+	ft::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
 
-	ft::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
-	printSize(vct);
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
 
-	lst_it = lst.begin();
-	for (int i = 1; lst_it != lst.end(); ++i)
-		*lst_it++ = i * 5;
-	vct.assign(lst.begin(), lst.end());
-	printSize(vct);
+	it = it + 5;
+	it = 1 + it;
+	it = it - 4;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
 
-	vct.insert(vct.end(), lst.rbegin(), lst.rend());
-	printSize(vct);
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
+
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+	printSize(vct, true);
 	return (0);
 }
+
 
 // int main ()
 // {
