@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 14:25:41 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 17:28:12 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ namespace ft
 			reference operator*() const
 			{
 				// std::cout << *(_current->_key) << std::endl;
-				return ((*_current->_key));
+				return (*(_current->_key)); //NB j ai fait *( vs (*
 			}
 			pointer operator->() const  { return _current->_key; }
 

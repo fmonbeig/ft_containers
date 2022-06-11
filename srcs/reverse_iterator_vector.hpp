@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reverse_iterator.hpp                               :+:      :+:    :+:   */
+/*   reverse_iterator_vector.hpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 16:12:59 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:54:25 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ namespace ft
 			{
 				Iter temp = base();
 				temp--;
-				return temp.operator->();
+				return temp;
 			}
 
 			// pointer operator->() const { return (&(operator*())); } // FIXME Normalement pas besoin de lui

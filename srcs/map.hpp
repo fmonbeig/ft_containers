@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 14:26:23 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 18:01:52 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #include <algorithm>
 #include "pair.hpp"
 #include "utils.hpp"
-#include "reverse_iterator.hpp"
+#include "reverse_iterator_map.hpp"
 #include "map_iterator.hpp"
 
 namespace ft
@@ -258,7 +258,7 @@ class map
 		size_type size() const
 		{ return _size; }
 
-		size_type max_size()
+		size_type max_size() const
 		{ return (_allocNode.max_size()); }
 
 		// +------------------------------------------+ //
@@ -299,8 +299,15 @@ class map
 		void insert( InputIt first, InputIt last )
 		{
 			for(; first != last; first++)
-				insert(*first.operator->());
+				insert(*first);
 		}
+
+		// template< class InputIt >
+		// void insert( InputIt first, InputIt last )
+		// {
+		// 	for(; first != last; first++)
+		// 		insert(*first.operator->());
+		// }
 
 		iterator insert( iterator hint, const value_type& value )
 		{
@@ -426,8 +433,8 @@ class map
 
 		const_iterator upper_bound( const Key& key ) const
 		{
-			iterator it = begin();
-			iterator ite = end();
+			const_iterator it = begin();
+			const_iterator ite = end();
 
 			for(;it != ite; it++)
 			{
@@ -466,8 +473,8 @@ class map
 
 		const_iterator lower_bound( const Key& key ) const
 		{
-			iterator it = begin();
-			iterator ite = end();
+			const_iterator it = begin();
+			const_iterator ite = end();
 
 			// if (!_comp(it->first, key))
 			// 	return(ite);
@@ -487,7 +494,7 @@ class map
 		{ return ft::pair<iterator,iterator>(lower_bound(key), upper_bound(key)); }
 
 		ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
-		{ return ft::pair<iterator,iterator>(lower_bound(key), upper_bound(key)); }
+		{ return ft::pair<const_iterator,const_iterator>(lower_bound(key), upper_bound(key)); }
 
 		// +------------------------------------------+ //
 		//   OBSERVERS									//

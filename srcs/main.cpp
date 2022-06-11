@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 15:59:20 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/11 17:53:18 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,70 +23,48 @@
 #include <list>
 #include "common.hpp"
 
-#define TESTED_TYPE int
+
+
+#define T1 int
+#define T2 int
+typedef _pair<const T1, T2> T3;
 
 int		main(void)
 {
-	const int size = 5;
-	ft::vector<TESTED_TYPE> vct(size);
-	ft::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
-	ft::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
+	std::list<T3> lst;
+	unsigned int lst_size = 7;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3(lst_size - i, i));
 
-	for (int i = 0; i < size; ++i)
-		it[i] = (size - i) * 5;
+	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
 
-	it = it + 5;
-	it = 1 + it;
-	it = it - 4;
-	std::cout << *(it += 2) << std::endl;
-	std::cout << *(it -= 1) << std::endl;
+	TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 5;
 
-	*(it -= 2) = 42;
-	*(it += 2) = 21;
+	it = mp.begin(); ite = --(--mp.end());
+	TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 7;
 
-	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+	std::cout << "\t-- PART ONE --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
 
-	std::cout << "(it == const_it): " << (ite == it) << std::endl;
-	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
-	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+	mp = mp_copy;
+	mp_copy = mp_range;
+	mp_range.clear();
 
-	printSize(vct, true);
+	std::cout << "\t-- PART TWO --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
 	return (0);
 }
 
 
-// int main ()
-// {
-//   std::map<char,int> mymap;
-//   std::map<char,int>::iterator itlow,itup;
-
-//   mymap['a']=20;
-//   mymap['b']=40;
-//   mymap['c']=60;
-//   mymap['d']=80;
-//   mymap['e']=100;
-
-//   itlow=mymap.lower_bound ('b');  // itlow points to b
-//   itup=mymap.upper_bound ('d');   // itup points to e (not d!)
-
-//   std::cout << "low : " << itlow->first << '\n';
-//   std::cout << "up : " << itup->first << '\n';
-
-//   mymap.erase(itlow,itup);        // erases [itlow,itup)
-
-
-//   std::map<char,int>::iterator itr=mymap.begin();
-
-//   // std::cout <<"BEGIN = " <<itr->first << " => " << itr->second << '\n';
-
-//   // print content:
-//   for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-//   {
-//     std::cout << it->first << " => " << it->second << '\n';
-//   }
-
-//   return 0;
-// }
 
 // int main()
 // {
