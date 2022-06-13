@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:34:07 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 17:28:12 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:03:37 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,7 @@ namespace ft
 			operator map_iterator<Compare, node, T const>() const
 			{	return (map_iterator<Compare, node, T const>(_current)); };
 
-			reference operator*() const
-			{
-				// std::cout << *(_current->_key) << std::endl;
-				return (*(_current->_key)); //NB j ai fait *( vs (*
-			}
+			reference operator*() const { return (*(_current->_key)); }
 			pointer operator->() const  { return _current->_key; }
 
 			// +------------------------------------------+ //
@@ -76,23 +72,6 @@ namespace ft
 
 			map_iterator& operator++()
 			{
-				// if (_current->_dad)
-				// 	std::cout <<"NODE " << _current->_key->first << " DAD " << _current->_dad->_key->first << std::endl;
-				// else
-				// 	std::cout <<"NODE " << _current->_key->first << " has no dad"<< std::endl;
-				// if (_current->_end)
-				// 	std::cout <<"NODE " << _current->_key->first << " has an end " << std::endl;
-				// else
-				// 	std::cout <<"NODE " << _current->_key->first << " has no end"<< std::endl;
-				// if (_current->_right)
-				// 	std::cout <<"NODE " << _current->_key->first << " right " << _current->_right->_key->first << std::endl;
-				// else
-				// 	std::cout <<"NODE " << _current->_key->first << " has no right"<< std::endl;
-				// if (_current->_left)
-				// 	std::cout <<"NODE " << _current->_key->first << " left " << _current->_left << std::endl;
-				// else
-				// 	std::cout <<"NODE " << _current->_key->first << " has no left"<< std::endl;
-
 				if (_current->_right)
 				{
 					_current = _current->_right;
@@ -111,56 +90,18 @@ namespace ft
 								_current = _current->_dad;
 						else
 						{
-							// std::cout << "********1" << std::endl;
 							while (_current->_dad && (!(_comp(_current->_key->first, _current->_dad->_key->first))))
-							{
 								_current = _current->_dad;
-								// std::cout << " NOUVEAU NODE " << _current->_key->first << std::endl;
-							}
 							if (_current->_dad && _comp(_current->_key->first, _current->_dad->_key->first))
-							{
-									// std::cout << "**********2" << std::endl;
 								_current = _current->_dad;
-								// std::cout << " NOUVEAU NODE FINAL " << _current->_key->first << std::endl;
-							}
+
 							if (_comp(_current->_key->first, temp->_key->first))
-							{
-									// std::cout << "**********3" << std::endl;
 								_current = _current->_end;
-							}
 						}
 					}
 					else
 						_current = _current->_end;
 				}
-				// else if (_current->_right == NULL)
-				// {
-				// 	node *temp = _current;
-
-				// 	if (_comp(_current->_key->first, _current->_dad->_key->first))
-				// 			_current = _current->_dad;
-				// 	else
-				// 	{
-				// 		std::cout << "********1" << std::endl;
-				// 		while (_current->_dad && (!(_comp(_current->_key->first, _current->_dad->_key->first))))
-				// 		{
-				// 			_current = _current->_dad;
-				// 			std::cout << " NOUVEAU NODE " << _current->_key->first << std::endl;
-				// 		}
-				// 		if (_current->_dad && _comp(_current->_key->first, _current->_dad->_key->first))
-				// 		{
-				// 				std::cout << "**********2" << std::endl;
-				// 			_current = _current->_dad;
-				// 			std::cout << " NOUVEAU NODE FINAL " << _current->_key->first << std::endl;
-				// 		}
-				// 		if (_comp(_current->_key->first, temp->_key->first))
-				// 		{
-				// 				std::cout << "**********3" << std::endl;
-				// 			_current = temp->_end;
-				// 		}
-				// 	}
-				// }
-				// std::cout <<"APRES ++ " << _current->_key->first << std::endl;
 				return *this;
 			}
 
@@ -226,7 +167,6 @@ namespace ft
 
 			node	*getnode()
 			{ return _current;}
-
 	};
 }
 

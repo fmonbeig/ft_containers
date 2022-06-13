@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:25:48 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/10 14:20:10 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:17:46 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,12 @@ namespace ft
 		// +------------------------------------------+ //
 		//   ENABLE IF								    //
 		// +------------------------------------------+ //
+
 	template<bool B, class T = void>
 	struct enable_if {};
 
 	template<class T>
 	struct enable_if<true, T> { typedef T type; };
-
-
 
 		// +------------------------------------------+ //
 		//   IS INTEGRAL							    //
@@ -126,7 +125,6 @@ namespace ft
 			++first2;
 		}
 		return (first2 != last2);
-
 	}
 
 		// +------------------------------------------+ //

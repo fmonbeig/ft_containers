@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:37:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 17:53:18 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:48:29 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,49 +21,6 @@
 #include <cstdio>
 #include <iomanip>
 #include <list>
-#include "common.hpp"
-
-
-
-#define T1 int
-#define T2 int
-typedef _pair<const T1, T2> T3;
-
-int		main(void)
-{
-	std::list<T3> lst;
-	unsigned int lst_size = 7;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(lst_size - i, i));
-
-	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
-
-	TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 5;
-
-	it = mp.begin(); ite = --(--mp.end());
-	TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 7;
-
-	std::cout << "\t-- PART ONE --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
-
-	mp = mp_copy;
-	mp_copy = mp_range;
-	mp_range.clear();
-
-	std::cout << "\t-- PART TWO --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
-	return (0);
-}
-
 
 
 // int main()
@@ -300,11 +257,11 @@ int		main(void)
 // 	return 0;
 // }
 
-// int main()
-// {
-// 			+------------------------------------------+ //
-// 			  REAL								        //
-// 			+------------------------------------------+ //
+int main()
+{
+			// +------------------------------------------+ //
+			//   REAL								        //
+			// +------------------------------------------+ //
 // 	std::map<int, int> real;
 // 	std::pair<int, int> add(100, 42);
 // 	std::pair<int, int> add2(50, 42);
@@ -336,28 +293,27 @@ int		main(void)
 // 			  MINE								        //
 // 			+------------------------------------------+ //
 
-	// ft::map<int, std::string> mine;
-	// ft::pair<int, std::string> add(100, "42");
+	ft::map<int, int> mine;
 
-	// ft::pair<int, int> add(100, 42);
-	// ft::pair<int, int> add2(50, 42);
-	// ft::pair<int, int> add3(4, 42);
-	// ft::pair<int, int> add4(2, 42);
-	// ft::pair<int, int> add5(999, 48);
-	// ft::pair<int, int> add6(7, 42);
-	// ft::pair<int, int> add7(12, 42);
-	// ft::pair<int, int> add8(-56, 42);
-	// ft::pair<int, int> add9(1, 42);
+	ft::pair<int, int> add(100, 42);
+	ft::pair<int, int> add2(50, 42);
+	ft::pair<int, int> add3(4, 42);
+	ft::pair<int, int> add4(2, 42);
+	ft::pair<int, int> add5(999, 48);
+	ft::pair<int, int> add6(7, 42);
+	ft::pair<int, int> add7(12, 42);
+	ft::pair<int, int> add8(-56, 42);
+	ft::pair<int, int> add9(1, 42);
 
-	// mine.insert(add);
-	// mine.insert(add2);
-	// mine.insert(add3);
-	// mine.insert(add4);
-	// mine.insert(add5);
-	// mine.insert(add6);
-	// mine.insert(add7);
-	// mine.insert(add8);
-	// mine.insert(add9);
+	mine.insert(add);
+	mine.insert(add2);
+	mine.insert(add3);
+	mine.insert(add4);
+	mine.insert(add5);
+	mine.insert(add6);
+	mine.insert(add7);
+	mine.insert(add8);
+	mine.insert(add9);
 
 // 	ft::map<int, int> mine2;
 // 	mine2.insert(add7);
@@ -370,10 +326,10 @@ int		main(void)
 
 
 // FIXME
-// 	for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
-// 	{
-// 		std::cout << it->first << std::endl;
-// 	}
+	for (ft::map<int, int>::iterator it = mine.begin(); it != mine.end(); it++)
+	{
+		std::cout << it->first << std::endl;
+	}
 
 // 	mine.erase(mine.begin(), mine.end());
 
@@ -396,7 +352,7 @@ int		main(void)
 // 	// mine.erase(it);
 
 
-// }
+}
 
   // third insert function version (range insertion):
 

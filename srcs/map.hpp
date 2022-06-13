@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/13 13:46:04 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:53:43 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,7 @@ class map
 		~map()
 		{
 			clear();
-			// Destroy _end
 			_allocPair.deallocate(_end->_key, 1);
-			// _allocPair.destroy(_end->_key);
 			_allocNode.deallocate(_end, 1);
 			_allocNode.destroy(_end);
 		}
@@ -212,7 +210,7 @@ class map
 			return const_iterator(node_value_min(_root));
 		}
 
-		iterator	end() // end () doit etre le meme a chaque fois // on pourrait le créer en dur dans map et en mettre une copie dans chaque node, et on met a jour le end a chaque changement
+		iterator	end()
 		{ return iterator(_end);}
 
 		const_iterator	end() const
@@ -255,10 +253,9 @@ class map
 		{
 			if (_size > 0)
 				destroy_tree(_root);
-			// 	erase(begin(), end());
 		}
 
-		/* At each insert we have to recalculate the new end() */
+		/* At each insert we have to update end() */
 		pair<iterator, bool>	insert( const value_type& value )
 		{
 			size_type temp = _size;
@@ -287,13 +284,6 @@ class map
 			for(; first != last; first++)
 				insert(*first);
 		}
-
-		// template< class InputIt >
-		// void insert( InputIt first, InputIt last )
-		// {
-		// 	for(; first != last; first++)
-		// 		insert(*first.operator->());
-		// }
 
 		iterator insert( iterator hint, const value_type& value )
 		{
@@ -337,9 +327,6 @@ class map
 				_end->_dad = NULL;
 				_end->_left = NULL;
 			}
-			// node *new_max = node_value_max(_root);
-			// new_max->_left = NULL;
-			// new_max->_right = NULL;
 		}
 
 		size_type erase( const Key& key )
@@ -390,7 +377,7 @@ class map
 				return 1;
 		}
 
-		iterator find( const Key& key )  //NB problem when we try to find something with 0 data
+		iterator find( const Key& key )
 		{ return (find_in_tree(_root, key)); }
 
 		const_iterator find( const Key& key ) const
@@ -443,9 +430,6 @@ class map
 			iterator it = begin();
 			iterator ite = end();
 
-			// if (!_comp(it->first, key))
-			// 	return(ite);
-
 			for(;it != ite; it++)
 			{
 				if (!_comp(it->first, key))
@@ -462,16 +446,10 @@ class map
 			const_iterator it = begin();
 			const_iterator ite = end();
 
-			// if (!_comp(it->first, key))
-			// 	return(ite);
-
 			for(;it != ite; it++)
 			{
 				if (!_comp(it->first, key))
-				{
-					// it--;
 					return it;
-				}
 			}
 			return ite;
 		}
@@ -490,8 +468,8 @@ class map
 
 		value_compare value_comp() const { return (value_compare(Compare())); };
 
-		void	print_tree() // NB we need to comment this at the end
-			{ printTree(_root, "********* ", true); }
+		// void	print_tree()
+		// 	{ printTree(_root, "********* ", true); }
 
 /******************************************************************************************************/
 /************** AVL TREE		AVL TREE		AVL TREE		AVL TREE		AVL TREE **************/
@@ -513,7 +491,7 @@ class map
 			return N->_height;
 		}
 
-		void destroy_tree(node *N)  //FIXME Some leaks problem
+		void destroy_tree(node *N)
 		{
 			if (N != NULL)
 			{
@@ -530,7 +508,7 @@ class map
 			_root = NULL;
 		}
 
-		iterator find_in_tree(node *N, const Key& key)  //FIXME Some leaks problem
+		iterator find_in_tree(node *N, const Key& key)
 		{
 			if (N == NULL)
 				return end();
@@ -542,7 +520,7 @@ class map
 				return find_in_tree(N->_right, key);
 		}
 
-		const_iterator find_in_tree(node *N, const Key& key) const //FIXME Some leaks problem
+		const_iterator find_in_tree(node *N, const Key& key) const
 		{
 			if (N == NULL)
 				return end();
@@ -570,13 +548,9 @@ class map
 
 		void	free_node(node *N)
 		{
-			// std::cout << "NODE FREE = " << N->_key->first << " END = " << N->_end << std::endl;
-
-			// std::cout << "REAL DESTROY = " << N->_key->first << " POINTER = " << N->_key << std::endl;
 			if (N->_key)
 			{
 				_allocPair.deallocate(N->_key, 1);
-				// _allocPair.destroy(N->_key);
 				N->_key = NULL;
 			}
 			_allocNode.deallocate(N, 1);
@@ -586,32 +560,8 @@ class map
 
 		node *rightRotate(node *y)
 		{
-			// std::cout << "RIGHT ROTATE" << std::endl;
-			// if (y)
-			// {
-			// 	if(y->_dad)
-			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad " << y->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad == NULL" << std::endl;
-			// }
-
 			node *x = y->_left;
 			node *B = x->_right;
-
-			// if (x)
-			// {
-			// 	if(x->_dad)
-			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad " << x->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad == NULL" << std::endl;
-			// }
-			// if (B)
-			// {
-			// 	if(B->_dad)
-			// 	std::cout << "NODE B = " << B->_key->first<< std::endl; //<< " OLD Dad " << B->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE B = " << B->_key->first << " OLD Dad == NULL" << std::endl;
-			// }
 
 			x->_dad = y->_dad;
 			y->_dad = x;
@@ -622,59 +572,14 @@ class map
 			y->_height = max(height(y->_left), height(y->_right)) + 1;
 			x->_height = max(height(x->_left), height(x->_right)) + 1;
 
-			// if (y)
-			// {
-			// 	if(y->_dad)
-			// 		std::cout << "NODE Y = " << y->_key->first << " NEW Dad " << y->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE Y = " << y->_key->first << " NEW Dad == NULL" << std::endl;
-			// }
-			// if (x)
-			// {
-			// 	if(x->_dad)
-			// 		std::cout << "NODE X = " << x->_key->first << " NEW Dad " << x->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE X = " << x->_key->first << " NEW Dad == NULL" << std::endl;
-			// }
-			// if (B)
-			// {
-			// 	if(B->_dad)
-			// 		std::cout << "NODE B = " << B->_key->first << " NEW Dad " << B->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE B = " << B->_key->first << " NEW Dad == NULL" << std::endl;
-			// }
-			// std::cout << "=======" << std::endl;
 			return x;
 		}
 
 		node *leftRotate(node *x)
 		{
-			// std::cout << "LEFT ROTATE" << std::endl;
-			// if (x)
-			// {
-			// 	if(x->_dad)
-			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad " << x->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE X = " << x->_key->first << " OLD Dad == NULL" << std::endl;
-			// }
-
 			node *y = x->_right;
 			node *B = y->_left;
 
-			// if (y)
-			// {
-			// 	if(y->_dad)
-			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad " << y->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE Y = " << y->_key->first << " OLD Dad == NULL" << std::endl;
-			// }
-			// if (B)
-			// {
-			// 	if(B->_dad)
-			// 	std::cout << "NODE B = " << B->_key->first<< std::endl; //<< " OLD Dad " << B->_dad->_key->first << std::endl;
-			// 	else
-			// 		std::cout << "NODE B = " << B->_key->first << " OLD Dad == NULL" << std::endl;
-			// }
 			y->_dad = x->_dad;
 			x->_dad = y;
 			y->_left = x;
@@ -684,19 +589,6 @@ class map
 			x->_height = max(height(x->_left), height(x->_right)) + 1;
 			y->_height = max(height(y->_left), height(y->_right)) + 1;
 
-			// if(y->_dad)
-			// 	std::cout << "NODE Y = " << y->_key->first << " NEW Dad " << y->_dad->_key->first << std::endl;
-			// else
-			// 	std::cout << "NODE Y = " << y->_key->first << " NEW Dad == NULL" << std::endl;
-			// if(x->_dad)
-			// 	std::cout << "NODE X = " << x->_key->first << " NEW Dad " << x->_dad->_key->first << std::endl;
-			// else
-			// 	std::cout << "NODE X = " << x->_key->first << " NEW Dad == NULL" << std::endl;
-			// if(B->_dad)
-			// 	std::cout << "NODE B = " << B->_key->first << " NEW Dad " << B->_dad->_key->first << std::endl;
-			// else
-			// 	std::cout << "NODE B = " << B->_key->first << " NEW Dad == NULL" << std::endl;
-			// std::cout << "=======" << std::endl;
 			return y;
 		}
 
@@ -707,18 +599,20 @@ class map
 			return height(N->_left) - height(N->_right);
 		}
 
-		// Insert a node in a recursive way
+		/* Insert a node in a recursive way
+		/ 1- Find the correct position and Insert new node
+		/ 2- Check the balance and rotate if necessary
+		*/
 		node *insert_node(node *root, const value_type value, node *parent)
 		{
-			// Find the correct postion and insert the N
 			if (root == NULL)
 			{
 				_size++;
 				return (new_node(value, parent));
 			}
-			if (_comp(value.first, root->_key->first)) // if value lower than root key
+			if (_comp(value.first, root->_key->first))
 				root->_left = insert_node(root->_left, value, root);
-			else if (!(_comp(value.first, root->_key->first))) // if value higher or equal than root key
+			else if (!(_comp(value.first, root->_key->first)))
 			{
 				if (value.first == root->_key->first)
 					return root;
@@ -726,7 +620,6 @@ class map
 			}
 			else
 				return root;
-			// Update the balance factor of each node you pass through and balance the tree
 			root->_height = 1 + max(height(root->_left), height(root->_right));
 			int balanceFactor = getBalanceFactor(root);
 			if (balanceFactor > 1)
@@ -756,7 +649,6 @@ class map
 			return root;
 		}
 
-		// Node with minimum value in it
 		node *node_value_min(node *N) const
 		{
 			node *temp = N;
@@ -775,57 +667,33 @@ class map
 
 		node *deleteNode(node *root, const value_type value)
 		{
-			// Find the node and delete it
-			// std::cout <<"RIGHT ROOT " << _root->_right->_key->first << "-----" << std::endl;
 			if (root == NULL)
 				return root;
 			if (_comp(value.first, root->_key->first))
 				root->_left = deleteNode(root->_left, value);
 			else if (!(_comp(value.first, root->_key->first)) && value.first != root->_key->first )
-			{
-				// std::cout << "RIGHT " << value.first << " " << root->_key->first <<std::endl<< std::endl;
 				root->_right = deleteNode(root->_right, value);
-			}
 			else
 			{
-				// std::cout << "EQUAL " << value.first << " " << root->_key->first <<std::endl<< std::endl;
 				if ((root->_left == NULL) || (root->_right == NULL))
 				{
-					// std::cout << " ONE ROOT IS NULL " << std::endl<< std::endl;
 					node *temp = root->_left ? root->_left : root->_right;
 					if (temp == NULL)
 					{
-						// std::cout << "Leaf Node = NULL" << std::endl<< std::endl<< std::endl;
 						temp = root;
-						// root->_dad->_end = root->_end; // NB we have to check leaks
 						root = NULL;
-						// free_node(root);
-						// root = NULL;
 					}
 					else
 					{
-						// std::cout << "SWAPPING TIME" << std::endl<< std::endl;
 						node swap;
 
 						swap._key = root->_key;
-
-						// std::cout <<"ROOT->_KEY ==== " << root->_key->first << "-----" << std::endl;
-						// std::cout <<"BEFORE ROOT " << _root->_right->_key->first << "-----" << std::endl;
-						// std::cout <<"BEFORE ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
-						// std::cout << root->_key->first << " " << temp->_key->first << std::endl;
 						root->_key = temp->_key;
 						root->_left = temp->_left;
 						root->_right = temp->_right;
-						// root->_end = temp->_end;
-
 						temp->_key = swap._key;
-
-						// std::cout <<"AFTER ROOT DAD " << _root->_right->_dad->_key->first << "-----" << std::endl;
-
-						// std::cout <<"AFTER ROOT " << _root->_right->_key->first << "-----" << std::endl;
 					}
 						_size--;
-						// std::cout << "SIZE " << _size + 1 << " IS NOW " << _size << " after deleting node " << temp->_key->first << std::endl;
 						free_node(temp);
 				}
 				else
@@ -833,19 +701,12 @@ class map
 					node swap;
 
 					swap._key = root->_key;
-
 					node *temp = node_value_min(root->_right);
-
 					if (temp->_key->first == root->_right->_key->first)
-					{
 						root->_right = root->_right->_right;
-					}
 					else
-					{
 						temp->_dad->_left = NULL;
-					}
 					root->_key = temp->_key;
-
 					temp->_key = swap._key;
 					if (temp->_right)
 						temp->_right->_dad = root;
@@ -853,19 +714,14 @@ class map
 					free_node(temp);
 				}
 			}
-
 			if (root == NULL)
 				return root;
-
-			// Update the balance factor of each node and balance the tree
 			root->_height = 1 + max(height(root->_left), height(root->_right));
 			int balanceFactor = getBalanceFactor(root);
 			if (balanceFactor > 1)
 			{
 				if (getBalanceFactor(root->_left) >= 0)
-				{
 					return rightRotate(root);
-				}
 				else
 				{
 					root->_left = leftRotate(root->_left);
@@ -875,9 +731,7 @@ class map
 			if (balanceFactor < -1)
 			{
 				if (getBalanceFactor(root->_right) <= 0)
-				{
 					return leftRotate(root);
-				}
 				else
 				{
 					root->_right = rightRotate(root->_right);
@@ -886,7 +740,7 @@ class map
 			}
 			return root;
 		}
-		//FIXME    HERE
+
 		void	initialize_end()
 		{ _end = new_node(value_type(key_type(), mapped_type()), NULL); }
 

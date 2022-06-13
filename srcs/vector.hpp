@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:57:32 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 16:55:08 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:19:30 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class vector
 				_alloc.construct(_ptr + i, value);
 			_size = count;
 			_cap = count;
-		}		//how to use --> it std::vector<int> v(size);
+		}		//how to use it --> std::vector<int> v(size);
 
 		template< class InputIt >
 		vector( InputIt first, InputIt last, const Allocator& alloc = Allocator())
@@ -367,8 +367,8 @@ class vector
 	private:
 		pointer			_ptr;
 		allocator_type	_alloc;
-		size_t			_size; // how many construct object they are
-		size_t			_cap; // how many memory they are
+		size_t			_size;
+		size_t			_cap;
 
 		void movePtrRight(size_t count, iterator start, iterator end)
 		{
@@ -390,7 +390,7 @@ class vector
 
 		void checkSize(size_t n)
 		{
-			if (n > max_size()) //NB ca serait alloc.max_size() ??
+			if (n > max_size())
 				throw std::out_of_range("vector");
 		}
 

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 16:54:25 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:16:31 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ namespace ft
 				temp--;
 				return temp;
 			}
-
-			// pointer operator->() const { return (&(operator*())); } // FIXME Normalement pas besoin de lui
 
 			/* Acces to the element with operator ' [] ' using operator ' * ' */
 
@@ -149,7 +147,6 @@ namespace ft
 	template <class _IteratorL, class _IteratorR>
 	bool operator>=(const reverse_iterator<_IteratorL>& lhs, const reverse_iterator<_IteratorR>& rhs)
 	{ return !(lhs < rhs); }
-
 
 	template< class Iter >
 	reverse_iterator<Iter>

@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 10:57:09 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/05/20 14:28:54 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:18:01 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ namespace ft
 	class vector_iterator
 	{
 		public:
-
 			typedef	T				value_type;
 			typedef	T*				pointer;
 			typedef	T&				reference;
@@ -47,7 +46,6 @@ namespace ft
 			reference operator*() const { return *_ptr; }
 			pointer operator->() const { return _ptr; }
 			reference operator[](difference_type n) const{ return _ptr + n; }
-			// NB : Const version ??
 
 			// +------------------------------------------+ //
 			//   OPERATOR							        //

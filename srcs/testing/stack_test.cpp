@@ -70,23 +70,12 @@ TEST(stack, OPERATOR_WITH_EQUALITY)
 	mine.push(44);
 	mine.push(-34);
 
-	EXPECT_EQ(real == real, true);
-	EXPECT_EQ(mine == mine, true);
-
-	EXPECT_EQ(real != real, false);
-	EXPECT_EQ(mine != mine, false);
-
-	EXPECT_EQ(real <= real, true);
-	EXPECT_EQ(mine <= mine, true);
-
-	EXPECT_EQ(real >= real, true);
-	EXPECT_EQ(mine >= mine, true);
-
-	EXPECT_EQ(real < real, false);
-	EXPECT_EQ(mine < mine, false);
-
-	EXPECT_EQ(real > real, false);
-	EXPECT_EQ(mine > mine, false);
+	EXPECT_EQ(real == real, mine == mine);
+	EXPECT_EQ(real != real, mine != mine);
+	EXPECT_EQ(real <= real, mine <= mine);
+	EXPECT_EQ(real >= real, mine >= mine);
+	EXPECT_EQ(real < real, mine < mine);
+	EXPECT_EQ(real > real, mine > mine);
 }
 
 TEST(stack, OPERATOR_NOT_EQUAL)
@@ -106,23 +95,12 @@ TEST(stack, OPERATOR_NOT_EQUAL)
 	mine2.push(44);
 	mine2.push(-32);
 
-	EXPECT_EQ(real == real2, false);
-	EXPECT_EQ(mine == mine2, false);
-
-	EXPECT_EQ(real != real2, true);
-	EXPECT_EQ(mine != mine2, true);
-
-	EXPECT_EQ(real <= real2, true);
-	EXPECT_EQ(mine <= mine2, true);
-
-	EXPECT_EQ(real >= real2, false);
-	EXPECT_EQ(mine >= mine2, false);
-
-	EXPECT_EQ(real < real2, true);
-	EXPECT_EQ(mine < mine2, true);
-
-	EXPECT_EQ(real > real2, false);
-	EXPECT_EQ(mine > mine2, false);
+	EXPECT_EQ(real == real2, mine == mine2);
+	EXPECT_EQ(real != real2, mine != mine2);
+	EXPECT_EQ(real <= real2, mine <= mine2);
+	EXPECT_EQ(real >= real2, mine >= mine2);
+	EXPECT_EQ(real < real2, mine < mine2);
+	EXPECT_EQ(real > real2, mine > mine2);
 }
 
 TEST(stack, COPY)
