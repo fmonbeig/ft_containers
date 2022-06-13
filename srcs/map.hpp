@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/13 15:53:43 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:36:05 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ struct node
 template<
 	typename Key,
 	typename T,
-	typename Compare = std::less<Key>,// Function object for performing comparisons. ex : Compare(x, y)
+	typename Compare = std::less<Key>,
 	typename Allocator = std::allocator<ft::pair<const Key, T> > >
 class map
 {
@@ -53,26 +53,27 @@ class map
 		//   TYPEDEF 									//
 		// +------------------------------------------+ //
 	public:
-		typedef Key													key_type;
-		typedef T													mapped_type;
-		typedef typename ft::pair<const Key, T>						value_type;
+		typedef Key															key_type;
+		typedef T															mapped_type;
+		typedef typename ft::pair<const Key, T>								value_type;
 
-		typedef std::size_t 										size_type;
-		typedef std::ptrdiff_t										difference_type;
+		typedef std::size_t 												size_type;
+		typedef std::ptrdiff_t												difference_type;
 
-		typedef Compare												key_compare;
-		typedef Allocator											Allocator_type;
-		typedef value_type&											reference;
-		typedef const value_type&									const_reference;
+		typedef Compare														key_compare;
+		typedef Allocator													Allocator_type;
+		typedef value_type&													reference;
+		typedef const value_type&											const_reference;
 
-		typedef typename Allocator::pointer							pointer;
-		typedef typename Allocator::const_pointer					const_pointer;
+		typedef typename Allocator::pointer									pointer;
+		typedef typename Allocator::const_pointer							const_pointer;
 		typedef map_iterator<Compare, node<value_type>, value_type>			iterator;
 		typedef map_iterator<Compare, node<value_type>, const value_type>	const_iterator;
-		typedef ft::reverse_iterator<iterator>							reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator>								reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
 	protected:
-		typedef node<value_type>								node;
+		typedef node<value_type>											node;
+		typedef typename Allocator_type::template rebind<node>::other		node_alloc;
 
 		// +------------------------------------------+ //
 		//   STRUCT AND CLASS FOR MAP 					//
@@ -100,7 +101,7 @@ class map
 
 	protected:
 		Compare					_comp;
-		std::allocator<node>	_allocNode;
+		node_alloc	_allocNode;
 		Allocator				_allocPair;
 		node					*_root;
 		size_type				_size;
@@ -111,13 +112,13 @@ class map
 		// +------------------------------------------+ //
 	public:
 		explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-			_comp(comp), _allocNode(std::allocator<node>()),_allocPair(alloc),
+			_comp(comp), _allocNode(node_alloc()),_allocPair(alloc),
 			_root(NULL),_size(0), _end(NULL)
 		{ initialize_end(); }
 
 		template< class InputIt >
 		map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ):
-			_comp(comp), _allocNode(std::allocator<node>()), _allocPair(alloc), _root(NULL), _size(0), _end(NULL)
+			_comp(comp), _allocNode(node_alloc()), _allocPair(alloc), _root(NULL), _size(0), _end(NULL)
 		{
 			initialize_end();
 			insert(first, last);
@@ -131,7 +132,7 @@ class map
 			_allocNode.destroy(_end);
 		}
 
-		map( const map& other ) //NB Ne fonctionne pas (peut etre lié a end())
+		map( const map& other )
 		{
 			_comp = other._comp;
 			_allocNode = other._allocNode;
@@ -344,7 +345,7 @@ class map
 		void swap( map& other )
 		{
 			Compare					tmp_comp = _comp;
-			std::allocator<node>	tmp_allocNode = _allocNode;
+			node_alloc				tmp_allocNode = _allocNode;
 			Allocator				tmp_allocPair = _allocPair;
 			node					*tmp_root = _root;
 			size_type				tmp_size = _size;

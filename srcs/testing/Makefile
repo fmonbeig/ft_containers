@@ -12,14 +12,14 @@ CXXFLAGS += $(INCLUDE)
 
 MAIN = gtest_main.cpp
 
-FILES =  vector_test #map_test #pair_test #vector_iterator_test stack_test   #requests_gtests
+FILES =  vector_test map_test pair_test vector_iterator_test stack_test   #requests_gtests
 
 CONTAINERS_OBJS_PATH = ../../objs/
 
 CONTAINERS_DIR = configParsing configParsing/AST requests cgi responses socket
 
 CONTAINERS_PATH = $(addprefix $(CONTAINERS_OBJS_PATH), $(CONTAINERS_DIR))
-# CONTAINERS_OBJS = $(wildcard $(foreach $(CONTAINERS_PATH)/*.o) #taking all the objects without the main
+#CONTAINERS_OBJS = $(wildcard $(foreach $(CONTAINERS_PATH)/*.o) #taking all the objects without the main
 CONTAINERS_OBJS = $(foreach dir, $(CONTAINERS_PATH) ,$(wildcard $(dir)/*.o))
 
 SRCS = $(addsuffix .cpp, $(FILES))

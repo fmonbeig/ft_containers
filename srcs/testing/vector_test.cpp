@@ -268,3 +268,23 @@ TEST(vector, OPERATOR)
 	EXPECT_EQ((real < real2), (mine < mine2));
 }
 
+TEST(vector, TIME_STD)
+{
+	std::vector<int>	real;
+
+	for (int i = 0; i < 10000000; i++)
+		real.push_back(i);
+
+	real.clear();
+}
+
+TEST(vector, TIME_FT)
+{
+	std::vector<int>	mine;
+
+	for (int i = 0; i < 10000000; i++)
+		mine.push_back(i);
+
+	mine.clear();
+}
+
