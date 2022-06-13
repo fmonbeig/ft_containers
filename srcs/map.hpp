@@ -6,7 +6,7 @@
 /*   By: fmonbeig <fmonbeig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 14:32:52 by fmonbeig          #+#    #+#             */
-/*   Updated: 2022/06/11 18:01:52 by fmonbeig         ###   ########.fr       */
+/*   Updated: 2022/06/13 13:46:04 by fmonbeig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,6 @@ namespace ft
 template<typename T>
 struct node
 {
-	node(){}
-
-	node &operator=(node const &rhs)
-	{
-		if (this != &rhs)
-		{
-			this->_key = rhs._key;
-			this->_left = rhs._left;
-			this->_right = rhs._right;
-			this->_dad = rhs._dad;
-			this->_end = rhs._end;
-		}
-		return (*(this));
-	}
 	T			*_key;
 	node		*_left;
 	node		*_right;
